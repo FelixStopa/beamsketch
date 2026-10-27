@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BeamSketch – Online Laser-Editor</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M12 1.5v9%27 stroke=%27%2312a594%27 stroke-width=%272.4%27 stroke-linecap=%27round%27/%3E%3Cpath d=%27M12 12.2l1.5 3.3 3.3 1.5-3.3 1.5L12 21.8l-1.5-3.3L7.2 17l3.3-1.5z%27 fill=%27%2312a594%27/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <div id="menubar">
+    <div class="brand"><svg class="logo" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 1.5v9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M12 12.2l1.5 3.3 3.3 1.5-3.3 1.5L12 21.8l-1.5-3.3L7.2 17l3.3-1.5z" fill="currentColor"/><path d="M3 22.5h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".55"/></svg>BeamSketch</div>
+    <div class="menu" data-menu="file"><button data-i18n="Datei">Datei</button><div class="drop"></div></div>
+    <div class="menu" data-menu="edit"><button data-i18n="Bearbeiten">Bearbeiten</button><div class="drop"></div></div>
+    <div class="menu" data-menu="arrange"><button data-i18n="Anordnen">Anordnen</button><div class="drop"></div></div>
+    <div class="menu" data-menu="tools"><button data-i18n="Werkzeuge">Werkzeuge</button><div class="drop"></div></div>
+    <div class="menu" data-menu="laser"><button data-i18n="Laser">Laser</button><div class="drop"></div></div>
+    <div class="menu" data-menu="view"><button data-i18n="Ansicht">Ansicht</button><div class="drop"></div></div>
+    <div class="menu" data-menu="help"><button data-i18n="Hilfe">Hilfe</button><div class="drop"></div></div>
+    <div style="flex:1"></div>
+    <button id="themeBtn"></button>
+    <select id="langSel" title="Sprache / Language"></select>
+    <span class="badge" id="devBadge">–</span>
+  </div>
+
+  <div id="tabbar"></div>
+  <div id="actionbar"></div>
+
+  <div id="main">
+    <aside id="projPanel" hidden></aside>
+    <div id="tools"></div>
+    <div id="canvasWrap">
+      <canvas id="cv"></canvas>
+      <div id="hud">–</div>
+      <div id="hint"></div>
+    </div>
+    <div id="vsplit" data-i18n-title="Ziehen: Breite ändern · Doppelklick: zurücksetzen"></div>
+    <div id="right">
+      <div class="panel" id="pLayers" style="flex:0 0 auto;max-height:38%;min-height:64px">
+        <h3><span data-i18n="Ebenen / Schnitte">Ebenen / Schnitte</span> <span class="tools"></span></h3>
+        <div class="body" style="padding:0"><table id="layerTable"></table></div>
+      </div>
+      <div class="hsplit" id="hsplitLayers" data-i18n-title="Ziehen: Höhe der Ebenenliste ändern"></div>
+      <div class="panel" id="pProps" style="flex:1 1 0;min-height:120px">
+        <h3 data-i18n="Eigenschaften">Eigenschaften</h3>
+        <div class="body" id="propsBody"></div>
+      </div>
+      <div class="hsplit" id="hsplitLaser" data-i18n-title="Ziehen: Höhe des Laser-Bereichs ändern"></div>
+      <div class="panel" id="pLaser" style="flex:0 1 auto;max-height:45%;min-height:64px">
+        <h3 data-i18n="Laser">Laser</h3>
+        <div class="body" id="laserBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="palette"></div>
+  <div id="status">
+    <span><span data-i18n="Cursor">Cursor</span>: <span class="k" id="stPos">0.00, 0.00</span></span>
+    <span><span data-i18n="Auswahl">Auswahl</span>: <span class="k" id="stSel">–</span></span>
+    <span><span data-i18n="Zoom">Zoom</span>: <span class="k" id="stZoom">100%</span></span>
+    <span style="flex:1"></span>
+    <span id="stMsg"></span>
+  </div>
+</div>
+<input type="file" id="fileInput" style="display:none" multiple>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

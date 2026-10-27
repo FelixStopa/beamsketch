@@ -1,0 +1,12 @@
+{
+  "name": "beamsketch",
+  "private": true,
+  "description": "Browser-based laser editor with GCode output for GRBL lasers",
+  "license": "AGPL-3.0-only",
+  "homepage": "https://beamsketch.com",
+  "repository": "github:FelixStopa/beamsketch",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node serve.js"
+  }
+}
