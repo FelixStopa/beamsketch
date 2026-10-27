@@ -1,8 +1,5 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/img/logo-dark.png">
-    <img src="docs/img/logo.png" alt="BeamSketch" width="420">
-  </picture>
+  <img src="docs/img/logo.png" alt="BeamSketch" width="420">
 </p>
 
 <h3 align="center">The laser editor that runs in your browser</h3>
@@ -20,33 +17,30 @@
 </p>
 
 <p align="center">
-  <a href="#-features">Features</a> ·
-  <a href="#-quick-start">Quick start</a> ·
-  <a href="#-supported-lasers">Supported lasers</a> ·
-  <a href="#-contributing">Contributing</a> ·
-  <a href="#-license">License</a>
+  <a href="#features">Features</a> ·
+  <a href="#quick-start">Quick start</a> ·
+  <a href="#supported-lasers">Supported lasers</a> ·
+  <a href="#contributing">Contributing</a> ·
+  <a href="#license">License</a>
 </p>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/img/editor-dark.png">
-  <img src="docs/img/editor-light.png" alt="BeamSketch editor with a mountain wall-art design, layer list with cut settings and laser panel">
-</picture>
+<img src="docs/img/editor-light.png" alt="BeamSketch editor with a mountain wall-art design, layer list with cut settings and laser panel">
 
 ---
 
-## ✨ Features
+## Features
 
 <table>
   <tr>
     <td width="50%" valign="top">
-      <h3>✏️ Draw & import</h3>
+      <h3>Draw & import</h3>
       Rectangle, ellipse, polygon/star, polyline, bezier pen and text. Node editor, boolean operations,
       offset, align & distribute, arrays, snapping and unlimited undo with a history panel.
       Import <b>SVG</b>, <b>DXF</b>, <b>LightBurn</b> projects (<code>.lbrn</code>/<code>.lbrn2</code>)
       and images with tracing.
     </td>
     <td width="50%" valign="top">
-      <h3>🎨 Layers instead of colors</h3>
+      <h3>Layers instead of colors</h3>
       Every color is a cut setting: line, fill, fill + line or offset fill – with speed, power, passes,
       interval, angle, cross-hatch, overscan, kerf, Z offset, air assist, M3/M4 and tabs.
       A material library keeps your favourite settings.
@@ -54,13 +48,13 @@
   </tr>
   <tr>
     <td valign="top">
-      <h3>🖼️ Image engraving</h3>
+      <h3>Image engraving</h3>
       Grayscale, threshold and dithering (Floyd–Steinberg, Jarvis, Stucki, Atkinson, Sierra, ordered) –
       shown <b>live on the canvas</b> exactly as it will be engraved, with brightness, contrast and gamma
       sliders.
     </td>
     <td valign="top">
-      <h3>🔌 Straight to the laser</h3>
+      <h3>Straight to the laser</h3>
       GRBL GCode with safety checks, toolpath preview with time estimate and framing.
       Connect over <b>USB (Web Serial)</b> with jog pad, homing, console, pause and stop –
       or save the GCode for the SD card.
@@ -68,12 +62,12 @@
   </tr>
   <tr>
     <td valign="top">
-      <h3>🧰 Generators</h3>
+      <h3>Generators</h3>
       Finger-joint boxes, living hinges, QR codes and Code&nbsp;128 barcodes, text on a path or circle,
       serial numbers from CSV, material and focus test patterns and automatic nesting.
     </td>
     <td valign="top">
-      <h3>🔤 138 fonts & 97 symbols</h3>
+      <h3>138 fonts & 97 symbols</h3>
       Bundled fonts with real kerning – 92 of them connected script fonts – plus system fonts and your own
       <code>.ttf</code>/<code>.otf</code>. A symbol library with hearts, stars, animals, holidays and more.
     </td>
@@ -104,6 +98,8 @@
 <details>
 <summary><b>More screenshots</b></summary>
 <br>
+<img src="docs/img/editor-dark.png" alt="BeamSketch in dark mode">
+<p align="center">Dark mode.</p>
 <img src="docs/img/setup.png" alt="Setup assistant on first start">
 <p align="center">The setup assistant picks your laser from a list of 54 models – or reads the real values from the controller.</p>
 <img src="docs/img/box-dialog.png" alt="Box generator dialog">
@@ -112,13 +108,13 @@
 
 ### And also
 
-- 🧭 **Setup assistant** with a searchable list of 54 laser models; reads `$130`, `$131`, `$30`, `$110` … directly from the controller
-- 🗂️ **Tabs** – several designs open at once, each with its own undo history
-- 🌗 **Light and dark theme**, following your system on first start
-- 🌍 **13 languages** – English, German, Spanish, French, Italian, Portuguese, Dutch, Polish, Turkish, Russian, Japanese, Chinese, Korean
-- 🔒 **Private by design** – everything runs locally in your browser; your designs never leave your computer
+- **Setup assistant** with a searchable list of 54 laser models; reads `$130`, `$131`, `$30`, `$110` … directly from the controller
+- **Tabs** – several designs open at once, each with its own undo history
+- **Light and dark theme**, following your system on first start
+- **13 languages** – English, German, Spanish, French, Italian, Portuguese, Dutch, Polish, Turkish, Russian, Japanese, Chinese, Korean
+- **Private by design** – everything runs locally in your browser; your designs never leave your computer
 
-## 🚀 Quick start
+## Quick start
 
 **Online:** open **[beamsketch.com](https://beamsketch.com)** and click *Start now* – no sign-up needed.
 (The hosted version adds an optional free account for online storage and AI tools; those parts are not
@@ -149,7 +145,7 @@ Any static web server works too – BeamSketch is plain HTML, CSS and ES modules
 6. **Frame** the job to check the position on the material
 7. **Save GCode** – or **Connect** and **Start**
 
-## 🔧 Supported lasers
+## Supported lasers
 
 | Controller | Status |
 |---|---|
@@ -164,7 +160,7 @@ Creality Falcon, Ortur, Atomstack, Sculpfun, NEJE, Longer, TwoTrees, AlgoLaser, 
 and many more are in the device list (`devices/devices.json`). Missing yours? A pull request with the
 model and its work area is very welcome.
 
-## ⌨️ Keyboard shortcuts
+## Keyboard shortcuts
 
 | Key | Action | Key | Action |
 |---|---|---|---|
@@ -175,7 +171,7 @@ model and its work area is very welcome.
 | `0` / `1` | Fit all / fit work area | `Ctrl+E` | Save GCode |
 | `Space` + drag | Pan | `Ctrl+H` | History |
 
-## 🧩 Project structure
+## Project structure
 
 | Path | Content |
 |---|---|
@@ -218,19 +214,19 @@ User-facing text is wrapped in `loc('…')`; the German original is the key. Tra
 Improvements to existing translations are very welcome.
 </details>
 
-## ⚠️ Safety
+## Safety
 
 Lasers can cause fires, burns and permanent eye damage. **Wear laser safety glasses, never leave the laser
 unattended, ensure ventilation and keep a fire extinguisher at hand.** Never cut PVC or other
 chlorine-containing plastics. You are responsible for checking the generated GCode and your machine
 settings before running a job.
 
-## 🤝 Contributing
+## Contributing
 
 Bug reports, laser models, translations and code are all welcome – please read
 [CONTRIBUTING.md](CONTRIBUTING.md) first. For bigger changes, open an issue so we can agree on the approach.
 
-## 📄 License
+## License
 
 Copyright © 2026 Felix Stopa
 
