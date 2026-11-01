@@ -14,6 +14,7 @@
   <a href="LICENSE"><img alt="License: AGPL-3.0" src="https://img.shields.io/badge/license-AGPL--3.0-0e7f74?style=for-the-badge"></a>
   <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-none-0e7f74?style=for-the-badge">
   <img alt="13 languages" src="https://img.shields.io/badge/languages-13-0e7f74?style=for-the-badge">
+  <a href="https://ko-fi.com/beamsketch"><img alt="Support on Ko-fi" src="https://img.shields.io/badge/support-Ko--fi-ff5e5b?style=for-the-badge&logo=ko-fi&logoColor=white"></a>
 </p>
 
 <p align="center">
@@ -225,6 +226,11 @@ settings before running a job.
 
 Bug reports, laser models, translations and code are all welcome – please read
 [CONTRIBUTING.md](CONTRIBUTING.md) first. For bigger changes, open an issue so we can agree on the approach.
+
+## Support
+
+BeamSketch is free and will stay free. If it saves you time and you'd like to support its development, you can
+buy me a coffee on [Ko-fi](https://ko-fi.com/beamsketch) – or simply leave a star on GitHub. Thank you!
 
 ## License
 
