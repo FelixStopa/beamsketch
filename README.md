@@ -157,7 +157,7 @@ Any static web server works too – BeamSketch is plain HTML, CSS and ES modules
 | xTool S1, Snapmaker 2.0 | ⚠️ limited – own protocol |
 | Ruida (OMTech, Thunder …), Glowforge, xTool F1/M1/P2, LaserPecker, K40 with M2 Nano | ❌ no GCode – drawing and SVG export work |
 
-Creality Falcon, Ortur, Atomstack, Sculpfun, NEJE, Longer, TwoTrees, AlgoLaser, Mecpow, Wainlux, Comgrow
+Creality Falcon, Ortur, Atomstack, Sculpfun, NEJE, Longer, TwoTrees, AlgoLaser, Mecpow, Wainlux, Comgrow, Acmer
 and many more are in the device list (`devices/devices.json`). Missing yours? A pull request with the
 model and its work area is very welcome.
 
