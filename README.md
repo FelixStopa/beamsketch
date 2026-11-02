@@ -36,7 +36,7 @@
     <td width="50%" valign="top">
       <h3>Draw & import</h3>
       Rectangle, ellipse, polygon/star, polyline, bezier pen and text. Node editor, boolean operations,
-      offset, align & distribute, arrays, snapping and unlimited undo with a history panel.
+      offset, align & distribute, arrays, snapping and an undo history of 200 steps with a history panel – it even survives a page reload.
       Import <b>SVG</b>, <b>DXF</b>, <b>LightBurn</b> projects (<code>.lbrn</code>/<code>.lbrn2</code>)
       and images with tracing.
     </td>
