@@ -10,6 +10,7 @@ import { importLBRN } from './lbrn.js';
 import { buildJob, jobBounds } from './cam.js';
 import { generateGCode, frameGCode, estimateTime, fmtTime, jobOffset } from './gcode.js';
 import { GrblSerial } from './serial.js';
+import { GalvoLaser, isGalvo, galvoCfg, buildGalvoProgram } from './galvo.js';
 import { Library, Session, DEFAULT_MATERIALS } from './library.js';
 import { showOnboarding, wasOnboarded, resetOnboarding, deviceChooser, applyDevice, loadDevices, confirmSafety } from './onboarding.js';
 import { loadImage, getImage, grayscaleGrid, invalidateImagePreview, ImageCache } from './raster.js';
@@ -27,6 +28,7 @@ const App = {
   view: new View(),
   history: new History(),
   serial: new GrblSerial(),
+  galvo: new GalvoLaser(),
   state: {
     tool: 'select', selection: [], selIds: new Set(), activeLayer: 0,
     dark: true, showFill: true, rotateMode: false, drag: null, overlay: null,
@@ -1856,6 +1858,7 @@ function buildLaser() {
   const el = $('#laserBody');
   el.innerHTML = '';
   const M = App.doc.machine;
+  if (isGalvo(M)) return buildGalvoPanel(el);
   const anchor = h('div', { class: 'anchor' });
   for (let r = 2; r >= 0; r--) for (let c = 0; c < 3; c++) {
     const idx = r * 3 + c;
@@ -1966,12 +1969,105 @@ App.serial.onProgress = (n, t) => {
 };
 App.serial.onDone = () => { toast(loc('Job fertig ✓'), 'ok'); };
 
+/* ============ Galvo-Laser (EZCAD2 / BJJCZ) ============
+   Kein GCode: Die Werkzeugwege gehen als Befehlslisten per WebUSB an die Steuerung (galvo.js).
+   Die Arbeitsfläche ist das Linsenfeld, ihre Mitte die Feldmitte. */
+const GALVO_STATE = () => ({ idle: loc('bereit'), marking: loc('markiert …'), framing: loc('Rahmen') });
+function buildGalvoPanel(el) {
+  const M = App.doc.machine, G = App.galvo, g = galvoCfg(M);
+  el.appendChild(h('small', { class: 'hint' },
+    loc('Galvo-Laser ({src}) · Linsenfeld {w} × {h} mm – die Mitte der Arbeitsfläche ist die Mitte des Feldes.',
+      { src: g.source === 'co2' ? 'CO2' : loc('Faser'), w: M.width, h: M.height })));
+  el.appendChild(checkbox(App.state.selectedOnly, v => { App.state.selectedOnly = v; },
+    loc('Nur ausgewählte Objekte ausgeben')));
+  const rng = outputRangeText();
+  if (rng) el.appendChild(h('div', {
+    class: 'row', style: { marginTop: '4px', color: rng.bad ? 'var(--err)' : 'var(--fg2)', fontSize: '11.5px' }
+  }, h('span', {}, rng.bad ? loc('⚠ Ausgabe:') : loc('Ausgabe:')), h('b', {}, rng.text)));
+  el.appendChild(h('div', { class: 'laserGrid', style: { marginTop: '6px' } },
+    h('button', { class: 'tbtn', onclick: showPreview }, loc('▶ Vorschau')),
+    h('button', { class: 'tbtn', title: loc('Umriss mit dem roten Pilotlaser zeigen, bis du erneut klickst'), onclick: doFrame },
+      G.state === 'framing' ? loc('⏹ Rahmen aus') : loc('⬚ Rahmen'))));
+  el.appendChild(h('div', { class: 'row', style: { margin: '8px 0 4px' } },
+    h('span', { class: 'badge', style: G.state === 'marking' ? { color: 'var(--ok)' } : {} },
+      G.connected ? GALVO_STATE()[G.state] : loc('getrennt')),
+    h('span', { style: { flex: 1 } }),
+    h('button', { class: 'tbtn', onclick: toggleConnection }, G.connected ? loc('Trennen') : loc('Verbinden'))));
+  if (G.connected) {
+    el.appendChild(h('div', { class: 'laserGrid', style: { marginTop: '6px' } },
+      h('button', { class: 'tbtn big go', onclick: startJob }, loc('▶ Start')),
+      h('button', {
+        class: 'tbtn', onclick: async () => {
+          if (G.state !== 'marking') return;
+          await (G.paused ? G.resume() : G.pause());
+          toast(G.paused ? loc('Pausiert') : loc('Fortgesetzt')); buildLaser();
+        }
+      }, G.paused ? loc('▶ Fortsetzen') : loc('⏸ Pause')),
+      h('button', { class: 'tbtn big stop', onclick: () => { G.stop().catch(e => toast(e.message, 'err')); toast(loc('Gestoppt'), 'err'); } }, loc('⏹ Stopp'))));
+    el.appendChild(h('div', { style: { marginTop: '6px', height: '6px', background: 'var(--bg3)', borderRadius: '3px', overflow: 'hidden' } },
+      h('div', { id: 'progBar', style: { height: '100%', width: '0%', background: 'var(--ok)' } })));
+    el.appendChild(h('small', { class: 'hint', id: 'progTxt' }, ''));
+  } else {
+    el.appendChild(h('small', { class: 'hint' }, G.supported
+      ? loc('Galvo-Laser per USB anschließen, EZCAD bzw. LightBurn schließen und „Verbinden" klicken (Chrome/Edge). Unter Windows muss der Treiber mit Zadig auf „WinUSB" umgestellt sein.')
+      : loc('WebUSB nicht verfügbar – nutze Chrome oder Edge am Computer.')));
+  }
+}
+App.galvo.onState = () => { if (isGalvo(App.doc.machine)) buildLaser(); };
+App.galvo.onProgress = (n, t) => {
+  const b = $('#progBar'), x = $('#progTxt');
+  if (b && t) b.style.width = (100 * n / t).toFixed(1) + '%';
+  if (x && t) x.textContent = loc('{n}/{t} Pakete gesendet', { n, t });
+};
+App.galvo.onDone = () => { toast(loc('Job fertig ✓'), 'ok'); };
+
+async function toggleConnection() {
+  const M = App.doc.machine;
+  const dev = isGalvo(M) ? App.galvo : App.serial;
+  try {
+    if (dev.connected) { await dev.disconnect(); toast(loc('Getrennt')); }
+    else {
+      if (isGalvo(M)) await App.galvo.connect(M);
+      else await App.serial.connect(M.baud);
+      toast(loc('Verbunden'), 'ok');
+    }
+  } catch (e) { toast(e.message, 'err'); }
+  buildLaser();
+}
+async function galvoConnected() {
+  const G = App.galvo;
+  if (!G.connected) {
+    try { await G.connect(App.doc.machine); } catch (e) { toast(e.message, 'err'); return false; }
+  }
+  G.machine = App.doc.machine;      // geänderte Einstellungen gelten sofort
+  return true;
+}
+async function galvoFrame(ops) {
+  if (!await galvoConnected()) return;
+  App.galvo.frame(jobBounds(ops)).catch(e => toast(e.message, 'err'));
+}
+function startGalvoJob(ops) {
+  const prog = buildGalvoProgram(App.doc.machine, ops);
+  const c = h('div', {}, h('div', { class: 'kv' },
+    h('span', {}, loc('Geschätzte Dauer:')), h('b', {}, fmtTime(prog.seconds)),
+    h('span', {}, loc('Markierlänge:')), h('b', {}, (prog.markLen / 1000).toFixed(2) + ' m')),
+    h('p', { style: { color: 'var(--warn)' } }, loc('⚠ Schutzbrille für die Wellenlänge deines Lasers tragen – der Strahl eines Faserlasers ist unsichtbar. Laser nie unbeaufsichtigt betreiben.')));
+  modal(loc('Job starten?'), c, [{ label: loc('Abbrechen') }, {
+    label: loc('Jetzt starten'), primary: true, click: async () => {
+      if (!await galvoConnected()) return;
+      App.galvo.run(prog).catch(e => toast(e.message, 'err'));
+    }
+  }]);
+}
+
 function buildOps() {
   const opts = {};
   if (App.state.selectedOnly && App.state.selection.length) {
     opts.only = new Set(App.state.selection.map(s => s.id));
   }
-  return buildJob(App.doc, App.ctxGeo, opts);
+  // Galvo: Spiegel haben keine Massenträgheit wie ein Laserkopf – kein Overscan beim Füllen
+  const doc = isGalvo(App.doc.machine) ? { ...App.doc, layers: App.doc.layers.map(L => ({ ...L, overscan: 0 })) } : App.doc;
+  return buildJob(doc, App.ctxGeo, opts);
 }
 /* Prüft die tatsächlich ausgegebenen Koordinaten und warnt, bevor die
    Maschine in einen Endschalter fährt. Gibt ein Promise<boolean> zurück. */
@@ -2103,6 +2199,7 @@ async function startJob() {
   const ops = buildOps();
   if (!ops.length) return toast(loc('Nichts auszugeben'), 'err');
   if (!await checkOutputRange(ops)) return;
+  if (isGalvo(App.doc.machine)) return startGalvoJob(ops);
   const est = estimateTime(App.doc, ops);
   const c = h('div', {}, h('div', { class: 'kv' },
     h('span', {}, loc('Geschätzte Dauer:')), h('b', {}, fmtTime(est.seconds)),
@@ -2114,9 +2211,11 @@ async function startJob() {
   }]);
 }
 async function doFrame() {
+  if (isGalvo(App.doc.machine) && App.galvo.state === 'framing') return App.galvo.stop();
   const ops = buildOps();
   if (!ops.length) return toast(loc('Nichts auszugeben'), 'err');
   if (!await checkOutputRange(ops)) return;
+  if (isGalvo(App.doc.machine)) return galvoFrame(ops);
   const g = frameGCode(App.doc, ops);
   if (!g) return;
   if (App.serial.connected) { sendToLaser(g); toast(loc('Rahmen wird abgefahren')); }
@@ -2223,7 +2322,8 @@ function machineDialog() {
       field(loc('Einheit für Geschwindigkeiten'), speedUnitSelect(() => { m.close(); machineDialog(); }))),
     h('div', { class: 'grid2' },
       field(loc('Name'), h('input', { type: 'text', value: M.name, onchange: e => M.name = e.target.value })),
-      field(loc('Firmware'), selectInput(M.firmware, [{ v: 'GRBL', t: 'GRBL' }, { v: 'GRBL-M3', t: loc('GRBL-M3 (alt)') }, { v: 'Marlin', t: 'Marlin' }], v => M.firmware = v)),
+      field(loc('Firmware'), selectInput(M.firmware, [{ v: 'GRBL', t: 'GRBL' }, { v: 'GRBL-M3', t: loc('GRBL-M3 (alt)') }, { v: 'Marlin', t: 'Marlin' }, { v: 'EZCAD2', t: loc('EZCAD2 (Galvo)') }],
+        v => { const was = isGalvo(M); M.firmware = v; if (isGalvo(M) !== was) { if (isGalvo(M)) M.jobOrigin = 'absolute'; m.close(); machineDialog(); } })),
       field(loc('Breite mm'), numInput(M.width, 1, v => { M.width = v; App.draw(); })),
       field(loc('Höhe mm'), numInput(M.height, 1, v => { M.height = v; App.draw(); })),
       field(loc('S-Wert max'), numInput(M.sScale, 1, v => M.sScale = v)),
@@ -2241,6 +2341,7 @@ function machineDialog() {
       checkbox(M.airAssistM7, v => M.airAssistM7 = v, loc('Luft über M7 (sonst M8)')),
       checkbox(M.boundsCheck, v => M.boundsCheck = v, loc('Bereichsprüfung')),
       checkbox(M.returnToFinish, v => M.returnToFinish = v, loc('Endposition anfahren'))),
+    isGalvo(M) ? galvoSettings(M) : null,
     h('h4', { class: 'sec' }, loc('Rahmen vor dem Job')),
     h('div', { class: 'grid2' },
       field(loc('Rahmen'), selectInput(M.frameBeforeJob || 'off', [
@@ -2258,6 +2359,28 @@ function machineDialog() {
     h('div', { class: 'row', style: { marginTop: '8px' } },
       h('button', { class: 'tbtn', onclick: () => { $('#fileInput').click(); } }, loc('.lbdev-Datei laden…'))));
   const m = modal(loc('Geräte-Einstellungen'), c, [{ label: loc('Fertig'), primary: true, click: () => { App.refresh(); $('#devBadge').textContent = `${M.name} · ${M.width}×${M.height} mm · ${M.firmware}`; } }], { width: '560px' });
+}
+
+/* Galvo: Laserquelle, Geschwindigkeiten, Verzögerungen und Ausrichtung des Linsenfelds */
+function galvoSettings(M) {
+  M.galvo = galvoCfg(M);
+  const g = M.galvo;
+  return h('div', {},
+    h('h4', { class: 'sec' }, loc('Galvo-Laser')),
+    h('small', { class: 'hint' }, loc('Breite und Höhe oben sind das Linsenfeld (z. B. 110 × 110 mm). Steht die Zeichnung gespiegelt oder gedreht, hier die Achsen anpassen.')),
+    h('div', { class: 'grid2' },
+      field(loc('Laserquelle'), selectInput(g.source, [{ v: 'fiber', t: loc('Faser') }, { v: 'co2', t: 'CO2' }], v => g.source = v)),
+      field(loc('Leerfahrt') + ' ' + speedUnit(), speedInput(g.travelSpeed, v => g.travelSpeed = Math.max(1, v))),
+      field(loc('Rahmen-Geschw.') + ' ' + speedUnit(), speedInput(g.frameSpeed, v => g.frameSpeed = Math.max(1, v))),
+      field(loc('Pilotlaser-Ausgang'), numInput(g.lightPin, 1, v => g.lightPin = Math.max(0, Math.min(15, Math.round(v))))),
+      field(loc('Laser-Ein-Verzögerung µs'), numInput(g.delayOn, 1, v => g.delayOn = Math.round(v))),
+      field(loc('Laser-Aus-Verzögerung µs'), numInput(g.delayOff, 1, v => g.delayOff = Math.round(v))),
+      field(loc('Ecken-Verzögerung µs'), numInput(g.delayPolygon, 1, v => g.delayPolygon = Math.round(v))),
+      field(loc('Sprung-Verzögerung µs'), numInput(g.delayJumpLong, 1, v => g.delayJumpLong = Math.max(0, Math.round(v))))),
+    h('div', { class: 'grid3', style: { marginTop: '4px' } },
+      checkbox(g.flipX, v => g.flipX = v, loc('X spiegeln')),
+      checkbox(g.flipY, v => g.flipY = v, loc('Y spiegeln')),
+      checkbox(g.swapXY, v => g.swapXY = v, loc('X und Y tauschen'))));
 }
 
 /* ============ Konsole ============ */
@@ -2626,7 +2749,7 @@ const MENUS = {
     { t: loc('Rahmen abfahren'), a: doFrame },
     { t: loc('Job starten'), a: startJob },
     { sep: 1 },
-    { t: loc('Verbinden / Trennen'), a: async () => { const S = App.serial; if (S.connected) await S.disconnect(); else { try { await S.connect(App.doc.machine.baud); } catch (e) { toast(e.message, 'err'); } } buildLaser(); } },
+    { t: loc('Verbinden / Trennen'), a: toggleConnection },
     { t: loc('Konsole öffnen'), a: showConsole },
     { t: loc('Referenzfahrt ($H)'), a: () => App.serial.home() },
     { t: loc('Alarm lösen ($X)'), a: () => App.serial.unlock() },
@@ -3147,6 +3270,11 @@ function guardSerial() {
   S.connect = async (...a) => {
     if (!await confirmSafety()) throw new Error(loc('Abgebrochen'));
     return connect(...a);
+  };
+  const G = App.galvo, gConnect = G.connect.bind(G);
+  G.connect = async (...a) => {
+    if (!await confirmSafety()) throw new Error(loc('Abgebrochen'));
+    return gConnect(...a);
   };
 }
 

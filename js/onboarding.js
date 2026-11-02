@@ -35,7 +35,8 @@ export function resetOnboarding() {
 const SUPPORT_LABEL = {
   full: { t: loc('GCode direkt nutzbar'), c: 'ok' },
   limited: { t: loc('eingeschränkt'), c: 'warn' },
-  none: { t: loc('kein GCode möglich'), c: 'err' }
+  none: { t: loc('kein GCode möglich'), c: 'err' },
+  galvo: { t: loc('direkt per USB (Galvo)'), c: 'ok' }
 };
 
 /* Anzeigename; die allgemeinen Einträge (Marke „Allgemein") werden übersetzt */
@@ -62,6 +63,12 @@ export function applyDevice(App, d, over = {}) {
   m.absoluteCoords = homing;
   m.deviceId = d.id;
   m.support = d.support || 'full';
+  if (d.ctrl === 'EZCAD2') {
+    // Galvo: Arbeitsfläche = Linsenfeld, immer absolute Koordinaten um die Feldmitte
+    m.galvo = { ...(m.galvo || {}), source: d.type === 'co2' ? 'co2' : 'fiber' };
+    m.jobOrigin = 'absolute';
+    m.homeOnStartup = false;
+  }
   const badge = $('#devBadge');
   if (badge) badge.textContent = `${m.name} · ${m.width}×${m.height} mm · ${m.firmware}`;
   App.refresh();
@@ -95,6 +102,12 @@ export function deviceChooser(App, onPick) {
     detail.appendChild(h('div', { class: 'grid2', style: { marginTop: '6px' } },
       field(loc('Breite mm'), numInput(state.width, 1, v => state.width = v)),
       field(loc('Höhe mm'), numInput(state.height, 1, v => state.height = v))));
+    if (d.ctrl === 'EZCAD2') {
+      detail.appendChild(h('small', { class: 'hint' }, loc('Breite und Höhe sind das Linsenfeld deines Galvo-Lasers (steht auf dem Objektiv oder in EZCAD, z. B. 110 × 110 mm).')));
+      if (d.src) detail.appendChild(h('small', { class: 'hint' },
+        loc('Werte laut Hersteller.') + ' ', h('a', { href: d.src, target: '_blank', rel: 'noreferrer', style: { color: 'var(--acc)' } }, loc('Quelle'))));
+      return;
+    }
     detail.appendChild(h('div', { style: { marginTop: '4px' } },
       checkbox(state.homing, v => { state.homing = v; renderDetail(); },
         loc('Laser fährt beim Start eine Referenzfahrt (Endschalter vorhanden)'))));
@@ -116,7 +129,7 @@ export function deviceChooser(App, onPick) {
     list.innerHTML = '';
     const q = state.q.trim().toLowerCase();
     const items = (catalog.devices || []).filter(d => {
-      if (state.filter === 'ok' && d.support !== 'full') return false;
+      if (state.filter === 'ok' && d.support !== 'full' && d.support !== 'galvo') return false;
       if (!q) return true;
       return (d.brand + ' ' + d.model + ' ' + devName(d) + ' ' + (d.alias || '')).toLowerCase().includes(q);
     });

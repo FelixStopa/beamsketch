@@ -57,6 +57,8 @@ export function defaultLayer(i) {
     dotMode: false,
     dotTime: 1.0,
     offsetCount: 0,      // Offset-Füllung: 0 = bis leer
+    frequency: 30,       // kHz – nur Galvo-Laser (Faser: Pulsfrequenz, CO2: PWM)
+    pulseWidth: 0,       // ns – nur MOPA-Faserlaser, 0 = Standard der Quelle
     isTool: false
   };
 }

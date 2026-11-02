@@ -4,7 +4,8 @@
  "support": {
   "full": "GCode direkt nutzbar",
   "limited": "eingeschränkt nutzbar",
-  "none": "andere Steuerung – kein GCode"
+  "none": "andere Steuerung – kein GCode",
+  "galvo": "direkt per USB (Galvo)"
  },
  "devices": [
   {
@@ -1014,6 +1015,42 @@
    "note": "Die Originalplatine versteht kein GCode (K40 Whisperer o. Ä. nötig). Mit einem Umbau auf GRBL/Smoothie funktioniert BeamSketch.",
    "src": "",
    "id": "allgemein-k40-mit-originaler-m2-nano-platine"
+  },
+  {
+   "brand": "Allgemein",
+   "alias": "Galvo EZCAD2 BJJCZ LMC JCZ",
+   "ctrl": "EZCAD2",
+   "support": "galvo",
+   "width": 110,
+   "height": 110,
+   "sMax": 1000,
+   "baud": 115200,
+   "maxSpeed": 2000,
+   "accel": 3000,
+   "homing": false,
+   "src": "https://github.com/meerk40t/galvoplotter",
+   "model": "Faserlaser (Galvo) mit EZCAD2",
+   "type": "fiber",
+   "note": "Faser- und MOPA-Markierlaser mit BJJCZ-Steuerung (EZCAD2). Geräte mit EZCAD3 werden nicht unterstützt. Neu in BeamSketch – erst mit Restmaterial testen.",
+   "id": "generic-galvo-fiber-ezcad2"
+  },
+  {
+   "brand": "Allgemein",
+   "alias": "Galvo EZCAD2 BJJCZ LMC JCZ",
+   "ctrl": "EZCAD2",
+   "support": "galvo",
+   "width": 110,
+   "height": 110,
+   "sMax": 1000,
+   "baud": 115200,
+   "maxSpeed": 2000,
+   "accel": 3000,
+   "homing": false,
+   "src": "https://github.com/meerk40t/galvoplotter",
+   "model": "CO2-Galvo mit EZCAD2",
+   "type": "co2",
+   "note": "CO2-Galvolaser mit BJJCZ-Steuerung (EZCAD2). Geräte mit EZCAD3 werden nicht unterstützt. Neu in BeamSketch – erst mit Restmaterial testen.",
+   "id": "generic-galvo-co2-ezcad2"
   },
   {
    "brand": "Glowforge",

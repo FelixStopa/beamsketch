@@ -153,9 +153,10 @@ Any static web server works too – BeamSketch is plain HTML, CSS and ES modules
 | GRBL / GRBL-LPC / grblHAL (almost all diode lasers) | ✅ save GCode **and** send directly via USB |
 | Smoothieware (K40 conversions, Cohesion3D) | ✅ GCode |
 | xTool D1 / D1 Pro | ✅ GCode (they behave like GRBL) |
+| Galvo lasers with EZCAD2 / BJJCZ controller (fiber, MOPA, CO2 galvo) | 🧪 new – send directly via WebUSB, red-light framing |
 | Marlin (3D printer / CNC with laser module) | ⚠️ limited – adjust the start GCode |
 | xTool S1, Snapmaker 2.0 | ⚠️ limited – own protocol |
-| Ruida (OMTech, Thunder …), Glowforge, xTool F1/M1/P2, LaserPecker, K40 with M2 Nano | ❌ no GCode – drawing and SVG export work |
+| Ruida (OMTech, Thunder …), Glowforge, xTool F1/M1/P2, LaserPecker, K40 with M2 Nano, EZCAD3 galvos | ❌ no GCode – drawing and SVG export work |
 
 Creality Falcon, Ortur, Atomstack, Sculpfun, NEJE, Longer, TwoTrees, AlgoLaser, Mecpow, Wainlux, Comgrow, Acmer
 and many more are in the device list (`devices/devices.json`). Missing yours? A pull request with the
@@ -186,6 +187,7 @@ model and its work area is very welcome.
 | `js/font.js` | Text to vector, font library, kerning |
 | `js/svg.js`, `js/dxf.js`, `js/lbrn.js` | Import/export |
 | `js/serial.js` | Web Serial connection to GRBL |
+| `js/galvo.js` | Galvo lasers (EZCAD2 / BJJCZ) over WebUSB |
 | `js/projects.js` | Tabs, saving projects |
 | `js/symbols.js` | Symbol library |
 | `js/features.js`, `js/generators.js`, `js/qrcode.js` | Generators and dialogs |
@@ -244,7 +246,9 @@ If you run a modified version for others over a network, the AGPL requires you t
 code – change `SOURCE_URL` in `js/main.js` (shown in *Help → About*) to point to your version.
 
 Bundled third-party parts keep their own licenses: the fonts in `fonts/` (SIL Open Font License 1.1 or
-Apache License 2.0, see `fonts/LICENSES.md`) and opentype.js in `vendor/` (MIT).
+Apache License 2.0, see `fonts/LICENSES.md`) and opentype.js in `vendor/` (MIT). The galvo driver in
+`js/galvo.js` follows the protocol implementation of [galvoplotter](https://github.com/meerk40t/galvoplotter)
+by MeerK40t (MIT, see `vendor/LICENSE-galvoplotter.txt`).
 
 The name **BeamSketch** and its logo identify the official project and the service at beamsketch.com.
 Please use a different name for modified versions you publish or host.

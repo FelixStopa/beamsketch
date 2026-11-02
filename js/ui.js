@@ -269,6 +269,13 @@ export function cutSettingsDialog(App, L) {
         checkbox(L.bidir, v => { L.bidir = v; App.refresh(); }, loc('Bidirektional'))
       ));
     }
+    if (App.doc.machine.firmware === 'EZCAD2') {
+      c.appendChild(h('h4', { style: { margin: '10px 0 4px', color: 'var(--fg2)' } }, loc('Galvo-Laser')));
+      c.appendChild(h('div', { class: 'grid2' },
+        field(loc('Frequenz kHz'), numInput(L.frequency ?? 30, 1, v => { L.frequency = Math.max(1, Math.min(4000, v)); App.refresh(); })),
+        field(loc('Pulsbreite ns (MOPA)'), numInput(L.pulseWidth ?? 0, 1, v => { L.pulseWidth = Math.max(0, Math.round(v)); App.refresh(); }))));
+      c.appendChild(h('small', { class: 'hint' }, loc('Pulsbreite nur bei MOPA-Faserlasern, 0 = Standard der Laserquelle.')));
+    }
     c.appendChild(h('h4', { style: { margin: '10px 0 4px', color: 'var(--fg2)' } }, loc('Erweitert')));
     c.appendChild(h('div', { class: 'grid2' },
       field(loc('Kerf-Ausgleich mm'), numInput(L.kerf, .01, v => { L.kerf = v; App.refresh(); })),
