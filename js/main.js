@@ -11,6 +11,7 @@ import { buildJob, jobBounds } from './cam.js';
 import { generateGCode, frameGCode, estimateTime, fmtTime, jobOffset } from './gcode.js';
 import { GrblSerial } from './serial.js';
 import { GalvoLaser, isGalvo, galvoCfg, buildGalvoProgram } from './galvo.js';
+import { pickModelFile, layeredModelDialog } from './model3d.js';
 import { Library, Session, DEFAULT_MATERIALS } from './library.js';
 import { showOnboarding, wasOnboarded, resetOnboarding, deviceChooser, applyDevice, loadDevices, confirmSafety } from './onboarding.js';
 import { loadImage, getImage, grayscaleGrid, invalidateImagePreview, ImageCache } from './raster.js';
@@ -1457,6 +1458,8 @@ async function importFile(f) {
       if (r.warn.types && r.warn.types.size) msg += ' – ' + loc('nicht unterstützt:') + ' ' + [...r.warn.types].join(', ');
       toast(msg, 'ok');
       fitAll();
+    } else if (ext === 'stl' || ext === 'obj') {
+      await layeredModelDialog(f);
     } else if (ext === 'lbdev') {
       applyLbdev(JSON.parse(await f.text()));
       toast(loc('Gerätedatei geladen'), 'ok');
@@ -2732,6 +2735,7 @@ const MENUS = {
     { sep: 1 },
     { t: loc('Symbole…'), k: 'Strg+K', a: symbolPanel },
     { t: loc('Box-Generator…'), a: F.boxDialog },
+    { t: loc('Schichtmodell aus 3D-Datei (STL/OBJ)…'), a: pickModelFile },
     { t: loc('Flexscharnier…'), a: F.hingeDialog },
     { t: loc('QR-Code / Barcode…'), a: F.codeDialog },
     { t: loc('Text auf Pfad…'), a: F.textPathDialog },

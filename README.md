@@ -66,6 +66,7 @@
       <h3>Generators</h3>
       Finger-joint boxes, living hinges, QR codes and Code&nbsp;128 barcodes, text on a path or circle,
       serial numbers from CSV, material and focus test patterns and automatic nesting.
+      <b>Layered models from STL/OBJ</b>: slice a 3D model into numbered sheets with a 3D preview.
     </td>
     <td valign="top">
       <h3>138 fonts & 97 symbols</h3>
@@ -188,6 +189,7 @@ model and its work area is very welcome.
 | `js/svg.js`, `js/dxf.js`, `js/lbrn.js` | Import/export |
 | `js/serial.js` | Web Serial connection to GRBL |
 | `js/galvo.js` | Galvo lasers (EZCAD2 / BJJCZ) over WebUSB |
+| `js/mesh.js`, `js/model3d.js`, `js/view3d.js` | STL/OBJ import, layered models, 3D preview (WebGL) |
 | `js/projects.js` | Tabs, saving projects |
 | `js/symbols.js` | Symbol library |
 | `js/features.js`, `js/generators.js`, `js/qrcode.js` | Generators and dialogs |
@@ -248,7 +250,8 @@ code – change `SOURCE_URL` in `js/main.js` (shown in *Help → About*) to poin
 Bundled third-party parts keep their own licenses: the fonts in `fonts/` (SIL Open Font License 1.1 or
 Apache License 2.0, see `fonts/LICENSES.md`) and opentype.js in `vendor/` (MIT). The galvo driver in
 `js/galvo.js` follows the protocol implementation of [galvoplotter](https://github.com/meerk40t/galvoplotter)
-by MeerK40t (MIT, see `vendor/LICENSE-galvoplotter.txt`).
+by MeerK40t (MIT, see `vendor/LICENSE-galvoplotter.txt`). The 3D preview uses earcut by Mapbox in
+`vendor/earcut.js` (ISC, see `vendor/LICENSE-earcut.txt`).
 
 The name **BeamSketch** and its logo identify the official project and the service at beamsketch.com.
 Please use a different name for modified versions you publish or host.
