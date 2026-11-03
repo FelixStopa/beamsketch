@@ -1,4 +1,5 @@
-// serial.js — GRBL über Web Serial: Verbinden, Streaming (Character-Counting), Jog, Status
+// serial.js — GRBL über Web Serial oder WLAN (FluidNC-WebSocket): Verbinden, Streaming (Character-Counting),
+// Jog, Status. Beide Wege liefern denselben Textstrom; nur Öffnen, Senden und Lesen unterscheiden sich.
 import { loc } from './i18n.js';
 export class GrblSerial {
   constructor() {
@@ -18,6 +19,46 @@ export class GrblSerial {
   }
   get supported() { return 'serial' in navigator; }
 
+  /* WLAN: FluidNC (und ESP3D) reichen die GRBL-Ausgabe über einen WebSocket durch – Binär-Frames sind
+     Controller-Text, Text-Frames Verwaltungsmeldungen (CURRENT_ID, PING …). Eingaben gehen als Binär-Frames
+     zurück. host: „192.168.1.50", „fluidnc.local", „host:port" oder eine volle ws://-Adresse. */
+  async connectNet(host) {
+    const url = netUrl(host);
+    if (!url) throw new Error(loc('Bitte die Adresse des Lasers eintragen (z. B. 192.168.1.50).'));
+    if (location.protocol === 'https:' && url.startsWith('ws:') && !/^ws:\/\/(localhost|127\.)/.test(url))
+      throw new Error(loc('Der Browser erlaubt von einer https-Seite keine unverschlüsselte WLAN-Verbindung. Starte BeamSketch lokal (http://localhost) oder nutze USB.'));
+    const ws = new WebSocket(url, ['arduino']);
+    ws.binaryType = 'arraybuffer';
+    await new Promise((res, rej) => {
+      const t = setTimeout(() => { try { ws.close(); } catch (e) { } rej(new Error(loc('Keine Verbindung zu {u}', { u: url }))); }, 6000);
+      ws.onopen = () => { clearTimeout(t); res(); };
+      ws.onerror = () => { clearTimeout(t); rej(new Error(loc('Keine Verbindung zu {u}', { u: url }))); };
+    });
+    const dec = new TextDecoder();
+    ws.onmessage = ev => {
+      if (typeof ev.data === 'string') {
+        if (/^(CURRENT_ID|ACTIVE_ID|PING|DHT):/.test(ev.data)) return;
+        this._feed(ev.data + (/\n$/.test(ev.data) ? '' : '\n'));
+      } else this._feed(dec.decode(ev.data, { stream: true }));
+    };
+    ws.onclose = () => { if (this.connected) { this.onLine('er', loc('WLAN-Verbindung getrennt')); this._closed(); } };
+    this.ws = ws;
+    this.connected = true;
+    this._poll = setInterval(() => { if (this.connected) this.raw('?'); }, 250);
+    await this.sleep(200);
+    this.write('\r\n');
+    return true;
+  }
+  _send(bytes) {
+    if (this.ws) { if (this.ws.readyState === 1) this.ws.send(bytes); return Promise.resolve(); }
+    return this.writer ? this.writer.write(bytes) : Promise.resolve();
+  }
+  _closed() {
+    this.streaming = false; clearInterval(this._poll);
+    this.connected = false; this.port = null; this.reader = null; this.writer = null; this.ws = null;
+    this.onStatus(this.status);
+  }
+
   async connect(baud = 115200) {
     if (!this.supported) throw new Error(loc('Web Serial wird von diesem Browser nicht unterstützt. Nutze Chrome, Edge oder Opera (Desktop).'));
     this.port = await navigator.serial.requestPort();
@@ -35,6 +76,7 @@ export class GrblSerial {
   async disconnect() {
     this.streaming = false;
     clearInterval(this._poll);
+    if (this.ws) { const ws = this.ws; this.connected = false; try { ws.close(); } catch (e) { } this._closed(); return; }
     try { if (this.reader) { await this.reader.cancel(); this.reader.releaseLock(); } } catch (e) { }
     try { if (this.writer) { this.writer.releaseLock(); } } catch (e) { }
     try { if (this.port) await this.port.close(); } catch (e) { }
@@ -48,16 +90,19 @@ export class GrblSerial {
       while (this.connected) {
         const { value, done } = await this.reader.read();
         if (done) break;
-        this._buf += dec.decode(value, { stream: true });
-        let i;
-        while ((i = this._buf.search(/\r\n|\n|\r/)) >= 0) {
-          const line = this._buf.slice(0, i).trim();
-          this._buf = this._buf.slice(i + 1).replace(/^\n/, '');
-          if (line) this._handle(line);
-        }
+        this._feed(dec.decode(value, { stream: true }));
       }
     } catch (e) {
       this.onLine('er', 'Lesefehler: ' + e.message);
+    }
+  }
+  _feed(text) {
+    this._buf += text;
+    let i;
+    while ((i = this._buf.search(/\r\n|\n|\r/)) >= 0) {
+      const line = this._buf.slice(0, i).trim();
+      this._buf = this._buf.slice(i + 1).replace(/^\n/, '');
+      if (line) this._handle(line);
     }
   }
 
@@ -97,13 +142,13 @@ export class GrblSerial {
     this.onStatus(st);
   }
 
-  async raw(s) { // Echtzeitbefehl ohne Zeilenende
-    if (!this.writer) return;
-    await this.writer.write(new TextEncoder().encode(s));
+  async raw(s) { // Echtzeitbefehl ohne Zeilenende – als einzelne Bytes (0x85 Jog-Abbruch darf kein UTF-8 werden)
+    if (!this.connected) return;
+    await this._send(Uint8Array.from(s, c => c.charCodeAt(0) & 255));
   }
   async write(s) {
-    if (!this.writer) return;
-    await this.writer.write(new TextEncoder().encode(s));
+    if (!this.connected) return;
+    await this._send(new TextEncoder().encode(s));
     if (s.trim() && s !== '?') this.onLine('tx', s.trim());
   }
   // Einzelbefehl (außerhalb des Streams)
@@ -187,4 +232,13 @@ export class GrblSerial {
     this.command('M3 S' + S);
     setTimeout(() => { this.command('M5 S0'); }, ms || 300);
   }
+}
+
+/* Adresse → WebSocket-URL. FluidNC: Port 81 (WebUI 2); eine volle ws://-Adresse wird übernommen. */
+export function netUrl(host) {
+  host = String(host || '').trim();
+  if (!host) return '';
+  if (/^wss?:\/\//i.test(host)) return host;
+  host = host.replace(/^https?:\/\//i, '').replace(/\/+$/, '');
+  return 'ws://' + (/:\d+$/.test(host) || /^\[.*\]:\d+$/.test(host) ? host : host + ':81') + '/';
 }

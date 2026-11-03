@@ -8,10 +8,22 @@ import { importSVG, exportSVG, parsePathData } from './svg.js';
 import { importDXF } from './dxf.js';
 import { importLBRN } from './lbrn.js';
 import { buildJob, jobBounds } from './cam.js';
-import { generateGCode, frameGCode, estimateTime, fmtTime, jobOffset } from './gcode.js';
+import { generateGCode, frameGCode, estimateTime, fmtTime, jobOffset, rotaryK } from './gcode.js';
 import { GrblSerial } from './serial.js';
 import { GalvoLaser, isGalvo, galvoCfg, buildGalvoProgram } from './galvo.js';
 import { pickModelFile, layeredModelDialog } from './model3d.js';
+import { checkDesign, fixFinding } from './check.js';
+import { pickEdge, makeJoint, JOINT_DEFAULTS } from './joints.js';
+import { partsDialog, editPart } from './partsui.js';
+import { view3dDialog } from './view3dui.js';
+import { warpDialog, cornersDialog, closeDialog, joinSel, reverseSel, setStartFromNode, trimAt, applyTrim } from './pathtoolsui.js';
+import { exportDXF, exportPDF, readPDF, pdfShapes } from './formats.js';
+import { centerlines } from './centerline.js';
+import { fitCalibrationDialog, loadFitCal, applyFitCal } from './calibrate.js';
+import { cameraDialog } from './camera.js';
+import { printCutDialog } from './printcut.js';
+import { jigDialog } from './jig.js';
+import { pageList, pageIndex, switchPage, addPage, deletePage, moveToPage, movePage } from './pages.js';
 import { Library, Session, DEFAULT_MATERIALS } from './library.js';
 import { showOnboarding, wasOnboarded, resetOnboarding, deviceChooser, applyDevice, loadDevices, confirmSafety } from './onboarding.js';
 import { loadImage, getImage, grayscaleGrid, invalidateImagePreview, ImageCache } from './raster.js';
@@ -35,7 +47,7 @@ const App = {
     dark: true, showFill: true, rotateMode: false, drag: null, overlay: null,
     preview: null, nodeSel: [], mouse: { x: 0, y: 0 }, snapGrid: false, snapObj: true,
     clipboard: null, showTravel: true,
-    imagePreview: true, aux: []
+    imagePreview: true, aux: [], drawGuides: null
   },
   ctxGeo: { tol: 0.02, fontProvider: textSubpaths }
 };
@@ -49,6 +61,7 @@ App.draw = () => {
   App.state.selection = resolveSel();
   render(cv, App.doc, App.view, App.state, App.ctxGeo);
   $('#stZoom').textContent = Math.round(App.view.scale * 25.4 / 96 * 100) + '%';
+  const sp = $('#stPage'); if (sp) sp.textContent = loc('Seite {i} / {n}', { i: pageIndex(App.doc) + 1, n: pageList(App.doc).length });
   const n = App.state.selection.length;
   const sb = n ? shapesBBox(App.state.selection, App.ctxGeo) : null;
   selBoxCache = sb;
@@ -148,7 +161,46 @@ function snap(p, ignoreShapes) {
     const g = App.doc.settings.gridSize;
     best = { x: Math.round(p.x / g) * g, y: Math.round(p.y / g) * g };
   }
+  // Hilfslinien: jede Achse für sich
+  if (App.doc.settings.showGuides !== false) {
+    const tol = pxWorld(8);
+    for (const g of guides()) {
+      if (g.axis === 'v' && Math.abs(p.x - g.pos) < tol) best.x = g.pos;
+      if (g.axis === 'h' && Math.abs(p.y - g.pos) < tol) best.y = g.pos;
+    }
+  }
   return best;
+}
+
+/* ============ Hilfslinien ============
+   Aus dem oberen (waagerecht) oder linken Lineal (senkrecht) ziehen, verschieben, zum Löschen zurück ins
+   Lineal ziehen. Sie liegen in den Projekteinstellungen, sind keine Objekte und werden nie gelasert. */
+const guides = () => (App.doc.settings.guides = App.doc.settings.guides || []);
+let guideDrag = null;
+function drawGuides(g, px) {
+  if (App.doc.settings.showGuides === false) return;
+  g.save();
+  g.strokeStyle = '#00b4d8'; g.lineWidth = 1 * px; g.setLineDash([6 * px, 4 * px]);
+  for (const gd of guides()) {
+    g.beginPath();
+    if (gd.axis === 'h') { g.moveTo(-1e5, gd.pos); g.lineTo(1e5, gd.pos); } else { g.moveTo(gd.pos, -1e5); g.lineTo(gd.pos, 1e5); }
+    g.stroke();
+  }
+  g.restore();
+}
+App.state.drawGuides = (g, px) => drawGuides(g, px);
+function guidePointer(e, w) {
+  const r = cv.getBoundingClientRect(), sx = e.clientX - r.left, sy = e.clientY - r.top;
+  if (sy < RULER && sx > RULER) return { axis: 'h', fromRuler: true };
+  if (sx < RULER && sy > RULER) return { axis: 'v', fromRuler: true };
+  if (App.state.tool !== 'select' || App.doc.settings.showGuides === false || hitTest(w)) return null;
+  const tol = pxWorld(5);
+  const g = guides().find(gd => Math.abs((gd.axis === 'h' ? w.y : w.x) - gd.pos) < tol);
+  return g ? { guide: g } : null;
+}
+function inRuler(e, axis) {
+  const r = cv.getBoundingClientRect();
+  return axis === 'h' ? e.clientY - r.top < RULER : e.clientX - r.left < RULER;
 }
 
 /* ============ Trefferprüfung ============ */
@@ -259,6 +311,13 @@ cv.addEventListener('pointerdown', e => {
     return;
   }
   if (e.button !== 0) return;
+  const gp = guidePointer(e, w);
+  if (gp) {
+    if (gp.fromRuler) { App.doc.settings.showGuides = true; const g = { axis: gp.axis, pos: gp.axis === 'h' ? w.y : w.x }; guides().push(g); guideDrag = g; }
+    else guideDrag = gp.guide;
+    App.draw();
+    return;
+  }
   const T = tools[App.state.tool];
   if (T && T.down) T.down(w, e);
 });
@@ -272,6 +331,13 @@ window.addEventListener('pointermove', e => {
   if (panning) {
     App.view.ox = panning.ox + (e.clientX - panning.sx);
     App.view.oy = panning.oy - (e.clientY - panning.sy);
+    App.draw(); return;
+  }
+  if (guideDrag) {
+    let v = guideDrag.axis === 'h' ? w.y : w.x;
+    if (App.state.snapGrid || App.doc.settings.snapGrid) { const gs = App.doc.settings.gridSize; v = Math.round(v / gs) * gs; }
+    guideDrag.pos = v;
+    hint(loc('Hilfslinie bei {v} mm – zum Löschen ins Lineal ziehen', { v: fmtNum(v) }));
     App.draw(); return;
   }
   const T = tools[App.state.tool];
@@ -289,6 +355,12 @@ window.addEventListener('pointerup', e => {
     }
   }
   if (panning) { panning = null; return; }
+  if (guideDrag) {
+    if (inRuler(e, guideDrag.axis)) App.doc.settings.guides = guides().filter(g => g !== guideDrag);
+    guideDrag = null; hint('');
+    scheduleAutosave(); App.draw();
+    return;
+  }
   const w = evtWorld(e);
   const T = tools[App.state.tool];
   if (T && T.up) T.up(w, e);
@@ -409,6 +481,7 @@ tools.select = {
   dbl(w) {
     const hit = hitTest(w, 0, true);
     if (hit && hit.locked) unlockShape(hit);
+    else if (hit && hit.gen && editPart(hit)) { /* generiertes Teil: Generator wieder öffnen */ }
     else if (hit && hit.type === 'group') { ungroupOne(hit); App.commit('Gruppe betreten'); }
     else if (hit && hit.type === 'text') { setSel([hit]); buildProps(); const i = $('#txtInput'); if (i) { i.focus(); i.select(); } }
     else if (hit) { setSel([hit]); App.setTool('node'); }
@@ -607,6 +680,125 @@ tools.measure = {
     App.draw();
   },
   up() { App.state.drag = null; }
+};
+
+/* --- Fugen-Werkzeug: Kante 1 (Finger/Zapfen), dann Kante 2 (Gegenstück/Schlitze) anklicken --- */
+let jointPick = null;
+const jointCandidates = () => App.doc.shapes.filter(s => !s.hidden && !s.locked && ['path', 'rect', 'polygon'].includes(s.type) && !(App.doc.layers[s.layer] || {}).isTool);
+function jointOverlay(g, px) {
+  if (!jointPick) return;
+  const seg = (e, col, w) => { g.strokeStyle = col; g.lineWidth = w * px; g.beginPath(); g.moveTo(e.a.x, e.a.y); g.lineTo(e.b.x, e.b.y); g.stroke(); };
+  if (jointPick.hover) seg(jointPick.hover, '#1d7fe0', 5);
+  if (jointPick.first) seg(jointPick.first, '#f59e0b', 6);
+  if (jointPick.preview) {
+    g.strokeStyle = '#f59e0b'; g.lineWidth = 1.6 * px; g.setLineDash([4 * px, 3 * px]);
+    for (const sh of jointPick.preview) for (const p of shapePolys(sh, App.ctxGeo)) {
+      g.beginPath(); p.pts.forEach((q, i) => i ? g.lineTo(q.x, q.y) : g.moveTo(q.x, q.y)); if (p.closed) g.closePath(); g.stroke();
+    }
+    g.setLineDash([]);
+  }
+}
+tools.joint = {
+  activate() {
+    jointPick = { first: null, hover: null, preview: null };
+    App.state.overlay = jointOverlay;
+    $('#hud').textContent = loc('Kante 1 anklicken – sie bekommt die Finger bzw. Zapfen');
+  },
+  deactivate() { jointPick = null; $('#hud').textContent = ''; },
+  move(w) {
+    // Dialog ohne Knopf geschlossen (✕, Esc): wieder bei Kante 1 beginnen
+    if (jointPick && jointPick.preview && !document.querySelector('.modalbg')) tools.joint.activate();
+    if (!jointPick || jointPick.preview) return;
+    jointPick.hover = pickEdge(jointCandidates(), w, pxWorld(10), App.ctxGeo);
+    App.draw();
+  },
+  down(w) {
+    if (!jointPick || jointPick.preview) return;
+    const e = pickEdge(jointCandidates(), w, pxWorld(10), App.ctxGeo);
+    if (!e) return;
+    if (!jointPick.first) {
+      jointPick.first = e;
+      $('#hud').textContent = loc('Kante 2 anklicken – sie bekommt das Gegenstück bzw. die Schlitze (Esc bricht ab)');
+    } else jointDialog(jointPick.first, e);
+    App.draw();
+  }
+};
+function jointDialog(e1, e2) {
+  const cfg = Object.assign({}, JOINT_DEFAULTS, App.state.jointCfg || {});
+  const info = h('small', { class: 'hint' });
+  const fields = h('div');
+  let result = null;
+  const upd = () => {
+    try {
+      result = makeJoint(e1, e2, cfg, App.ctxGeo);
+      jointPick.preview = result.shapes;
+      const i = result.info;
+      info.style.color = i.mismatch > 0.5 ? 'var(--warn)' : '';
+      info.textContent = (cfg.type === 'finger' ? loc('{n} Abschnitte à {w} mm', { n: i.count, w: fmtNum(i.width) })
+        : cfg.type === 'tab' ? loc('{n} Zapfen', { n: i.count })
+        : loc('{n} Schlitze, Tiefe {a} / {b} mm', { n: i.count, a: fmtNum(i.depth1), b: fmtNum(i.depth2) }))
+        + (i.mismatch > 0.5 ? ' – ' + loc('⚠ Die Kanten sind unterschiedlich lang ({d} mm), das Muster wird mittig gesetzt.', { d: fmtNum(i.mismatch) }) : '');
+    } catch (e) { result = null; info.textContent = e.message; }
+    App.draw();
+  };
+  const num = (k, step, min = 0, max = 1e4) => numInput(cfg[k], step, v => { cfg[k] = Math.max(min, Math.min(max, v)); upd(); });
+  const build = () => {
+    fields.innerHTML = '';
+    fields.appendChild(h('div', { class: 'grid2' },
+      field(loc('Art'), selectInput(cfg.type, [{ v: 'finger', t: loc('Fingerzinken') }, { v: 'tab', t: loc('Zapfen und Schlitze') }, { v: 'cross', t: loc('Kreuzverbindung (Halbschlitz)') }],
+        v => { cfg.type = v; build(); upd(); })),
+      field(loc('Materialstärke mm'), num('t', 0.1, 0.2)),
+      field(loc('Kerf mm'), num('kerf', 0.01, 0, 2)),
+      field(loc('Spiel mm (negativ = Presspassung)'), numInput(cfg.clearance, 0.01, v => { cfg.clearance = v; upd(); })),
+      cfg.type === 'finger' ? field(loc('Fingerbreite mm'), num('finger', 1, 1)) : null,
+      cfg.type === 'tab' ? field(loc('Anzahl Zapfen'), num('tabs', 1, 1, 50)) : null,
+      cfg.type === 'tab' ? field(loc('Zapfenbreite mm'), num('tabW', 1, 1)) : null,
+      cfg.type === 'tab' && e2.closed ? field(loc('Schlitz-Abstand zur Kante mm'), num('inset', 0.5, 0)) : null,
+      cfg.type === 'cross' ? field(loc('Anzahl Schlitze'), num('slots', 1, 1, 50)) : null,
+      cfg.type === 'cross' ? field(loc('Tiefe Kante 1 in % der Breite'), num('depth', 5, 5, 95)) : null));
+    fields.appendChild(h('small', { class: 'hint' }, {
+      finger: loc('Kante 1 bekommt Finger, die um die Materialstärke überstehen, Kante 2 die passenden Aussparungen.'),
+      tab: loc('Kante 1 bekommt Zapfen; auf Kante 2 entstehen Schlitze. Eine einzelne Linie wird durch die Schlitze ersetzt.'),
+      cross: loc('Beide Kanten bekommen Schlitze in Materialstärke, die Teile werden über Kreuz ineinander gesteckt.')
+    }[cfg.type]));
+  };
+  build(); upd();
+  modal(loc('Fuge anlegen'), h('div', {}, fields, info), [
+    { label: loc('Abbrechen'), click: () => { App.setTool('joint'); } },
+    {
+      label: loc('Erstellen'), primary: true, click: () => {
+        if (!result) return false;
+        App.state.jointCfg = { ...cfg };
+        for (const sh of result.shapes) {
+          const i = App.doc.shapes.findIndex(s => s.id === sh.id);
+          if (i >= 0) App.doc.shapes[i] = sh; else App.doc.shapes.push(sh);
+        }
+        App.doc.shapes = App.doc.shapes.filter(s => !result.remove.includes(s));
+        invalidateAll();
+        setSel(result.shapes);
+        App.commit(loc('Fuge'));
+        App.setTool('joint');
+        toast(loc('Fuge angelegt'), 'ok');
+      }
+    }
+  ], { width: '520px' });
+}
+
+/* --- Trimmen: Stück zwischen den nächsten Schnittpunkten wird rot, Klick entfernt es --- */
+let trimHit = null;
+tools.trim = {
+  activate() {
+    trimHit = null;
+    $('#hud').textContent = loc('Stück einer Linie anklicken – es wird bis zu den nächsten Schnittpunkten entfernt');
+    App.state.overlay = (g, px) => {
+      if (!trimHit || !trimHit.removedPts) return;
+      g.strokeStyle = '#e5484d'; g.lineWidth = 4 * px;
+      g.beginPath(); trimHit.removedPts.forEach((q, i) => i ? g.lineTo(q.x, q.y) : g.moveTo(q.x, q.y)); g.stroke();
+    };
+  },
+  deactivate() { trimHit = null; $('#hud').textContent = ''; },
+  move(w) { trimHit = trimAt(w, pxWorld(8)); App.draw(); },
+  down(w) { const hit = trimAt(w, pxWorld(8)); if (hit) { applyTrim(hit); trimHit = null; invalidateAll(); App.draw(); } }
 };
 
 /* --- Knoten-Editor --- */
@@ -1172,7 +1364,7 @@ function traceImageDialog() {
   const sh = s[0];
   const cfg = {
     threshold: 128, smooth: 1.0, invert: false, minArea: 0.5,
-    detail: 1200, target: sh.layer, after: 'keep'
+    detail: 1200, target: sh.layer, after: 'keep', mode: 'outline'
   };
   const info = h('small', { class: 'hint' }, loc('Vorschau wird berechnet …'));
   let raf = 0;
@@ -1198,6 +1390,7 @@ function traceImageDialog() {
 
   const body = h('div', {},
     h('small', { class: 'hint' }, loc('Regler ziehen – die Vorschau auf der Zeichenfläche folgt sofort.')),
+    field(loc('Art'), selectInput(cfg.mode, [{ v: 'outline', t: loc('Umriss (Flächen)') }, { v: 'center', t: loc('Mittellinien (Striche, Handschrift)') }], v => { cfg.mode = v; schedule(); })),
     slider(loc('Schwelle'), cfg.threshold, 0, 255, 1, v => { cfg.threshold = v; schedule(); }),
     slider(loc('Glättung'), cfg.smooth, 0, 4, .05, v => { cfg.smooth = v; schedule(); }),
     slider(loc('Min. Fläche'), cfg.minArea, 0, 25, .1, v => { cfg.minArea = v; schedule(); }),
@@ -1219,7 +1412,7 @@ function traceImageDialog() {
       label: loc('Nachzeichnen'), primary: true, click: () => {
         const polys = tracePolys(sh, { ...cfg, maxDim: cfg.detail });
         if (!polys.length) { toast(loc('Keine Konturen gefunden – Schwellwert anpassen'), 'err'); return false; }
-        const out = Shape.path(polys.map(p => nodeSub(p, true)), cfg.target);
+        const out = Shape.path(polys.map(p => nodeSub(p, !p.open)), cfg.target);
         out.transform = sh.transform.slice();
         App.doc.shapes.push(out);
         if (cfg.after === 'hide') sh.hidden = true;
@@ -1289,7 +1482,7 @@ function drawTraceOverlay(g, px) {
     for (const poly of traceCtx.polys) {
       g.moveTo(poly[0].x, poly[0].y);
       for (let i = 1; i < poly.length; i++) g.lineTo(poly[i].x, poly[i].y);
-      g.closePath();
+      if (!poly.open) g.closePath();
     }
   };
   // dunkler Halo darunter, damit die Kontur auf Weiß und Schwarz sichtbar bleibt
@@ -1315,6 +1508,15 @@ function tracePolys(sh, cfg) {
     const l = gray[y * W + x];
     return (cfg.invert ? l > t : l < t) ? 1 : 0;
   };
+  if (cfg.mode === 'center') {
+    // Mittellinien: Striche ausdünnen und als offene Linien verfolgen
+    const bin = new Uint8Array(W * H);
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) bin[y * W + x] = val(x, y);
+    const kx = sh.w / W, ky = sh.h / H;
+    return centerlines(bin, W, H, { spur: Math.max(3, Math.round(W / 150)), tol: Math.max(0.5, cfg.smooth) })
+      .map(l => { const pts = l.map(p => ({ x: p.x * kx, y: sh.h - p.y * ky })); pts.open = true; return pts; })
+      .filter(pts => { let len = 0; for (let i = 1; i < pts.length; i++) len += Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y); return len >= Math.max(0.2, cfg.minArea); });
+  }
   const segs = [];
   for (let y = -1; y < H; y++) for (let x = -1; x < W; x++) {
     const tl = val(x, y), tr = val(x + 1, y), br = val(x + 1, y + 1), bl = val(x, y + 1);
@@ -1456,6 +1658,23 @@ async function importFile(f) {
       let msg = loc('LightBurn-Projekt geladen: {n} Objekte, {l} Ebenen', { n: r.shapes.length, l: r.layers.length });
       if (r.warn.font) msg += ' – ' + loc('Textobjekte ohne gespeicherte Umrisse wurden nachgebildet');
       if (r.warn.types && r.warn.types.size) msg += ' – ' + loc('nicht unterstützt:') + ' ' + [...r.warn.types].join(', ');
+      toast(msg, 'ok');
+      fitAll();
+    } else if (ext === 'pdf' || ext === 'ai') {
+      let r;
+      try { r = await readPDF(await f.arrayBuffer()); }
+      catch (e) {
+        throw new Error(e.message === 'PostScript' ? loc('Diese Illustrator-Datei ist sehr alt (nur PostScript). Bitte in Illustrator als PDF-kompatibel speichern.')
+          : e.message === 'encrypted' ? loc('Die PDF-Datei ist verschlüsselt.') : loc('Die PDF-Datei konnte nicht gelesen werden ({msg}).', { msg: e.message }));
+      }
+      const shapes = pdfShapes(r, App.doc);
+      if (!shapes.length) throw new Error(loc('Keine Vektoren in der Datei gefunden (nur Text oder Bilder?)'));
+      App.doc.shapes.push(...shapes);
+      setSel(shapes);
+      App.commit(loc('PDF importieren'));
+      let msg = loc('{n} Pfade importiert', { n: shapes.length });
+      if (r.pages > 1) msg += ' – ' + loc('nur Seite 1 von {n}', { n: r.pages });
+      if (r.skipped.text || r.skipped.images) msg += ' – ' + loc('Texte und Bilder wurden übersprungen (Texte vorher in Pfade umwandeln)');
       toast(msg, 'ok');
       fitAll();
     } else if (ext === 'stl' || ext === 'obj') {
@@ -1819,8 +2038,13 @@ function buildImageProps(el, im) {
   el.appendChild(field(loc('Verfahren'), selectInput(im.dither, [
     { v: 'none', t: loc('Graustufen (Leistung moduliert)') }, { v: 'threshold', t: loc('Schwellwert (S/W)') },
     { v: 'ordered', t: loc('Geordnet (Bayer)') }, { v: 'floyd', t: 'Floyd-Steinberg' }, { v: 'jarvis', t: 'Jarvis' },
-    { v: 'stucki', t: 'Stucki' }, { v: 'atkinson', t: 'Atkinson' }, { v: 'sierra', t: 'Sierra' }
+    { v: 'stucki', t: 'Stucki' }, { v: 'atkinson', t: 'Atkinson' }, { v: 'sierra', t: 'Sierra' },
+    { v: 'halftone', t: loc('Raster (Zeitungsdruck)') }, { v: 'sketch', t: loc('Skizze (Kanten)') }
   ], v => { im.dither = v; done('Verfahren'); })));
+  if (im.dither === 'halftone') el.appendChild(h('div', { class: 'grid2' },
+    field(loc('Rasterweite mm'), numInput(im.cell ?? 1.2, 0.1, v => { im.cell = Math.max(0.2, v); done('Raster'); })),
+    field(loc('Rasterwinkel °'), numInput(im.screenAngle ?? 45, 1, v => { im.screenAngle = v; done('Raster'); }))));
+  if (im.dither === 'sketch') el.appendChild(slider(loc('Strichstärke'), im.threshold, 0, 255, 1, v => { im.threshold = v; live(); }, () => done('Strichstärke')));
 
   el.appendChild(h('h4', { class: 'sec' }, loc('Bildanpassung (live)')));
   if (im.dither === 'threshold')
@@ -1951,7 +2175,9 @@ function buildLaser() {
       h('span', { style: { flex: 1 } }),
       h('button', { class: 'tbtn', onclick: showConsole }, loc('Konsole'))));
   } else {
-    el.appendChild(h('small', { class: 'hint' }, App.serial.supported
+    el.appendChild(h('small', { class: 'hint' }, App.doc.machine.conn === 'wifi'
+      ? loc('Verbindung über WLAN zu {h} (FluidNC) – Adresse in den Maschineneinstellungen.', { h: App.doc.machine.host || '?' })
+      : App.serial.supported
       ? loc('Verbinde den Laser per USB und klicke „Verbinden" (Chrome/Edge).')
       : loc('Web Serial nicht verfügbar – GCode speichern und per SD-Karte oder mit einem anderen Programm senden.')));
   }
@@ -2080,8 +2306,12 @@ function checkOutputRange(ops) {
   const b = jobBounds(ops);
   if (!isFinite(b.x0)) return Promise.resolve(true);
   const r = { x0: b.x0 + off.x, x1: b.x1 + off.x, y0: b.y0 + off.y, y1: b.y1 + off.y };
-  const neg = r.x0 < -0.01 || r.y0 < -0.01;
-  const over = r.x1 > M.width + 0.01 || r.y1 > M.height + 0.01;
+  // Drehachse: in Y zählt der Umfang des Objekts, nicht die Arbeitsfläche
+  const rot = M.rotary && M.rotary.enabled;
+  if (rot && M.rotary.objectD > 0 && (b.y1 - b.y0) > Math.PI * M.rotary.objectD + 0.01)
+    toast(loc('Der Job ist höher als der Umfang des Objekts ({u} mm) – er überlappt sich beim Drehen.', { u: fmtNum(Math.PI * M.rotary.objectD) }), 'err');
+  const neg = r.x0 < -0.01 || (!rot && r.y0 < -0.01);
+  const over = r.x1 > M.width + 0.01 || (!rot && r.y1 > M.height + 0.01);
   if (!neg && !over) return Promise.resolve(true);
   if (!M.boundsCheck) return Promise.resolve(true);
 
@@ -2202,6 +2432,7 @@ async function startJob() {
   const ops = buildOps();
   if (!ops.length) return toast(loc('Nichts auszugeben'), 'err');
   if (!await checkOutputRange(ops)) return;
+  if (!await checkBeforeJob()) return;
   if (isGalvo(App.doc.machine)) return startGalvoJob(ops);
   const est = estimateTime(App.doc, ops);
   const c = h('div', {}, h('div', { class: 'kv' },
@@ -2223,6 +2454,136 @@ async function doFrame() {
   if (!g) return;
   if (App.serial.connected) { sendToLaser(g); toast(loc('Rahmen wird abgefahren')); }
   else showGcode(g, fileBase('job') + ' – ' + loc('Rahmen') + '.gcode');
+}
+
+/* ============ Seiten ============
+   Seitenwechsel beginnt einen neuen Rückgängig-Verlauf (der Verlauf kennt nur die Formen einer Seite). */
+function afterPageChange(label) {
+  App.history.stack = []; App.history.pos = -1;
+  App.history.push(App.doc, label);
+  invalidateAll(); setSel([]); scheduleAutosave(); App.refresh();
+}
+function gotoPage(i) { if (switchPage(App.doc, i)) afterPageChange(loc('Seite wechseln')); }
+function pagesDialog() {
+  const body = h('div');
+  const build = () => {
+    body.innerHTML = '';
+    const list = pageList(App.doc), cur = pageIndex(App.doc), selected = sel();
+    list.forEach((pg, i) => {
+      const n = i === cur ? App.doc.shapes.length : (pg.shapes || []).length;
+      body.appendChild(h('div', { class: 'row', style: { gap: '6px', alignItems: 'center', padding: '4px 0', borderTop: '1px solid var(--line)', background: i === cur ? 'var(--hover)' : '' } },
+        h('b', { style: { minWidth: '22px' } }, String(i + 1)),
+        h('input', { type: 'text', value: pg.name || '', placeholder: loc('Seite {i}', { i: i + 1 }), style: { flex: 1 }, onchange: e => { pg.name = e.target.value; scheduleAutosave(); }, onkeydown: e => e.stopPropagation() }),
+        h('small', { class: 'hint', style: { minWidth: '70px' } }, loc('{n} Objekte', { n })),
+        h('button', { class: 'tbtn', title: loc('nach oben'), disabled: i === 0, onclick: () => { movePage(App.doc, i, i - 1); scheduleAutosave(); App.refresh(); build(); } }, '↑'),
+        h('button', { class: 'tbtn', title: loc('nach unten'), disabled: i === list.length - 1, onclick: () => { movePage(App.doc, i, i + 1); scheduleAutosave(); App.refresh(); build(); } }, '↓'),
+        i !== cur && selected.length ? h('button', { class: 'tbtn', title: loc('Auswahl auf diese Seite verschieben'), onclick: () => { moveToPage(App.doc, selected, i); afterPageChange(loc('Auf Seite verschieben')); build(); } }, loc('Auswahl hierher')) : null,
+        i !== cur ? h('button', { class: 'tbtn', onclick: () => { gotoPage(i); build(); } }, loc('Öffnen')) : h('span', { class: 'tag' }, loc('aktuell'))));
+    });
+  };
+  build();
+  modal(loc('Seiten'), body, [
+    { label: loc('Neue Seite'), keep: true, click: () => { addPage(App.doc); afterPageChange(loc('Neue Seite')); build(); return false; } },
+    { label: loc('Seite duplizieren'), keep: true, click: () => { addPage(App.doc, true); afterPageChange(loc('Seite duplizieren')); build(); return false; } },
+    { label: loc('Aktuelle Seite löschen'), keep: true, click: () => { deletePage(App.doc); afterPageChange(loc('Seite löschen')); build(); return false; } },
+    { label: loc('Schließen'), primary: true }
+  ], { width: '640px' });
+}
+
+/* ============ Design-Check ============
+   Findet doppelte Linien, offene Konturen, schmale Stege usw. (check.js); Fundstellen werden auf der
+   Arbeitsfläche markiert, ein Klick zeigt sie, wo möglich behebt ein Knopf den Fehler. */
+const checkCfg = () => (App.state.checkCfg = App.state.checkCfg || { minBridge: 1, gapTol: 1, beforeJob: true });
+function findingText(f) {
+  switch (f.type) {
+    case 'duplicate': return loc('Doppelte Form – wird zweimal geschnitten');
+    case 'shared': return loc('{n} gemeinsame Kanten – werden zweimal geschnitten', { n: f.n });
+    case 'almostClosed': return loc('Kontur fast geschlossen (Lücke {d} mm)', { d: fmtNum(f.d) });
+    case 'openOnFill': return loc('Offene Linie auf einer Füll-Ebene – wird nicht graviert');
+    case 'imageOnLine': return loc('Bild auf einer Linien-Ebene – wird nicht graviert');
+    case 'tiny': return loc('Ausschnitt nur {s} mm groß – zu klein für den Schnitt', { s: fmtNum(f.size) });
+    case 'bridge': return loc('Steg nur {d} mm breit – kann brechen', { d: fmtNum(f.d) });
+    case 'outside': return loc('Liegt außerhalb der Arbeitsfläche');
+  }
+  return f.type;
+}
+const findingPoint = f => f.at || (f.box ? { x: (f.box.x0 + f.box.x1) / 2, y: (f.box.y0 + f.box.y1) / 2 } : null);
+let checkMarks = null;
+function setCheckMarks(found) {
+  App.state.aux = (App.state.aux || []).filter(fn => fn !== checkMarks);
+  checkMarks = found && found.length ? (g, px) => {
+    found.forEach((f, i) => {
+      const p = findingPoint(f);
+      if (!p) return;
+      g.strokeStyle = f.level === 'err' ? '#e5484d' : '#f59e0b';
+      g.lineWidth = 2.5 * px;
+      g.beginPath(); g.arc(p.x, p.y, 10 * px, 0, Math.PI * 2); g.stroke();
+      g.save(); g.translate(p.x + 11 * px, p.y + 11 * px); g.scale(px, -px);
+      g.fillStyle = g.strokeStyle; g.font = 'bold 12px system-ui'; g.fillText(String(i + 1), 0, 0); g.restore();
+    });
+  } : null;
+  if (checkMarks) App.state.aux.push(checkMarks);
+  App.draw();
+}
+function showFinding(f) {
+  if (f.shapes && f.shapes.length) setSel(f.shapes.filter(s => App.doc.shapes.includes(s)));
+  const p = findingPoint(f);
+  const b = f.box && isFinite(f.box.x0) ? f.box : p ? { x0: p.x - 15, y0: p.y - 15, x1: p.x + 15, y1: p.y + 15 } : null;
+  if (b) App.view.fit({ x0: b.x0 - 5, y0: b.y0 - 5, x1: b.x1 + 5, y1: b.y1 + 5 }, cv.clientWidth, cv.clientHeight, 60);
+  App.refresh();
+}
+function designCheckPanel() {
+  const cfg = checkCfg();
+  const body = h('div');
+  const run = () => {
+    const found = checkDesign(App.doc, App.ctxGeo, cfg);
+    setCheckMarks(found);
+    body.innerHTML = '';
+    body.appendChild(h('div', { class: 'grid2' },
+      field(loc('Kleinster Steg mm'), numInput(cfg.minBridge, 0.1, v => { cfg.minBridge = Math.max(0, v); run(); })),
+      field(loc('Lücke schließen bis mm'), numInput(cfg.gapTol, 0.1, v => { cfg.gapTol = Math.max(0, v); run(); }))));
+    body.appendChild(checkbox(cfg.beforeJob, v => { cfg.beforeJob = v; }, loc('Vor jedem Job prüfen')));
+    if (!found.length) {
+      body.appendChild(h('p', { style: { color: 'var(--ok)', margin: '10px 0' } }, loc('✓ Keine Probleme gefunden')));
+      return;
+    }
+    const errs = found.filter(f => f.level === 'err').length;
+    body.appendChild(h('p', { style: { margin: '8px 0 4px' } }, loc('{n} Hinweise, davon {e} Fehler', { n: found.length, e: errs })));
+    const list = h('div', { class: 'checklist' });
+    found.forEach((f, i) => {
+      list.appendChild(h('div', { class: 'row', style: { gap: '6px', alignItems: 'center', padding: '4px 0', borderTop: '1px solid var(--line)', cursor: 'pointer' }, onclick: () => showFinding(f) },
+        h('b', { style: { color: f.level === 'err' ? 'var(--err)' : 'var(--warn)', minWidth: '18px' } }, String(i + 1)),
+        h('span', { style: { flex: 1, fontSize: '12px' } }, findingText(f)),
+        f.fix ? h('button', {
+          class: 'tbtn', onclick: e => {
+            e.stopPropagation();
+            if (fixFinding(App.doc, f)) { invalidateAll(); App.commit(loc('Design-Check')); run(); }
+          }
+        }, { delete: loc('Löschen'), close: loc('Schließen'), inside: loc('Hineinschieben') }[f.fix]) : null));
+    });
+    body.appendChild(list);
+  };
+  run();
+  dockPanel(loc('Design-Check'), body, [{ label: loc('Erneut prüfen'), click: () => { run(); return false; } }], () => setCheckMarks(null));
+}
+/* vor dem Job: bei Funden fragen, ob trotzdem gestartet werden soll */
+function checkBeforeJob() {
+  const cfg = checkCfg();
+  if (!cfg.beforeJob) return Promise.resolve(true);
+  const found = checkDesign(App.doc, App.ctxGeo, cfg);
+  if (!found.length) return Promise.resolve(true);
+  return new Promise(resolve => {
+    let done = false;
+    const finish = v => { if (!done) { done = true; resolve(v); } };
+    const list = h('ul', { style: { margin: '6px 0', paddingLeft: '18px' } },
+      found.slice(0, 8).map(f => h('li', { style: { color: f.level === 'err' ? 'var(--err)' : '' } }, findingText(f))));
+    const m = modal(loc('Design-Check: {n} Hinweise', { n: found.length }), h('div', {}, list,
+      found.length > 8 ? h('small', { class: 'hint' }, loc('… und {n} weitere', { n: found.length - 8 })) : null), [
+      { label: loc('Anzeigen'), click: () => { finish(false); designCheckPanel(); } },
+      { label: loc('Trotzdem starten'), primary: true, click: () => finish(true) }
+    ], { width: '520px', sticky: true });
+    new MutationObserver((_, obs) => { if (!m.el.isConnected) { obs.disconnect(); finish(false); } }).observe(document.body, { childList: true });
+  });
 }
 
 /* ============ Vorschau ============
@@ -2330,7 +2691,10 @@ function machineDialog() {
       field(loc('Breite mm'), numInput(M.width, 1, v => { M.width = v; App.draw(); })),
       field(loc('Höhe mm'), numInput(M.height, 1, v => { M.height = v; App.draw(); })),
       field(loc('S-Wert max'), numInput(M.sScale, 1, v => M.sScale = v)),
-      field(loc('Baudrate'), selectInput(String(M.baud), ['9600', '19200', '38400', '57600', '115200', '230400', '250000'].map(v => ({ v, t: v })), v => M.baud = +v)),
+      isGalvo(M) ? null : field(loc('Verbindung'), selectInput(M.conn || 'usb', [{ v: 'usb', t: loc('USB (Web Serial)') }, { v: 'wifi', t: loc('WLAN (FluidNC, ESP3D)') }],
+        v => { M.conn = v; m.close(); machineDialog(); buildLaser(); })),
+      M.conn === 'wifi' && !isGalvo(M) ? field(loc('Adresse (IP oder Name)'), h('input', { type: 'text', value: M.host || '', placeholder: '192.168.1.50', onchange: e => { M.host = e.target.value.trim(); buildLaser(); } })) : null,
+      M.conn === 'wifi' && !isGalvo(M) ? null : field(loc('Baudrate'), selectInput(String(M.baud), ['9600', '19200', '38400', '57600', '115200', '230400', '250000'].map(v => ({ v, t: v })), v => M.baud = +v)),
       field(loc('Eilgang') + ' ' + speedUnit(), speedInput(M.rapidSpeed, v => M.rapidSpeed = v)),
       field(loc('Max Speed X') + ' ' + speedUnit(), speedInput(M.maxSpeedX, v => M.maxSpeedX = v)),
       field(loc('Max Speed Y') + ' ' + speedUnit(), speedInput(M.maxSpeedY, v => M.maxSpeedY = v)),
@@ -2345,6 +2709,7 @@ function machineDialog() {
       checkbox(M.boundsCheck, v => M.boundsCheck = v, loc('Bereichsprüfung')),
       checkbox(M.returnToFinish, v => M.returnToFinish = v, loc('Endposition anfahren'))),
     isGalvo(M) ? galvoSettings(M) : null,
+    isGalvo(M) ? null : rotarySettings(M),
     h('h4', { class: 'sec' }, loc('Rahmen vor dem Job')),
     h('div', { class: 'grid2' },
       field(loc('Rahmen'), selectInput(M.frameBeforeJob || 'off', [
@@ -2362,6 +2727,34 @@ function machineDialog() {
     h('div', { class: 'row', style: { marginTop: '8px' } },
       h('button', { class: 'tbtn', onclick: () => { $('#fileInput').click(); } }, loc('.lbdev-Datei laden…'))));
   const m = modal(loc('Geräte-Einstellungen'), c, [{ label: loc('Fertig'), primary: true, click: () => { App.refresh(); $('#devBadge').textContent = `${M.name} · ${M.width}×${M.height} mm · ${M.firmware}`; } }], { width: '560px' });
+}
+
+/* Drehachse am Y-Anschluss (Rollen oder Futter) */
+function rotarySettings(M) {
+  M.rotary = Object.assign({ enabled: false, type: 'roller', mmPerRot: 100, rollerD: 20, objectD: 70 }, M.rotary || {});
+  const R = M.rotary;
+  const body = h('div');
+  const build = () => {
+    body.innerHTML = '';
+    body.appendChild(checkbox(R.enabled, v => { R.enabled = v; build(); }, loc('Drehachse benutzen (am Y-Anschluss)')));
+    if (!R.enabled) return;
+    body.appendChild(h('div', { class: 'grid2' },
+      field(loc('Art'), selectInput(R.type, [{ v: 'roller', t: loc('Rollen') }, { v: 'chuck', t: loc('Futter') }], v => { R.type = v; build(); })),
+      field(loc('Y-Weg je Umdrehung mm'), numInput(R.mmPerRot, 0.1, v => R.mmPerRot = Math.max(0.1, v))),
+      R.type === 'roller' ? field(loc('Rollendurchmesser mm'), numInput(R.rollerD, 0.1, v => R.rollerD = Math.max(1, v))) : null,
+      field(loc('Objektdurchmesser mm'), numInput(R.objectD, 0.5, v => R.objectD = Math.max(1, v)))));
+    body.appendChild(h('small', { class: 'hint' }, loc('Y in der Zeichnung ist der Weg auf der Oberfläche des Objekts. „Y-Weg je Umdrehung" ist die Strecke, die die Y-Achse für eine volle Umdrehung von Rolle bzw. Futter fährt – mit „Testdrehung" prüfen: das Objekt muss sich genau einmal drehen.')));
+    body.appendChild(h('button', {
+      class: 'tbtn', style: { marginTop: '6px' }, onclick: () => {
+        if (!App.serial.connected) return toast(loc('Nicht verbunden'), 'err');
+        const y = Math.PI * R.objectD * rotaryK(M);
+        App.serial.command('G91'); App.serial.command('G0 Y' + y.toFixed(3)); App.serial.command('G90');
+        toast(loc('Testdrehung: eine Umdrehung des Objekts'), 'ok');
+      }
+    }, loc('Testdrehung')));
+  };
+  build();
+  return h('div', {}, h('h4', { class: 'sec' }, loc('Drehachse')), body);
 }
 
 /* Galvo: Laserquelle, Geschwindigkeiten, Verzögerungen und Ausrichtung des Linsenfelds */
@@ -2666,6 +3059,8 @@ const MENUS = {
     { t: loc('Projekt als Datei exportieren (.lsproj)'), a: exportProjectFile },
     { sep: 1 },
     { t: loc('SVG exportieren'), a: () => download(fileBase('zeichnung') + '.svg', exportSVG(App.doc, App.ctxGeo), 'image/svg+xml') },
+    { t: loc('DXF exportieren'), a: () => download(fileBase('zeichnung') + '.dxf', exportDXF(App.doc, App.ctxGeo, sel()), 'application/dxf') },
+    { t: loc('PDF exportieren'), a: () => download(fileBase('zeichnung') + '.pdf', exportPDF(App.doc, App.ctxGeo, sel()), 'application/pdf') },
     { t: loc('GCode speichern…'), k: 'Strg+E', a: () => exportGcode(false) },
     { t: loc('GCode anzeigen'), a: () => exportGcode(true) },
     { sep: 1 },
@@ -2729,13 +3124,20 @@ const MENUS = {
     { t: loc('Überlappungen verschmelzen (Weld)'), a: weldSel },
     { t: loc('In Pfad umwandeln'), a: convertToPath },
     { t: loc('Pfade trennen'), a: breakApart },
+    { t: loc('Verzerren…'), a: warpDialog },
+    { t: loc('Ecken abrunden / fasen…'), a: cornersDialog },
+    { t: loc('Offene Pfade schließen…'), a: closeDialog },
+    { t: loc('Pfade verbinden'), a: joinSel },
+    { t: loc('Richtung umkehren'), a: reverseSel },
+    { t: loc('Startpunkt auf gewählten Knoten setzen'), a: setStartFromNode },
     { t: loc('Bild nachzeichnen… (Live-Vorschau)'), a: traceImageDialog },
     { t: loc('Bild in Graustufen umwandeln'), a: () => setImageMode('none') },
     { t: loc('Bild in Schwarz/Weiß (Schwelle)'), a: () => setImageMode('threshold') },
     { sep: 1 },
     { t: loc('Symbole…'), k: 'Strg+K', a: symbolPanel },
     { t: loc('Box-Generator…'), a: F.boxDialog },
-    { t: loc('Schichtmodell aus 3D-Datei (STL/OBJ)…'), a: pickModelFile },
+    { t: loc('Teile-Generator (Zahnrad, Nocke, Regal …)…'), a: () => partsDialog() },
+    { t: loc('Schicht- oder Rippenmodell aus 3D-Datei (STL/OBJ)…'), a: pickModelFile },
     { t: loc('Flexscharnier…'), a: F.hingeDialog },
     { t: loc('QR-Code / Barcode…'), a: F.codeDialog },
     { t: loc('Text auf Pfad…'), a: F.textPathDialog },
@@ -2746,12 +3148,18 @@ const MENUS = {
     { sep: 1 },
     { t: loc('Materialbibliothek…'), k: 'Strg+M', a: materialDialog },
     { t: loc('Materialtest erstellen…'), a: materialTestDialog },
-    { t: loc('Zeilenabstand- / Fokustest…'), a: F.testPatternDialog }
+    { t: loc('Zeilenabstand- / Fokustest…'), a: F.testPatternDialog },
+    { t: loc('Passung kalibrieren…'), a: fitCalibrationDialog }
   ],
   laser: [
     { t: loc('Vorschau…'), k: 'Alt+P', a: showPreview },
+    { t: loc('Design prüfen…'), a: designCheckPanel },
     { t: loc('Rahmen abfahren'), a: doFrame },
     { t: loc('Job starten'), a: startJob },
+    { sep: 1 },
+    { t: loc('Kamera…'), a: cameraDialog },
+    { t: loc('Print & Cut…'), a: printCutDialog },
+    { t: loc('Vorrichtung (Jig)…'), a: jigDialog },
     { sep: 1 },
     { t: loc('Verbinden / Trennen'), a: toggleConnection },
     { t: loc('Konsole öffnen'), a: showConsole },
@@ -2766,6 +3174,10 @@ const MENUS = {
     { t: loc('Arbeitsfläche einpassen'), k: '1', a: fitBed },
     { t: loc('Vergrößern'), k: '+', a: () => { App.view.scale *= 1.2; App.draw(); } },
     { t: loc('Verkleinern'), k: '−', a: () => { App.view.scale /= 1.2; App.draw(); } },
+    { t: loc('3D-Ansicht…'), a: view3dDialog },
+    { t: loc('Seiten…'), a: pagesDialog },
+    { t: loc('Hilfslinien anzeigen'), c: () => App.doc.settings.showGuides !== false, a: () => { App.doc.settings.showGuides = App.doc.settings.showGuides === false; App.draw(); } },
+    { t: loc('Alle Hilfslinien löschen'), a: () => { App.doc.settings.guides = []; scheduleAutosave(); App.draw(); } },
     { sep: 1 },
     {
       t: loc('Gravur-Vorschau für Bilder'), c: () => App.state.imagePreview !== false,
@@ -3047,6 +3459,8 @@ const TOOLDEFS = () => [
   { id: 'text', ic: icon('text'), t: loc('Text (T)') },
   { gap: 1 },
   { id: 'measure', ic: icon('measure'), t: loc('Messen (M)') },
+  { id: 'joint', ic: icon('joint'), t: loc('Fuge (J) – zwei gerade Kanten anklicken') },
+  { id: 'trim', ic: icon('trim'), t: loc('Trimmen (K) – Stück zwischen zwei Schnittpunkten anklicken') },
   // Werkzeuge aus Erweiterungen (ext.js)
   ...(Ext.tools.length ? [{ gap: 1 }, ...Ext.tools] : [])
 ];
@@ -3219,6 +3633,8 @@ window.addEventListener('keydown', e => {
       else setSel([]);
       break;
     case 'Enter': if (pen) finishPen(false); if (polyDraw) finishPoly(false); break;
+    case 'PageUp': e.preventDefault(); gotoPage(pageIndex(App.doc) - 1); break;
+    case 'PageDown': e.preventDefault(); gotoPage(pageIndex(App.doc) + 1); break;
     case 'ArrowLeft': case 'ArrowRight': case 'ArrowUp': case 'ArrowDown': {
       if (!sel().length) return;
       e.preventDefault();
@@ -3234,7 +3650,7 @@ window.addEventListener('keydown', e => {
     case '+': case '=': App.view.scale *= 1.2; App.draw(); break;
     case '-': App.view.scale /= 1.2; App.draw(); break;
     default: {
-      const tk = { v: 'select', n: 'node', r: 'rect', e: 'ellipse', p: 'polygon', l: 'line', b: 'pen', t: 'text', m: 'measure' };
+      const tk = { v: 'select', n: 'node', r: 'rect', e: 'ellipse', p: 'polygon', l: 'line', b: 'pen', t: 'text', m: 'measure', j: 'joint', k: 'trim' };
       if (tk[K]) App.setTool(tk[K]);
     }
   }
@@ -3273,7 +3689,8 @@ function guardSerial() {
   const S = App.serial, connect = S.connect.bind(S);
   S.connect = async (...a) => {
     if (!await confirmSafety()) throw new Error(loc('Abgebrochen'));
-    return connect(...a);
+    const M = App.doc.machine;
+    return M.conn === 'wifi' ? S.connectNet(M.host) : connect(...a);   // WLAN (FluidNC) oder USB
   };
   const G = App.galvo, gConnect = G.connect.bind(G);
   G.connect = async (...a) => {
@@ -3306,6 +3723,8 @@ async function init() {
   $('#themeBtn').onclick = () => setTheme(!App.state.dark);
   setupSplitters();
   guardSerial();
+  $('#stPage').onclick = pagesDialog;
+  { const cal = loadFitCal(); if (cal) applyFitCal(App, cal); }   // gespeicherte Passungs-Kalibrierung
   for (const fn of Ext.start) if (await fn(App) === false) return;
   UserSymbols.load().catch(() => { });   // eigene Symbole vorab laden (übernimmt alte aus dem Browser)
   const nFonts = await loadFontLibrary();

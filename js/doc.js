@@ -256,7 +256,7 @@ export function shapePolys(sh, ctx, parentMat = Mat.id()) {
   const res = [];
   for (const sp of subs) {
     const poly = subpathToPoly(sp, tol).map(p => Mat.apply(m, p));
-    if (poly.length >= 2) res.push({ pts: poly, closed: sp.closed, layer: sh.layer, shape: sh });
+    if (poly.length >= 2) res.push({ pts: poly, closed: sp.closed, layer: sh.layer, shape: sh, fixed: !!sp.fixedStart });
   }
   return res;
 }

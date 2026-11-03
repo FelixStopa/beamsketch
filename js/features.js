@@ -10,6 +10,7 @@ import { locale, lang } from './i18n.js';
 import { textSubpaths, charAdvances } from './font.js';
 import { Mat } from './geom.js';
 import { boxParts, hingeLines } from './generators.js';
+import { nest } from './nest.js';
 import { qrEncode, code128Widths } from './qrcode.js';
 import { speedUnit } from './units.js';
 
@@ -284,55 +285,79 @@ export function serialDialog() {
 }
 
 /* ============ Automatisch anordnen (Nesting) ============
-   Regal-Verfahren über die Umrissrechtecke: Teile nach Höhe sortiert in Reihen von
-   vorne links (Maschinennullpunkt) nach rechts, dann die nächste Reihe dahinter. */
-export function nestPlan(sizes, W, H, gap, margin, rotate) {
-  const items = sizes.map((s, i) => {
-    let w = s.w, hh = s.h, rot = false;
-    // flach legen (lange Seite waagerecht), wenn erlaubt – oder drehen, wenn es sonst nicht passt
-    if (rotate && (hh > w || w > W - 2 * margin) && hh <= W - 2 * margin) { [w, hh] = [hh, w]; rot = true; }
-    return { i, w, h: hh, rot };
-  }).sort((a, b) => b.h - a.h || b.w - a.w);
-  let x = margin, y = margin, rowH = 0, overflow = 0;
-  const pos = [];
-  for (const it of items) {
-    if (x > margin && x + it.w > W - margin) { x = margin; y += rowH + gap; rowH = 0; }
-    if (y + it.h > H - margin) overflow++;
-    pos[it.i] = { x, y, rot: it.rot, w: it.w, h: it.h };
-    x += it.w + gap; rowH = Math.max(rowH, it.h);
+   Nach den echten Umrissen (nest.js): größte Teile zuerst, jeweils so weit vorne links wie möglich,
+   kleine Teile auch in Löchern großer. Fläche: Arbeitsfläche oder eine ausgewählte Restplatte. */
+const partGeo = (s, ctx) => {
+  const ps = shapePolys(s, ctx);
+  const polys = ps.filter(p => p.closed && p.pts.length >= 3).map(p => p.pts), lines = ps.filter(p => !p.closed).map(p => p.pts);
+  if (!polys.length && !lines.length) {
+    const b = shapesBBox([s], ctx);
+    if (isFinite(b.x0)) polys.push([{ x: b.x0, y: b.y0 }, { x: b.x1, y: b.y0 }, { x: b.x1, y: b.y1 }, { x: b.x0, y: b.y1 }]);
   }
-  return { pos, overflow, used: { w: W, h: y + rowH } };
-}
+  return { polys, lines };
+};
 export function nestDialog() {
   const A = App();
-  const list = A.state.selection.length ? A.state.selection.slice() : A.doc.shapes.filter(s => !s.hidden && !s.locked && !(A.doc.layers[s.layer] || {}).isTool);
+  const usable = s => !s.hidden && !s.locked && !(A.doc.layers[s.layer] || {}).isTool;
+  const selected = A.state.selection.slice();
+  let list = selected.length ? selected : A.doc.shapes.filter(usable);
   if (!list.length) return toast(loc('Nichts zum Anordnen'), 'err');
-  const cfg = Object.assign({ gap: 3, margin: 5, rotate: true }, A.state.nestCfg || {});
+  const cfg = Object.assign({ gap: 3, margin: 5, rotate: '90', quality: 'normal', sheet: false }, A.state.nestCfg || {});
+  if (typeof cfg.rotate === 'boolean') cfg.rotate = cfg.rotate ? '90' : '0';
   const body = h('div', {},
     h('div', { class: 'grid2' },
       field(loc('Abstand mm'), numInput(cfg.gap, 0.5, v => cfg.gap = Math.max(0, v))),
       field(loc('Rand mm'), numInput(cfg.margin, 1, v => cfg.margin = Math.max(0, v))),
-      checkbox(cfg.rotate, v => cfg.rotate = v, loc('Drehen um 90° erlauben'))),
-    h('small', { class: 'hint' }, loc('{n} Objekte werden von vorne links beginnend in Reihen auf der Arbeitsfläche verteilt. Ohne Auswahl werden alle Objekte angeordnet.', { n: list.length })));
+      field(loc('Drehen'), selectInput(cfg.rotate, [
+        { v: '0', t: loc('nicht drehen') }, { v: '180', t: loc('nur 180°') }, { v: '90', t: loc('in 90°-Schritten') },
+        { v: '45', t: loc('in 45°-Schritten') }, { v: '15', t: loc('in 15°-Schritten') }], v => cfg.rotate = v)),
+      field(loc('Genauigkeit'), selectInput(cfg.quality, [
+        { v: 'fast', t: loc('schnell') }, { v: 'normal', t: loc('normal') }, { v: 'best', t: loc('gründlich') }], v => cfg.quality = v))),
+    selected.length > 1 ? checkbox(cfg.sheet, v => cfg.sheet = v, loc('Größte ausgewählte Form ist die Restplatte (Teile werden darin verteilt)')) : null,
+    h('small', { class: 'hint' }, loc('Die Teile werden nach ihren echten Umrissen verteilt – vorne links beginnend, kleine Teile auch in Löchern großer Teile. Andere Objekte auf der Arbeitsfläche bleiben liegen und werden umgangen. Ohne Auswahl werden alle Objekte angeordnet.')));
   modal(loc('Automatisch anordnen'), body, [{ label: loc('Abbrechen') }, {
     label: loc('Anordnen'), primary: true, click: () => {
       A.state.nestCfg = { ...cfg };
-      const M = A.doc.machine;
-      const boxes = list.map(s => shapesBBox([s], A.ctxGeo));
-      const plan = nestPlan(boxes.map(b => ({ w: b.x1 - b.x0, h: b.y1 - b.y0 })), M.width, M.height, cfg.gap, cfg.margin, cfg.rotate);
+      const M = A.doc.machine, ctx = A.ctxGeo;
+      let area = { w: M.width, h: M.height }, sheet = null;
+      if (cfg.sheet && list.length > 1) {
+        const area2 = s => { const b = shapesBBox([s], ctx); return (b.x1 - b.x0) * (b.y1 - b.y0); };
+        sheet = list.reduce((a, b) => area2(b) > area2(a) ? b : a);
+        list = list.filter(s => s !== sheet);
+        const g = partGeo(sheet, ctx);
+        if (!g.polys.length) return toast(loc('Die Restplatte muss eine geschlossene Form sein'), 'err'), false;
+        area = { polys: g.polys };
+      }
+      const inList = new Set(list.concat(sheet ? [sheet] : []));
+      const obstacles = A.doc.shapes.filter(s => !inList.has(s) && usable(s)).map(s => partGeo(s, ctx));
+      const step = +cfg.rotate;
+      const angles = step === 0 ? [0] : step === 180 ? [0, 180] : Array.from({ length: Math.round(360 / step) }, (_, i) => i * step);
+      const t0 = Date.now();
+      const r = nest(list.map(s => partGeo(s, ctx)), area, {
+        gap: cfg.gap, margin: cfg.margin, angles, obstacles,
+        orders: { fast: 1, normal: 2, best: 4 }[cfg.quality]
+      });
+      // nicht Passendes rechts neben die Arbeitsfläche legen
+      let ox = (area.polys ? shapesBBox([sheet], ctx).x1 : M.width) + 10, oy = 0, missing = 0;
       list.forEach((s, i) => {
-        const b = boxes[i], p = plan.pos[i];
-        const cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2;
-        let m = Mat.translate(-cx, -cy);
-        if (p.rot) m = Mat.mul(m, Mat.rotate(Math.PI / 2));
-        m = Mat.mul(m, Mat.translate(p.x + p.w / 2, p.y + p.h / 2));
-        s.transform = Mat.mul(s.transform, m);
+        const p = r.placements[i];
+        if (p) {
+          let m = Mat.translate(-p.center.x, -p.center.y);
+          m = Mat.mul(m, Mat.rotate(p.angle));
+          m = Mat.mul(m, Mat.translate(p.center.x + p.dx, p.center.y + p.dy));
+          s.transform = Mat.mul(s.transform, m);
+        } else {
+          missing++;
+          const b = shapesBBox([s], ctx);
+          s.transform = Mat.mul(s.transform, Mat.translate(ox - b.x0, oy - b.y0));
+          oy += (b.y1 - b.y0) + cfg.gap;
+        }
       });
       A.setSel(list); A.commit('Anordnen');
-      if (plan.overflow) toast(loc('{n} Objekte passen nicht mehr auf die Arbeitsfläche', { n: plan.overflow }), 'err');
-      else toast(loc('{n} Objekte angeordnet', { n: list.length }), 'ok');
+      if (missing) toast(loc('{n} Objekte passen nicht mehr auf die Arbeitsfläche', { n: missing }) + ' – ' + loc('sie liegen rechts daneben'), 'err');
+      else toast(loc('{n} Objekte angeordnet', { n: list.length }) + ' (' + ((Date.now() - t0) / 1000).toFixed(1) + ' s)', 'ok');
     }
-  }], { width: '460px' });
+  }], { width: '520px' });
 }
 
 /* ============ Bild-Hintergrund entfernen ============
@@ -694,14 +719,16 @@ export function boxDialog() {
       if (cfg.finger < cfg.t * 1.5) { toast(loc('Fingerbreite sollte mindestens das 1,5-Fache der Materialstärke sein.'), 'err'); return false; }
       A.state.boxCfg = { ...cfg };
       const { parts } = boxParts(cfg);
-      const news = [];
-      layoutRows(parts.map(p => {
+      const news = [], set = 'G' + Date.now().toString(36);
+      layoutRows(parts.map((p, pi) => {
         const b = bbox([p.outline]);
         return {
           w: b.x1 - b.x0, h: b.y1 - b.y0, place: (x, y) => {
             const dx = x - b.x0, dy = y - b.y0;
             const sh = Shape.path([p.outline, ...p.holes].map(pl => nodeSub(shift(pl, dx, dy), true)), A.state.activeLayer);
             sh.name = loc(p.name);
+            // Parameter merken: 3D-Ansicht baut die Box zusammen, Doppelklick öffnet den Generator
+            sh.gen = { kind: 'box', cfg: { ...cfg }, set, part: pi };
             A.doc.shapes.push(sh); news.push(sh);
           }
         };

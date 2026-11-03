@@ -56,7 +56,8 @@
     </td>
     <td valign="top">
       <h3>Straight to the laser</h3>
-      GRBL GCode with safety checks, toolpath preview with time estimate and framing.
+      GRBL GCode with safety checks, a <b>design check</b> (duplicate lines, open outlines, thin bridges),
+      toolpath preview with time estimate and framing.
       Connect over <b>USB (Web Serial)</b> with jog pad, homing, console, pause and stop –
       or save the GCode for the SD card.
     </td>
@@ -65,8 +66,14 @@
     <td valign="top">
       <h3>Generators</h3>
       Finger-joint boxes, living hinges, QR codes and Code&nbsp;128 barcodes, text on a path or circle,
-      serial numbers from CSV, material and focus test patterns and automatic nesting.
-      <b>Layered models from STL/OBJ</b>: slice a 3D model into numbered sheets with a 3D preview.
+      serial numbers from CSV, material and focus test patterns and true-shape nesting (parts in holes, rotation, scrap sheets).
+      <b>Layered and rib models from STL/OBJ</b>: slice a 3D model into numbered sheets to stack, or into
+      ribs that slot onto a spine, with a 3D preview.
+      A <b>joint tool</b> adds finger joints, tabs and slots or cross-lap slots to any two straight edges.
+      A <b>part generator</b> makes involute gears, gear pairs, racks, GT2/HTD pulleys, cams, box inserts,
+      slot-together shelves and drawers – double-click a part to change its parameters later.
+      The <b>3D view</b> shows boxes, drawers, shelves, inserts and gear pairs assembled, in different
+      materials, with an exploded view and PNG export.
     </td>
     <td valign="top">
       <h3>138 fonts & 97 symbols</h3>
@@ -112,6 +119,10 @@
 
 - **Setup assistant** with a searchable list of 54 laser models; reads `$130`, `$131`, `$30`, `$110` … directly from the controller
 - **Tabs** – several designs open at once, each with its own undo history
+- **Camera overlay** – a webcam above the laser, calibrated with an engraved 3 × 3 or 5 × 5 grid of crosses (perspective and lens distortion corrected), shows the workpiece under your design (Laser → Camera…)
+- **Print & Cut** – print a design with two registration marks, jog the head to both marks, and the cut lines are rotated and shifted onto the print
+- **Jig for batches** – cut a board with pockets for your workpieces, then engrave the design into every pocket in one run
+- **Multi-page projects** – several pages in one project (status bar or View → Pages…, `PageUp` / `PageDown`); laser and export work on the current page
 - **Light and dark theme**, following your system on first start
 - **13 languages** – English, German, Spanish, French, Italian, Portuguese, Dutch, Polish, Turkish, Russian, Japanese, Chinese, Korean
 - **Private by design** – everything runs locally in your browser; your designs never leave your computer
@@ -152,6 +163,7 @@ Any static web server works too – BeamSketch is plain HTML, CSS and ES modules
 | Controller | Status |
 |---|---|
 | GRBL / GRBL-LPC / grblHAL (almost all diode lasers) | ✅ save GCode **and** send directly via USB |
+| FluidNC / ESP3D (ESP32 boards) | 🧪 new – send over Wi-Fi (WebSocket); needs BeamSketch served over http, e.g. `npm start` locally |
 | Smoothieware (K40 conversions, Cohesion3D) | ✅ GCode |
 | xTool D1 / D1 Pro | ✅ GCode (they behave like GRBL) |
 | Galvo lasers with EZCAD2 / BJJCZ controller (fiber, MOPA, CO2 galvo) | 🧪 new – send directly via WebUSB, red-light framing |
@@ -173,6 +185,7 @@ model and its work area is very welcome.
 | `M` | Measure | `Ctrl+M` | Material library |
 | `0` / `1` | Fit all / fit work area | `Ctrl+E` | Save GCode |
 | `Space` + drag | Pan | `Ctrl+H` | History |
+| `PageUp` / `PageDown` | Previous / next page | | |
 
 ## Project structure
 
@@ -186,10 +199,14 @@ model and its work area is very welcome.
 | `js/cam.js`, `js/gcode.js` | Toolpaths and GRBL GCode with time estimate |
 | `js/raster.js` | Image engraving, dithering, live preview |
 | `js/font.js` | Text to vector, font library, kerning |
-| `js/svg.js`, `js/dxf.js`, `js/lbrn.js` | Import/export |
+| `js/svg.js`, `js/dxf.js`, `js/lbrn.js`, `js/formats.js` | Import/export (SVG, DXF, LightBurn, PDF/AI import, DXF/PDF export) |
 | `js/serial.js` | Web Serial connection to GRBL |
 | `js/galvo.js` | Galvo lasers (EZCAD2 / BJJCZ) over WebUSB |
 | `js/mesh.js`, `js/model3d.js`, `js/view3d.js` | STL/OBJ import, layered models, 3D preview (WebGL) |
+| `js/assembly.js`, `js/view3dui.js` | 3D view of assemblies |
+| `js/parts.js`, `js/partsui.js`, `js/joints.js` | Part generator (gears, cams, shelves …), joint tool |
+| `js/nest.js`, `js/check.js` | True-shape nesting, design check |
+| `js/pathtools.js`, `js/pathtoolsui.js` | Warp, round/chamfer corners, close/join/reverse paths, start point, trim |
 | `js/projects.js` | Tabs, saving projects |
 | `js/symbols.js` | Symbol library |
 | `js/features.js`, `js/generators.js`, `js/qrcode.js` | Generators and dialogs |

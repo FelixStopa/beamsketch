@@ -76,6 +76,8 @@ export function render(cv, doc, view, state, ctxGeo) {
   // Bett
   g.fillStyle = state.dark ? '#25272e' : '#ffffff';
   g.fillRect(0, 0, M.width, M.height);
+  // Kamerabild unter der Zeichnung
+  if (state.drawUnder) state.drawUnder(g, px);
   // Raster
   const gs = doc.settings.gridSize;
   if (gs > 0 && gs * view.scale > 4) {
@@ -107,6 +109,8 @@ export function render(cv, doc, view, state, ctxGeo) {
   // Auswahl
   if (state.selection.length) drawSelection(g, doc, state, ctxGeo, px, view);
 
+  // Hilfslinien
+  if (state.drawGuides) state.drawGuides(g, px);
   // Werkzeug-Overlay
   if (state.overlay) state.overlay(g, px);
   // Zusätzliche Overlays (z. B. Live-Vorschau beim Nachzeichnen)

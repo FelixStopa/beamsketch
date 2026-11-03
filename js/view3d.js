@@ -19,8 +19,27 @@ function groupHoles(polys) {
 /* Dreiecke für alle Platten: Positionen, Normalen, Farben (je Ecke) */
 export function prismMesh(parts) {
   const pos = [], nrm = [], col = [];
-  const tri = (a, b, c, n, cl) => { pos.push(...a, ...b, ...c); for (let i = 0; i < 3; i++) { nrm.push(...n); col.push(...cl); } };
+  let map = null, flip = false;
+  // Dreieck (optional in den Raum abgebildet); die Normale folgt der Abbildung
+  const tri = (a, b, c, n, cl) => {
+    if (map) {
+      a = map(...a); b = map(...b); c = map(...c);
+      if (flip) [b, c] = [c, b];
+      const u = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], v = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
+      const x = u[1] * v[2] - u[2] * v[1], y = u[2] * v[0] - u[0] * v[2], z = u[0] * v[1] - u[1] * v[0], l = Math.hypot(x, y, z) || 1;
+      n = [x / l, y / l, z / l];
+    }
+    pos.push(...a, ...b, ...c); for (let i = 0; i < 3; i++) { nrm.push(...n); col.push(...cl); }
+  };
   for (const part of parts) {
+    map = part.map || null;
+    if (map) {
+      // Spiegelnde Abbildung (Determinante < 0) dreht den Umlaufsinn: Dreiecke umdrehen
+      const o = map(0, 0, 0), ex = map(1, 0, 0), ey = map(0, 1, 0), ez = map(0, 0, 1);
+      const d = (A, B) => [A[0] - B[0], A[1] - B[1], A[2] - B[2]];
+      const [X, Y, Z] = [d(ex, o), d(ey, o), d(ez, o)];
+      flip = X[0] * (Y[1] * Z[2] - Y[2] * Z[1]) - X[1] * (Y[0] * Z[2] - Y[2] * Z[0]) + X[2] * (Y[0] * Z[1] - Y[1] * Z[0]) < 0;
+    }
     const { z0, z1 } = part, cl = part.color || [0.8, 0.65, 0.45];
     const side = part.sideColor || cl.map(v => v * 0.8);
     for (const g of groupHoles(part.polys)) {

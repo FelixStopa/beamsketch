@@ -170,10 +170,18 @@ export function chainSegments(segs, gapTol = 0.5) {
 
 /* Umrisse einer Schicht ordnen: überlappende Körper vereinigen, Löcher abziehen,
    Inseln und Löcher unter minArea mm² verwerfen */
-function normalizeLayer(loops, minArea) {
+export function normalizeLayer(loops, minArea) {
   const outers = loops.filter(l => polyArea(l) > 0 && polyArea(l) >= minArea);
   const holes = loops.filter(l => polyArea(l) < 0 && -polyArea(l) >= minArea);
-  const overlap = outers.some((a, i) => outers.some((b, j) => j !== i && pointInPoly(a[0], b)));
+  // überlappen sich Körper? (Umrissrechtecke berühren sich und ein Eckpunkt liegt im anderen Umriss)
+  const box = p => p.reduce((b, q) => ({ x0: Math.min(b.x0, q.x), y0: Math.min(b.y0, q.y), x1: Math.max(b.x1, q.x), y1: Math.max(b.y1, q.y) }), { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity });
+  const boxes = outers.map(box);
+  const overlap = outers.some((a, i) => outers.some((b, j) => {
+    if (j <= i) return false;
+    const A = boxes[i], B = boxes[j];
+    if (A.x1 < B.x0 || B.x1 < A.x0 || A.y1 < B.y0 || B.y1 < A.y0) return false;
+    return a.some(v => pointInPoly(v, b)) || b.some(v => pointInPoly(v, a));
+  }));
   let res = outers;
   if (overlap) {
     // boolOp kommt mit genau übereinanderliegenden Kanten nicht zurecht (häufig bei STL aus CAD:

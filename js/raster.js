@@ -49,9 +49,35 @@ export function grayscaleGrid(sh, cols, rows) {
   return gray;
 }
 
-function dither(gray, cols, rows, mode, threshold) {
+/* opts: pxMm (Pixelgröße in mm), cell (Rasterweite mm), angle (Rasterwinkel °) */
+export function dither(gray, cols, rows, mode, threshold, opts = {}) {
   const out = new Float32Array(cols * rows);
   const t = threshold / 255;
+  if (mode === 'halftone') {
+    // Zeitungsraster: je Rasterzelle ein runder Punkt, dessen Fläche dem Grauwert der Zellmitte entspricht
+    const c = Math.max(1.5, (opts.cell || 1.2) / (opts.pxMm || 0.1)), a = (opts.angle ?? 45) * Math.PI / 180;
+    const cs = Math.cos(a), sn = Math.sin(a);
+    for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+      const u = (x * cs + y * sn) / c, v = (-x * sn + y * cs) / c;
+      const cu = Math.floor(u) + 0.5, cv = Math.floor(v) + 0.5;
+      const mx = Math.round((cu * cs - cv * sn) * c), my = Math.round((cu * sn + cv * cs) * c);
+      const g = gray[Math.max(0, Math.min(rows - 1, my)) * cols + Math.max(0, Math.min(cols - 1, mx))];
+      const r = Math.sqrt((1 - g) / Math.PI);           // Radius in Zellen (Fläche = Dunkelheit)
+      out[y * cols + x] = Math.hypot(u - cu, v - cv) < r ? 1 : 0;
+    }
+    return out;
+  }
+  if (mode === 'sketch') {
+    // Skizze: Kanten (Sobel) werden zu dunklen Strichen, gleichmäßige Flächen bleiben leer
+    const G = (x, y) => gray[Math.max(0, Math.min(rows - 1, y)) * cols + Math.max(0, Math.min(cols - 1, x))];
+    const k = 1 + (255 - threshold) / 64;
+    for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+      const gx = G(x + 1, y - 1) + 2 * G(x + 1, y) + G(x + 1, y + 1) - G(x - 1, y - 1) - 2 * G(x - 1, y) - G(x - 1, y + 1);
+      const gy = G(x - 1, y + 1) + 2 * G(x, y + 1) + G(x + 1, y + 1) - G(x - 1, y - 1) - 2 * G(x, y - 1) - G(x + 1, y - 1);
+      out[y * cols + x] = Math.min(1, Math.hypot(gx, gy) * k / 2);
+    }
+    return out;
+  }
   if (mode === 'none' || mode === 'grayscale') { for (let i = 0; i < gray.length; i++) out[i] = 1 - gray[i]; return out; }
   if (mode === 'threshold') { for (let i = 0; i < gray.length; i++) out[i] = gray[i] < t ? 1 : 0; return out; }
   if (mode === 'ordered') {
@@ -101,7 +127,7 @@ export function imageScanLines(sh, layer, doc, ctx) {
   if (cols * rows > 30e6) return [];
   const gray = grayscaleGrid(sh, cols, rows);
   if (!gray) return [];
-  let vals = dither(gray, cols, rows, sh.dither, sh.threshold);
+  let vals = dither(gray, cols, rows, sh.dither, sh.threshold, { pxMm: interval, cell: sh.cell, angle: sh.screenAngle });
   if (sh.invert) for (let i = 0; i < vals.length; i++) vals[i] = 1 - vals[i];
   const m = sh.worldMat || sh.transform;
   const dx = sh.w / cols, dy = sh.h / rows;
@@ -123,7 +149,7 @@ export function imageScanLines(sh, layer, doc, ctx) {
       pts: [Mat.apply(m, a), Mat.apply(m, b)],
       cells: rev ? cells.slice().reverse() : cells,
       lead: over, n: cells.length, power: layer.maxPower,
-      grayscale: (sh.dither === 'none' || sh.dither === 'grayscale')
+      grayscale: (sh.dither === 'none' || sh.dither === 'grayscale' || sh.dither === 'sketch')
     });
   }
   return out;
@@ -159,14 +185,14 @@ export function imagePreviewCanvas(sh, interval, override, maxPixels) {
     const k = Math.sqrt(MAXPX / (cols * rows));
     cols = Math.max(1, Math.round(cols * k)); rows = Math.max(1, Math.round(rows * k));
   }
-  const sig = [cols, rows, eff.dither, eff.threshold, eff.brightness, eff.contrast, eff.gamma,
+  const sig = [cols, rows, eff.dither, eff.threshold, eff.cell, eff.screenAngle, eff.brightness, eff.contrast, eff.gamma,
     eff.invert, eff.negative, eff.transparency, sh.src.length].join('|');
   const c = previewCache.get(sh.id);
   if (c && c.sig === sig) return c.canvas;
 
   const gray = grayscaleGrid(eff, cols, rows);
   if (!gray) return null;
-  const vals = dither(gray, cols, rows, eff.dither, eff.threshold);
+  const vals = dither(gray, cols, rows, eff.dither, eff.threshold, { pxMm: Math.abs(sh.w) / cols, cell: eff.cell, angle: eff.screenAngle });
   if (eff.invert) for (let i = 0; i < vals.length; i++) vals[i] = 1 - vals[i];
   const cv = document.createElement('canvas');
   cv.width = cols; cv.height = rows;

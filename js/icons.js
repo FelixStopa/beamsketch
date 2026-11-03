@@ -13,6 +13,8 @@ const P = {
   text: '<text x="12" y="17" text-anchor="middle" font-size="13.5" font-weight="600" ' +
     'font-family="system-ui,-apple-system,Segoe UI,sans-serif" fill="currentColor" stroke="none">Aa</text>',
   measure: '<rect x="2.5" y="8" width="19" height="8" rx="1.5"/><path d="M6.5 8v3M10 8v4M13.5 8v3M17 8v4"/>',
+  trim: '<circle cx="6.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/><path d="M8.3 15.7 17 4M15.7 15.7 7 4"/><path d="M2 9h5M17 9h5" stroke-dasharray="1.6 1.6"/>',
+  joint: '<path d="M3 11h3V8h3v3h3V8h3v3h3V8h3"/><path d="M3 13h3v3h3v-3h3v3h3v-3h3v3h3" stroke-dasharray="0"/>',
   symbols: '<path d="M12 19.5s-7.5-4.6-7.5-10.2A4.1 4.1 0 0 1 12 7a4.1 4.1 0 0 1 7.5 2.3c0 5.6-7.5 10.2-7.5 10.2z"/>',
   import: '<rect x="3" y="4.5" width="15" height="13" rx="2"/><circle cx="8" cy="9" r="1.4"/>' +
     '<path d="m3.5 15.5 4-4 3.5 3.5 2-2 4.5 4.5"/>' +

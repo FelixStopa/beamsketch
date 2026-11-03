@@ -16,6 +16,16 @@ export function toAscii(str) {
 }
 const f3 = v => (Math.round(v * 1000) / 1000).toString();
 
+/* Drehachse am Y-Anschluss: Weg auf der Oberfläche → Weg der Y-Achse.
+   mmPerRot = Y-Weg (Maschinen-mm) für eine volle Umdrehung von Rolle bzw. Futter.
+   Rollen: Das Objekt dreht sich um Rollen- zu Objektumfang – je mm Oberfläche bewegt sich die Rolle 1 mm. */
+export function rotaryK(m) {
+  const r = m && m.rotary;
+  if (!r || !r.enabled) return 1;
+  const d = r.type === 'chuck' ? r.objectD : r.rollerD;
+  return d > 0 && r.mmPerRot > 0 ? r.mmPerRot / (Math.PI * d) : 1;
+}
+
 export function jobOffset(doc, ops) {
   const m = doc.machine;
   if (m.jobOrigin === 'absolute') return { x: 0, y: 0 };
@@ -34,7 +44,14 @@ export function generateGCode(doc, ops, opts = {}) {
   const off = jobOffset(doc, ops);
   const out = [];
   const w = s => out.push(s);
-  const X = p => f4(p.x + off.x), Y = p => f4(p.y + off.y);
+  const rk = rotaryK(m);
+  const X = p => f4(p.x + off.x), Y = p => f4((p.y + off.y) * rk);
+  // Vorschub bleibt auf der Oberfläche gleich: bei Drehachse nach dem Maschinenweg umrechnen
+  const feedOn = (a, b, f) => {
+    if (rk === 1) return f;
+    const dd = Math.hypot(b.x - a.x, b.y - a.y), md = Math.hypot(b.x - a.x, (b.y - a.y) * rk);
+    return dd > 1e-9 ? Math.round(f * md / dd * 100) / 100 : f;
+  };
   const pw = pct => Math.round(Math.max(0, Math.min(100, pct)) / 100 * S);
   const airOn = m.airAssistM7 ? 'M7' : 'M8';
 
@@ -68,6 +85,7 @@ export function generateGCode(doc, ops, opts = {}) {
       return;
     }
     let line = 'G1 X' + X(p) + ' Y' + Y(p);
+    f = feedOn(pos, p, f);
     if (f !== curF) { line += ' F' + f3(f); curF = f; }
     if (s !== curS) { line += ' S' + s; curS = s; }
     w(line); pos = p;
@@ -124,7 +142,7 @@ export function generateGCode(doc, ops, opts = {}) {
     if (op.closed) G1(p[0], sVal, feed);
   }
   w('G1 S0'); w('M5'); w('M9');
-  if (m.returnToFinish) w('G0 X' + f4(m.finishX + off.x) + ' Y' + f4(m.finishY + off.y));
+  if (m.returnToFinish) w('G0 X' + f4(m.finishX + off.x) + ' Y' + f4((m.finishY + off.y) * rk));
   else if (m.jobOrigin === 'current') w('G0 X0 Y0');
   if (m.endGcode && m.endGcode.trim()) m.endGcode.split('\n').forEach(l => w(l));
   w('M2');
@@ -137,7 +155,8 @@ function frameLines(m, b, off) {
   const mode = m.frameBeforeJob || 'off';
   if (mode === 'off' || !isFinite(b.x0)) return [];
   const pts = [{ x: b.x0, y: b.y0 }, { x: b.x1, y: b.y0 }, { x: b.x1, y: b.y1 }, { x: b.x0, y: b.y1 }, { x: b.x0, y: b.y0 }];
-  const P = p => 'X' + f4(p.x + off.x) + ' Y' + f4(p.y + off.y);
+  const rk = rotaryK(m);
+  const P = p => 'X' + f4(p.x + off.x) + ' Y' + f4((p.y + off.y) * rk);
   const l = ['; Frame', 'G0 ' + P(pts[0])];
   const laser = mode === 'laser';
   if (laser) l.push('M3 S' + Math.round(Math.max(0, Math.min(100, m.laserFirePower)) / 100 * m.sScale));
@@ -171,7 +190,8 @@ export function frameGCode(doc, ops, mode = 'box') {
   const l = ['G90', 'G21'];
   if (m.jobOrigin === 'current') l.push('G92 X0 Y0');
   l.push('M4 S' + S, 'G1 F' + (m.rapidSpeed * 60));
-  for (const p of pts) l.push('G1 X' + f4(p.x + off.x) + ' Y' + f4(p.y + off.y));
+  const rk = rotaryK(m);
+  for (const p of pts) l.push('G1 X' + f4(p.x + off.x) + ' Y' + f4((p.y + off.y) * rk));
   l.push('S0', 'M5');
   if (m.jobOrigin === 'current') l.push('G0 X0 Y0');
   return l.join('\n') + '\n';

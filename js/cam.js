@@ -29,8 +29,8 @@ function nnOrder(paths, start = { x: 0, y: 0 }) {
     for (let i = 0; i < left.length; i++) {
       const p = left[i];
       if (p.closed) {
-        // beste Startposition auf geschlossener Kontur
-        for (let k = 0; k < p.pts.length; k++) {
+        // beste Startposition auf geschlossener Kontur (fest gesetzter Startpunkt bleibt)
+        for (let k = 0; k < (p.fixed ? 1 : p.pts.length); k++) {
           const d = V.dist2(cur, p.pts[k]);
           if (d < bd) { bd = d; bi = i; bidx = k; brev = false; }
         }
@@ -168,7 +168,7 @@ export function buildJob(doc, ctx, opts = {}) {
       if (L.mode === 'line' || L.mode === 'fill+line') {
         // entartete Reste (Punkte / Mikro-Segmente) verwerfen: sie brennen
         // sonst als Punkt mit voller Leistung ins Material
-        let paths = vec.map(p => ({ pts: p.pts, closed: p.closed })).filter(p => {
+        let paths = vec.map(p => ({ pts: p.pts, closed: p.closed, fixed: p.fixed })).filter(p => {
           if (p.pts.length < 2) return false;
           let len = 0;
           for (let i = 1; i < p.pts.length; i++) len += V.dist(p.pts[i - 1], p.pts[i]);
