@@ -19,7 +19,8 @@ export const LANGS = [
   { code: 'ru', name: 'Русский' },
   { code: 'ja', name: '日本語' },
   { code: 'zh', name: '简体中文' },
-  { code: 'ko', name: '한국어' }
+  { code: 'ko', name: '한국어' },
+  { code: 'ar', name: 'العربية', rtl: true }
 ];
 
 function detect() {
@@ -54,7 +55,9 @@ export function loc(s, params) {
 }
 
 /* Sprachkürzel für toLocaleString & Co. */
-export const locale = { de: 'de-DE', en: 'en-GB', zh: 'zh-CN', pt: 'pt-BR' }[lang] || lang;
+// Arabisch mit westlichen Ziffern – wie auf Maschinen, in GCode und mm-Angaben
+export const locale = { de: 'de-DE', en: 'en-GB', zh: 'zh-CN', pt: 'pt-BR', ar: 'ar-u-nu-latn' }[lang] || lang;
+export const rtl = !!(LANGS.find(l => l.code === lang) || {}).rtl;
 
 export function setLang(code) {
   try { localStorage.setItem(KEY, code); } catch (e) { /* egal */ }
@@ -64,6 +67,7 @@ export function setLang(code) {
 /* Statische Texte in index.html: data-i18n (Text) und data-i18n-title (Tooltip) */
 export function translateDOM(root = document) {
   document.documentElement.lang = lang;
+  document.documentElement.dir = rtl ? 'rtl' : 'ltr';
   root.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = loc(el.getAttribute('data-i18n') || el.textContent.trim()); });
   root.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = loc(el.getAttribute('data-i18n-title')); });
   document.title = loc('BeamSketch – Online Laser-Editor');

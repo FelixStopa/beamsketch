@@ -347,3 +347,8 @@ select option{background:var(--bg3);color:var(--fg)}
 .pmore:hover{background:var(--bg2);color:var(--fg)}
 .pempty{color:var(--fg2);font-size:12px;padding:10px 4px;line-height:1.5}
 .pempty.err{color:var(--err)}
+
+/* Rechts-nach-links (Arabisch): Menüs klappen nach links auf. Steuerkreuz, Startpunkt-Raster, Lineale
+   und Zeichenfläche zeigen Maschinenrichtungen – sie bleiben links-nach-rechts. */
+[dir=rtl] .menu .drop{left:auto;right:0}
+[dir=rtl] .jog,[dir=rtl] .anchor{direction:ltr}

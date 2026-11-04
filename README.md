@@ -13,7 +13,7 @@
   <a href="https://beamsketch.com"><img alt="Try it online" src="https://img.shields.io/badge/try_it-beamsketch.com-0e7f74?style=for-the-badge"></a>
   <a href="LICENSE"><img alt="License: AGPL-3.0" src="https://img.shields.io/badge/license-AGPL--3.0-0e7f74?style=for-the-badge"></a>
   <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-none-0e7f74?style=for-the-badge">
-  <img alt="13 languages" src="https://img.shields.io/badge/languages-13-0e7f74?style=for-the-badge">
+  <img alt="14 languages" src="https://img.shields.io/badge/languages-14-0e7f74?style=for-the-badge">
   <a href="https://ko-fi.com/beamsketch"><img alt="Support on Ko-fi" src="https://img.shields.io/badge/support-Ko--fi-ff5e5b?style=for-the-badge&logo=ko-fi&logoColor=white"></a>
 </p>
 
@@ -132,7 +132,7 @@
 - **Rotate handles** – quarter-circle handles on the selection corners, like you know them from other laser software
 - **Multi-page projects** – several pages in one project (status bar or View → Pages…, `PageUp` / `PageDown`); laser and export work on the current page
 - **Light and dark theme**, following your system on first start
-- **13 languages** – English, German, Spanish, French, Italian, Portuguese, Dutch, Polish, Turkish, Russian, Japanese, Chinese, Korean
+- **14 languages** – English, German, Spanish, French, Italian, Portuguese, Dutch, Polish, Turkish, Russian, Japanese, Chinese, Korean, Arabic (right-to-left)
 - **Private by design** – everything runs locally in your browser; your designs never leave your computer
 
 ## Quick start
