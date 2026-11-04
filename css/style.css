@@ -166,11 +166,17 @@ pre.code{background:var(--code);border:1px solid var(--line);border-radius:8px;p
 .kv{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;align-items:center}
 #themeBtn{background:none;border:1px solid var(--line);border-radius:6px;height:22px;width:26px;padding:0;margin-right:6px;cursor:pointer;color:var(--fg2)}
 #themeBtn:hover{background:var(--bg3);color:var(--fg)}
-#accountBtn{background:none;border:1px solid var(--line);border-radius:6px;height:22px;padding:0 8px;margin-right:6px;cursor:pointer;color:var(--fg2);font-size:11px;font-family:inherit}
-#accountBtn:hover{background:var(--bg3);color:var(--fg)}
+#accountBtn,.topBtn{background:none;border:1px solid var(--line);border-radius:6px;height:22px;padding:0 8px;margin-right:6px;cursor:pointer;color:var(--fg2);font-size:11px;font-family:inherit}
+#accountBtn:hover,.topBtn:hover{background:var(--bg3);color:var(--fg)}
+.topBtn{white-space:nowrap}
+.topBtn.tip{color:#e0566b}
+.topBtn.discord{color:#5865f2}
 #accountBtn.pro{color:var(--acc);border-color:var(--acc);font-family:inherit}
 #langSel{width:auto;height:22px;padding:0 4px;margin-right:6px;font-size:11px}
 .badge{background:var(--bg3);border:1px solid var(--line);border-radius:20px;padding:1px 9px;font-size:11px}
+/* gewählter Laser oben rechts: Knopf zu den Geräte-Einstellungen, gleiche Form wie die übrigen Knöpfe der Leiste */
+#devBadge{border-radius:6px;height:22px;padding:0 9px;color:var(--fg);font-family:inherit;cursor:pointer;white-space:nowrap}
+#devBadge:hover{background:var(--hover);border-color:var(--acc)}
 #console{font:11.5px ui-monospace,monospace;height:180px;overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:6px;padding:6px;user-select:text;white-space:pre-wrap}
 #console .tx{color:var(--tx)}#console .rx{color:var(--rx)}#console .er{color:var(--er)}
 .jog{display:grid;grid-template-columns:repeat(3,34px);grid-template-rows:repeat(3,30px);gap:4px;justify-content:center}

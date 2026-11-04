@@ -1758,6 +1758,8 @@ App.exportProjectFile = exportProjectFile;
 function setBadge() {
   const M = App.doc.machine;
   $('#devBadge').textContent = `${M.name} · ${M.width}×${M.height} mm · ${M.firmware}`;
+  $('#devBadge').title = loc('Geräte-Einstellungen');
+  $('#devBadge').onclick = machineDialog;
 }
 // Standard-Ebenen sinnvoll vorbelegen
 function layerDefaults(d) {
