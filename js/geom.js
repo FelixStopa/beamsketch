@@ -235,10 +235,27 @@ function splitEdges(polysA, polysB) {
   for (let i = 0; i < ea.length; i++) {
     for (let j = 0; j < eb.length; j++) {
       const x = segInt(ea[i].a, ea[i].b, eb[j].a, eb[j].b);
-      if (x) { cutsA[i].push({ t: x.t, p: x.p }); cutsB[j].push({ t: x.u, p: x.p }); }
+      if (x) { cutsA[i].push({ t: x.t, p: x.p }); cutsB[j].push({ t: x.u, p: x.p }); continue; }
+      // kollinear überlappend: jede Kante an den Endpunkten der anderen teilen,
+      // damit die gemeinsamen Stücke bei beiden exakt dieselben Endpunkte haben
+      if (collinear(ea[i], eb[j])) {
+        for (const p of [eb[j].a, eb[j].b]) { const t = paramOn(ea[i], p); if (t > 0 && t < 1) cutsA[i].push({ t, p }); }
+        for (const p of [ea[i].a, ea[i].b]) { const t = paramOn(eb[j], p); if (t > 0 && t < 1) cutsB[j].push({ t, p }); }
+      }
     }
   }
   return [splitAtCuts(ea, cutsA), splitAtCuts(eb, cutsB)];
+}
+const COL_TOL = 1e-7;
+function collinear(e, f) {
+  const r = V.sub(e.b, e.a), len = Math.hypot(r.x, r.y);
+  if (len < 1e-12) return false;
+  const off = p => Math.abs(V.cross(r, V.sub(p, e.a))) / len;   // Abstand von der Geraden durch e
+  return off(f.a) < COL_TOL && off(f.b) < COL_TOL;
+}
+function paramOn(e, p) {
+  const r = V.sub(e.b, e.a);
+  return V.dot(V.sub(p, e.a), r) / V.dot(r, r);
 }
 
 function key(p) { return Math.round(p.x / 1e-6) + ',' + Math.round(p.y / 1e-6); }
@@ -314,7 +331,21 @@ export function boolOp(polysA, polysB, op) {
   const [ea, eb] = splitEdges(polysA, polysB);
   const mid = e => V.lerp(e.a, e.b, .5);
   const keep = [];
+  // Gemeinsame Kanten (A und B laufen auf derselben Strecke) liegen auf dem Rand der jeweils anderen
+  // Form – der Mittelpunkt-Test ist dort zufällig. Sie werden nach Richtung entschieden:
+  // gleiche Richtung = beide Flächen auf derselben Seite, entgegengesetzt = Flächen stoßen aneinander.
+  const dirB = new Set(eb.map(e => key(e.a) + '|' + key(e.b)));
+  const shared = new Set();
   for (const e of ea) {
+    const same = dirB.has(key(e.a) + '|' + key(e.b)), opp = dirB.has(key(e.b) + '|' + key(e.a));
+    if (!same && !opp) continue;
+    shared.add(key(e.a) + '|' + key(e.b)); shared.add(key(e.b) + '|' + key(e.a));
+    if (same && (op === 'union' || op === 'intersect')) keep.push(e);
+    if (opp && !same && op === 'subtract') keep.push(e);
+  }
+  const isShared = e => shared.has(key(e.a) + '|' + key(e.b));
+  for (const e of ea) {
+    if (isShared(e)) continue;
     const inB = pointInPolys(mid(e), polysB);
     if (op === 'union' && !inB) keep.push(e);
     if (op === 'intersect' && inB) keep.push(e);
@@ -322,6 +353,7 @@ export function boolOp(polysA, polysB, op) {
     if (op === 'xor') keep.push(inB ? { a: e.b, b: e.a } : e);
   }
   for (const e of eb) {
+    if (isShared(e)) continue;
     const inA = pointInPolys(mid(e), polysA);
     if (op === 'union' && !inA) keep.push(e);
     if (op === 'intersect' && inA) keep.push(e);

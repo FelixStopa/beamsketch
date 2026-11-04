@@ -184,11 +184,10 @@ export function normalizeLayer(loops, minArea) {
   }));
   let res = outers;
   if (overlap) {
-    // boolOp kommt mit genau übereinanderliegenden Kanten nicht zurecht (häufig bei STL aus CAD:
-    // Körper mit bündigen Flächen). Jeder Körper wird darum um einen Bruchteil eines µm versetzt.
-    const jit = (poly, k) => poly.map(p => ({ x: p.x + k * 7.3e-5, y: p.y + k * 1.31e-4 }));
+    // bündige Flächen (häufig bei STL aus CAD) ergeben genau übereinanderliegende Kanten – boolOp
+    // behandelt sie als gemeinsame Kanten
     res = [outers[0]];
-    outers.slice(1).forEach((o, k) => { res = boolOp(res, [jit(o, k + 1)], 'union'); });
+    for (const o of outers.slice(1)) res = boolOp(res, [o], 'union');
   }
   if (holes.length) {
     const solid = res.filter(p => polyArea(p) > 0);
