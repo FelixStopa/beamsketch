@@ -485,7 +485,7 @@ export default {
   "Viel Erfolg! Die Einrichtung findest du jederzeit unter Hilfe.": "Veel succes! Het instellen vind je altijd terug onder Help.",
   "BeamSketch ist ein Laser-Editor, der komplett im Browser läuft. Du zeichnest oder importierst deine Vorlage, legst fest wie geschnitten oder graviert wird, und bekommst GCode für deinen GRBL-Laser – wahlweise als Datei oder direkt per USB.": "BeamSketch is een lasereditor die volledig in de browser draait. Je tekent of importeert je ontwerp, bepaalt hoe er gesneden of gegraveerd wordt, en krijgt GCode voor je GRBL-laser – als bestand of direct via USB.",
   "Zeichnen & Importieren": "Tekenen & importeren",
-  "Rechteck, Ellipse, Polygon, Bezier, Text mit 138 Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Rechthoek, ellips, veelhoek, Bézier, tekst met 138 lettertypen. Plus SVG, DXF, LightBurn-projecten en afbeeldingen.",
+  "Rechteck, Ellipse, Polygon, Bezier, Text mit {n} Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Rechthoek, ellips, veelhoek, Bézier, tekst met {n} lettertypen. Plus SVG, DXF, LightBurn-projecten en afbeeldingen.",
   "Ebenen statt Farben": "Lagen in plaats van kleuren",
   "Jede Farbe ist ein Schnitt-Satz: Geschwindigkeit, Leistung, Durchgänge, Füllen oder Schneiden.": "Elke kleur is een snij-instelling: snelheid, vermogen, doorgangen, vullen of snijden.",
   "Bildgravur": "Afbeeldingen graveren",
@@ -1459,5 +1459,8 @@ export default {
   "Ecken der Arbeitsfläche (ohne Linsenkorrektur)": "Hoeken van het werkgebied (zonder lenscorrectie)",
   "Kalibriert: {m}.": "Gekalibreerd: {m}.",
   "Restfehler an den Kreuzen ca. {e} mm.": "Restfout bij de kruisen ca. {e} mm.",
-  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Werkwijze: kalibratiekruisen maken, met weinig vermogen op een plank graveren, plank laten liggen, dan ‘Kalibreren…’ en de kruisen op volgorde aanklikken."
+  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Werkwijze: kalibratiekruisen maken, met weinig vermogen op een plank graveren, plank laten liggen, dan ‘Kalibreren…’ en de kruisen op volgorde aanklikken.",
+  "Diese Schrift enthält die Zeichen deines Textes nicht": "Dit lettertype bevat de tekens van je tekst niet",
+  "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} lettertypen bevatten de tekens van je tekst – ze staan bovenaan.",
+  "Arabisch": "Arabisch"
 };

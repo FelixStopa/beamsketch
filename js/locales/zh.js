@@ -485,7 +485,7 @@ export default {
   "Viel Erfolg! Die Einrichtung findest du jederzeit unter Hilfe.": "祝你成功！随时可在“帮助”中找到设置向导。",
   "BeamSketch ist ein Laser-Editor, der komplett im Browser läuft. Du zeichnest oder importierst deine Vorlage, legst fest wie geschnitten oder graviert wird, und bekommst GCode für deinen GRBL-Laser – wahlweise als Datei oder direkt per USB.": "BeamSketch 是一款完全在浏览器中运行的激光编辑器。你可以绘制或导入设计，确定切割或雕刻方式，并获得适用于 GRBL 激光器的 GCode – 可保存为文件，也可直接通过 USB 发送。",
   "Zeichnen & Importieren": "绘图与导入",
-  "Rechteck, Ellipse, Polygon, Bezier, Text mit 138 Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "矩形、椭圆、多边形、贝塞尔曲线、138 种字体的文本。还支持 SVG、DXF、LightBurn 项目和图片。",
+  "Rechteck, Ellipse, Polygon, Bezier, Text mit {n} Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "矩形、椭圆、多边形、贝塞尔曲线、{n} 种字体的文本。还支持 SVG、DXF、LightBurn 项目和图片。",
   "Ebenen statt Farben": "用图层代替颜色",
   "Jede Farbe ist ein Schnitt-Satz: Geschwindigkeit, Leistung, Durchgänge, Füllen oder Schneiden.": "每种颜色就是一组切割参数：速度、功率、遍数、填充或切割。",
   "Bildgravur": "图片雕刻",
@@ -1459,5 +1459,8 @@ export default {
   "Ecken der Arbeitsfläche (ohne Linsenkorrektur)": "工作区四角（无镜头校正）",
   "Kalibriert: {m}.": "已校准：{m}。",
   "Restfehler an den Kreuzen ca. {e} mm.": "十字处剩余误差约 {e} mm。",
-  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "步骤：创建校准十字，用低功率雕刻在木板上，木板保持不动，然后点“校准…”并按顺序点击十字。"
+  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "步骤：创建校准十字，用低功率雕刻在木板上，木板保持不动，然后点“校准…”并按顺序点击十字。",
+  "Diese Schrift enthält die Zeichen deines Textes nicht": "此字体不包含你文字中的字符",
+  "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} 种字体包含你文字中的字符——排在最上面。",
+  "Arabisch": "阿拉伯文"
 };

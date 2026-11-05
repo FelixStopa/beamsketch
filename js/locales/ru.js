@@ -485,7 +485,7 @@ export default {
   "Viel Erfolg! Die Einrichtung findest du jederzeit unter Hilfe.": "Удачи! Настройка всегда доступна в меню Справка.",
   "BeamSketch ist ein Laser-Editor, der komplett im Browser läuft. Du zeichnest oder importierst deine Vorlage, legst fest wie geschnitten oder graviert wird, und bekommst GCode für deinen GRBL-Laser – wahlweise als Datei oder direkt per USB.": "BeamSketch – это редактор для лазера, работающий полностью в браузере. Вы рисуете или импортируете макет, задаёте, как его резать или гравировать, и получаете GCode для GRBL-лазера – файлом или сразу по USB.",
   "Zeichnen & Importieren": "Рисование и импорт",
-  "Rechteck, Ellipse, Polygon, Bezier, Text mit 138 Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Прямоугольник, эллипс, многоугольник, Безье, текст со 138 шрифтами. А также SVG, DXF, проекты LightBurn и изображения.",
+  "Rechteck, Ellipse, Polygon, Bezier, Text mit {n} Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Прямоугольник, эллипс, многоугольник, Безье, текст со {n} шрифтами. А также SVG, DXF, проекты LightBurn и изображения.",
   "Ebenen statt Farben": "Слои вместо цветов",
   "Jede Farbe ist ein Schnitt-Satz: Geschwindigkeit, Leistung, Durchgänge, Füllen oder Schneiden.": "Каждый цвет – набор параметров реза: скорость, мощность, проходы, заливка или резка.",
   "Bildgravur": "Гравировка изображений",
@@ -1459,5 +1459,8 @@ export default {
   "Ecken der Arbeitsfläche (ohne Linsenkorrektur)": "Углы рабочей области (без коррекции объектива)",
   "Kalibriert: {m}.": "Откалибровано: {m}.",
   "Restfehler an den Kreuzen ca. {e} mm.": "Остаточная ошибка на крестах около {e} мм.",
-  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Порядок: создай калибровочные кресты, выгравируй их малой мощностью на доске, не сдвигай доску, затем «Калибровать…» и щёлкай кресты по порядку."
+  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Порядок: создай калибровочные кресты, выгравируй их малой мощностью на доске, не сдвигай доску, затем «Калибровать…» и щёлкай кресты по порядку.",
+  "Diese Schrift enthält die Zeichen deines Textes nicht": "В этом шрифте нет символов твоего текста",
+  "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "Символы твоего текста есть в {n} шрифтах – они вверху списка.",
+  "Arabisch": "Арабский"
 };

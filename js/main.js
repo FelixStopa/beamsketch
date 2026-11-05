@@ -3,7 +3,7 @@ import { Mat, V, boxValid, boxW, boxH, boxCenter, emptyBox, growBox, mergeBox, b
 import * as D from './doc.js';
 import { newDoc, Shape, History, shapePolys, shapeBBox, shapesBBox, walk, removeShape, toPath, nodeSub, LAYER_COLORS, defaultMachine, layerNo } from './doc.js';
 import { View, render, RULER, invalidateAll, invalidateShape, selectionBox, HANDLES, ROT_R, ROT_GRIP, rotateCorners, getSubs, displayColor } from './render.js';
-import { textSubpaths, FontStore, loadFontFile, loadFontLibrary, ensureFont, isBundled, libraryEntry, preloadUsedFonts } from './font.js';
+import { textSubpaths, FontStore, loadFontFile, loadFontLibrary, ensureFont, isBundled, libraryEntry, preloadUsedFonts, fontCovers, scriptsOf } from './font.js';
 import { importSVG, exportSVG, parsePathData } from './svg.js';
 import { importDXF } from './dxf.js';
 import { importLBRN } from './lbrn.js';
@@ -652,8 +652,11 @@ tools.text = {
   down(w) {
     const sh = Shape.text(w.x, w.y, loc('Text'), App.state.activeLayer);
     sh.size = App.state.lastFontSize || 20;
-    sh.font = App.state.lastFont || 'Sans';
+    // arabische Oberfläche: Mustertext ist arabisch – mit einer Schrift, die arabische Zeichen hat
+    const font = App.state.lastFont || (scriptsOf(sh.text).includes('arabic') && isBundled('Tajawal') ? 'Tajawal' : 'Sans');
+    sh.font = 'Sans';
     App.doc.shapes.push(sh);
+    if (font !== 'Sans') setFont(sh, font);
     setSel([sh]);
     App.commit('Text');
     App.setTool('select');
@@ -1979,6 +1982,18 @@ function fontSelect(active, onch) {
 /* ============ Schrift-Panel mit Vorschau ============
    Dockt rechts an, damit der Text auf der Zeichenfläche sichtbar bleibt:
    ein Klick setzt die Schrift sofort – man sieht sie direkt im Werkstück. */
+/* Schriften, die alle Zeichen des Mustertexts haben, zuerst; die übrigen zeigen ein lateinisches Muster
+   (sonst sähen z. B. bei arabischem Text alle gleich aus – der Browser nähme überall dieselbe Ersatzschrift) */
+const FALLBACK_SAMPLE = 'Hello Laser';
+function fontItems(list, text) {
+  const ok = list.filter(f => fontCovers(f.name, text)), rest = list.filter(f => !fontCovers(f.name, text));
+  return { items: ok.concat(rest), ok: ok.length, missing: rest.length };
+}
+function fontSample(f, text) {
+  const ok = fontCovers(f.name, text);
+  return h('div', { class: 'fp', style: { fontFamily: `"${f.name}"`, opacity: ok ? '' : '.45' }, title: ok ? '' : loc('Diese Schrift enthält die Zeichen deines Textes nicht') }, ok ? text : FALLBACK_SAMPLE);
+}
+
 function fontPickerPanel(t) {
   closeDock();
   const original = t.font;
@@ -1992,14 +2007,17 @@ function fontPickerPanel(t) {
   const draw = () => {
     list.innerHTML = '';
     const ql = q.trim().toLowerCase();
-    const items = FontStore.library.filter(f =>
-      (cat === 'all' || f.cat === cat) && (!ql || f.name.toLowerCase().includes(ql)));
+    const fi = fontItems(FontStore.library.filter(f =>
+      (cat === 'all' || f.cat === cat) && (!ql || f.name.toLowerCase().includes(ql))), sample());
+    const items = fi.items;
+    if (fi.missing && scriptsOf(sample()).some(k => k !== 'latin'))
+      list.appendChild(h('small', { class: 'hint', style: { display: 'block', margin: '0 0 6px' } }, loc('{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.', { n: fi.ok })));
     for (const f of items) {
       list.appendChild(h('div', {
         class: 'fontrow' + (f.name === t.font ? ' on' : ''),
         onclick: () => { setFont(t, f.name); draw(); }
       },
-        h('div', { class: 'fp', style: { fontFamily: `"${f.name}"` } }, sample()),
+        fontSample(f, sample()),
         h('div', { class: 'fn' }, f.name)));
     }
     if (!items.length) list.appendChild(h('small', { class: 'hint' }, loc('Keine Schrift gefunden.')));
@@ -3025,7 +3043,7 @@ function fontOverviewDialog() {
   const draw = () => {
     box.innerHTML = '';
     const ql = q.trim().toLowerCase();
-    const items = FontStore.library.filter(f => (cat === 'all' || f.cat === cat) && (!ql || f.name.toLowerCase().includes(ql)));
+    const items = fontItems(FontStore.library.filter(f => (cat === 'all' || f.cat === cat) && (!ql || f.name.toLowerCase().includes(ql))), txt).items;
     for (const f of items) box.appendChild(h('div', {
       class: 'fontcard', title: f.name + ' · ' + loc(FontStore.cats[f.cat] || f.cat) + ' · ' + f.lic,
       onclick: () => {
@@ -3036,7 +3054,7 @@ function fontOverviewDialog() {
         toast(loc('Schrift: {name}', { name: f.name }), 'ok');
       }
     },
-      h('div', { class: 'fp', style: { fontFamily: `"${f.name}"` } }, txt),
+      fontSample(f, txt),
       h('div', { class: 'fn' }, f.name)));
     info.textContent = loc('{n} Schriften · Klick weist die Schrift dem ausgewählten Text zu', { n: items.length });
   };

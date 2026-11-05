@@ -40,6 +40,18 @@ export async function loadFontLibrary(base = 'fonts/') {
 export function libraryEntry(name) { return FontStore.library.find(f => f.name === name); }
 export function isBundled(name) { return !!libraryEntry(name); }
 
+/* Welche Schriftsysteme braucht ein Text, und deckt eine mitgelieferte Schrift sie ab?
+   (fonts.json: scripts je Schrift; Ziffern und Satzzeichen zählen nicht) */
+const SCRIPT_RE = { latin: /[A-Za-z\u00c0-\u024f]/, cyrillic: /[\u0400-\u04ff]/, greek: /[\u0370-\u03ff]/,
+  arabic: /[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff\ufb50-\ufdff\ufe70-\ufeff]/, hebrew: /[\u0590-\u05ff]/,
+  cjk: /[\u4e00-\u9fff\u3400-\u4dbf]/, kana: /[\u3040-\u30ff]/, hangul: /[\uac00-\ud7af\u1100-\u11ff]/ };
+export const scriptsOf = text => Object.keys(SCRIPT_RE).filter(k => SCRIPT_RE[k].test(String(text || '')));
+export function fontCovers(name, text) {
+  const e = libraryEntry(name);
+  if (!e || !e.scripts) return true;               // Systemschriften und eigene Dateien: unbekannt, also ja
+  return scriptsOf(text).every(k => e.scripts.includes(k));
+}
+
 /* Stellt sicher, dass eine Schrift benutzbar ist:
    CSS-Schrift für Vorschau/Tracing und – wenn möglich – exakte Umrisse via opentype. */
 export async function ensureFont(name) {
@@ -102,6 +114,11 @@ export async function loadFontFile(file) {
   FontStore.cache.clear();
   return name;
 }
+
+/* Arabisch und Hebräisch brauchen Formanpassung (verbundene Buchstaben) und Rechts-nach-links –
+   das kann der Browser beim Zeichnen; opentype.js setzt die Glyphen nur einzeln von links nach rechts */
+const RTL_RE = /[\u0590-\u08ff\ufb1d-\ufdff\ufe70-\ufeff]/;
+export const needsShaping = text => RTL_RE.test(String(text || ''));
 
 function cssFont(sh) {
   const style = sh.italic ? 'italic ' : '';
@@ -172,11 +189,15 @@ function traceSubpaths(sh) {
   const lines = String(sh.text).split('\n');
   const lineH = size * 1.25 + (sh.vspace || 0);
   const meas = document.createElement('canvas').getContext('2d');
+  // Richtung ausdrücklich setzen: sonst erbt die Zeichenfläche dir=rtl der Seite und x wäre die rechte Kante
+  const rtl = needsShaping(sh.text);
+  meas.direction = rtl ? 'rtl' : 'ltr';
+  const spacing = rtl ? 0 : (sh.hspace || 0);       // Buchstabenabstand würde arabische Verbindungen zerreißen
   const fontStr = `${style}${weight}${size * ppmm}px ${fam}`;
   meas.font = fontStr;
   let maxW = 1;
   const widths = lines.map(l => {
-    let w = meas.measureText(l).width + (sh.hspace || 0) * ppmm * Math.max(0, l.length - 1);
+    let w = meas.measureText(l).width + spacing * ppmm * Math.max(0, l.length - 1);
     maxW = Math.max(maxW, w); return w;
   });
   const pad = Math.ceil(size * ppmm * 0.4) + 4;
@@ -188,15 +209,16 @@ function traceSubpaths(sh) {
   const g = cv.getContext('2d', { willReadFrequently: true });
   g.fillStyle = '#000'; g.fillRect(0, 0, W, H);
   g.fillStyle = '#fff'; g.font = fontStr; g.textBaseline = 'alphabetic';
+  g.direction = rtl ? 'rtl' : 'ltr'; g.textAlign = 'left';
   const baseY = pad + size * ppmm;
   lines.forEach((l, li) => {
     let x = pad;
     if (sh.align === 'center') x = pad + (maxW - widths[li]) / 2;
     if (sh.align === 'right') x = pad + (maxW - widths[li]);
     const y = baseY + li * lineH * ppmm;
-    if (sh.hspace) {
+    if (spacing) {
       let cx = x;
-      for (const ch of l) { g.fillText(ch, cx, y); cx += g.measureText(ch).width + sh.hspace * ppmm; }
+      for (const ch of l) { g.fillText(ch, cx, y); cx += g.measureText(ch).width + spacing * ppmm; }
     } else g.fillText(l, x, y);
   });
   const img = g.getImageData(0, 0, W, H).data;
@@ -345,7 +367,7 @@ export function textSubpaths(sh) {
   const key = JSON.stringify([sh.text, sh.font, sh.size, sh.bold, sh.italic, sh.hspace, sh.vspace, sh.align]);
   if (FontStore.cache.has(key)) return FontStore.cache.get(key);
   let subs = null;
-  if (FontStore.fonts.has(sh.font)) { try { subs = otSubpaths(sh); } catch (e) { subs = null; } }
+  if (FontStore.fonts.has(sh.font) && !needsShaping(sh.text)) { try { subs = otSubpaths(sh); } catch (e) { subs = null; } }
   if (!subs) { try { subs = traceSubpaths(sh); } catch (e) { subs = []; } }
   if (FontStore.cache.size > 400) FontStore.cache.clear();
   FontStore.cache.set(key, subs);

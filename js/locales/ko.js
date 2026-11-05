@@ -485,7 +485,7 @@ export default {
   "Viel Erfolg! Die Einrichtung findest du jederzeit unter Hilfe.": "행운을 빕니다! 설정은 언제든지 도움말에서 다시 열 수 있습니다.",
   "BeamSketch ist ein Laser-Editor, der komplett im Browser läuft. Du zeichnest oder importierst deine Vorlage, legst fest wie geschnitten oder graviert wird, und bekommst GCode für deinen GRBL-Laser – wahlweise als Datei oder direkt per USB.": "BeamSketch는 브라우저에서만 동작하는 레이저 편집기입니다. 디자인을 그리거나 가져와서 커팅 또는 각인 방식을 정하면, GRBL 레이저용 GCode를 파일로 받거나 USB로 바로 보낼 수 있습니다.",
   "Zeichnen & Importieren": "그리기 & 가져오기",
-  "Rechteck, Ellipse, Polygon, Bezier, Text mit 138 Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "사각형, 타원, 다각형, 베지어, 138개 글꼴의 텍스트. SVG, DXF, LightBurn 프로젝트와 이미지도 지원합니다.",
+  "Rechteck, Ellipse, Polygon, Bezier, Text mit {n} Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "사각형, 타원, 다각형, 베지어, {n}개 글꼴의 텍스트. SVG, DXF, LightBurn 프로젝트와 이미지도 지원합니다.",
   "Ebenen statt Farben": "색상 대신 레이어",
   "Jede Farbe ist ein Schnitt-Satz: Geschwindigkeit, Leistung, Durchgänge, Füllen oder Schneiden.": "각 색상은 커팅 설정입니다: 속도, 출력, 패스 수, 채우기 또는 커팅.",
   "Bildgravur": "이미지 각인",
@@ -1459,5 +1459,8 @@ export default {
   "Ecken der Arbeitsfläche (ohne Linsenkorrektur)": "작업 영역 모서리(렌즈 보정 없음)",
   "Kalibriert: {m}.": "보정됨: {m}.",
   "Restfehler an den Kreuzen ca. {e} mm.": "십자에서 남은 오차 약 {e} mm.",
-  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "순서: 보정 십자를 만들고 낮은 출력으로 판에 각인한 뒤 판을 그대로 두고 “보정…”을 눌러 십자를 순서대로 클릭하세요."
+  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "순서: 보정 십자를 만들고 낮은 출력으로 판에 각인한 뒤 판을 그대로 두고 “보정…”을 눌러 십자를 순서대로 클릭하세요.",
+  "Diese Schrift enthält die Zeichen deines Textes nicht": "이 글꼴에는 텍스트의 문자가 없습니다",
+  "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "텍스트의 문자를 포함한 글꼴 {n}개 – 위쪽에 표시됩니다.",
+  "Arabisch": "아랍어"
 };

@@ -485,7 +485,7 @@ export default {
   "Viel Erfolg! Die Einrichtung findest du jederzeit unter Hilfe.": "がんばってください！セットアップはいつでもヘルプから開けます。",
   "BeamSketch ist ein Laser-Editor, der komplett im Browser läuft. Du zeichnest oder importierst deine Vorlage, legst fest wie geschnitten oder graviert wird, und bekommst GCode für deinen GRBL-Laser – wahlweise als Datei oder direkt per USB.": "BeamSketch はブラウザーだけで動くレーザーエディターです。デザインを描くか読み込み、カットか彫刻かを決めると、GRBL レーザー用の GCode が得られます – ファイルとして、または USB で直接。",
   "Zeichnen & Importieren": "描画と読み込み",
-  "Rechteck, Ellipse, Polygon, Bezier, Text mit 138 Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "長方形、楕円、多角形、ベジェ、138 種類のフォントでのテキスト。さらに SVG、DXF、LightBurn プロジェクト、画像にも対応。",
+  "Rechteck, Ellipse, Polygon, Bezier, Text mit {n} Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "長方形、楕円、多角形、ベジェ、{n} 種類のフォントでのテキスト。さらに SVG、DXF、LightBurn プロジェクト、画像にも対応。",
   "Ebenen statt Farben": "色ではなくレイヤー",
   "Jede Farbe ist ein Schnitt-Satz: Geschwindigkeit, Leistung, Durchgänge, Füllen oder Schneiden.": "各色がカット設定です：速度、出力、パス数、塗りまたはカット。",
   "Bildgravur": "画像彫刻",
@@ -1459,5 +1459,8 @@ export default {
   "Ecken der Arbeitsfläche (ohne Linsenkorrektur)": "作業エリアの角（レンズ補正なし）",
   "Kalibriert: {m}.": "キャリブレーション済み: {m}。",
   "Restfehler an den Kreuzen ca. {e} mm.": "十字での残差 約 {e} mm。",
-  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "手順: キャリブレーション十字を作成し、低出力で板に刻印して板を動かさずに置き、「キャリブレーション…」で十字を順番にクリックします。"
+  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "手順: キャリブレーション十字を作成し、低出力で板に刻印して板を動かさずに置き、「キャリブレーション…」で十字を順番にクリックします。",
+  "Diese Schrift enthält die Zeichen deines Textes nicht": "このフォントにはテキストの文字が含まれていません",
+  "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "テキストの文字を含むフォントは {n} 個 – 上に表示されています。",
+  "Arabisch": "アラビア語"
 };

@@ -485,7 +485,7 @@ export default {
   "Viel Erfolg! Die Einrichtung findest du jederzeit unter Hilfe.": "Boa sorte! A configuração está sempre disponível em Ajuda.",
   "BeamSketch ist ein Laser-Editor, der komplett im Browser läuft. Du zeichnest oder importierst deine Vorlage, legst fest wie geschnitten oder graviert wird, und bekommst GCode für deinen GRBL-Laser – wahlweise als Datei oder direkt per USB.": "O BeamSketch é um editor laser que funciona inteiramente no navegador. Você desenha ou importa o seu modelo, define como será cortado ou gravado e recebe GCode para o seu laser GRBL – como arquivo ou diretamente por USB.",
   "Zeichnen & Importieren": "Desenhar & importar",
-  "Rechteck, Ellipse, Polygon, Bezier, Text mit 138 Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Retângulo, elipse, polígono, Bézier, texto com 138 fontes. Além de SVG, DXF, projetos LightBurn e imagens.",
+  "Rechteck, Ellipse, Polygon, Bezier, Text mit {n} Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Retângulo, elipse, polígono, Bézier, texto com {n} fontes. Além de SVG, DXF, projetos LightBurn e imagens.",
   "Ebenen statt Farben": "Camadas em vez de cores",
   "Jede Farbe ist ein Schnitt-Satz: Geschwindigkeit, Leistung, Durchgänge, Füllen oder Schneiden.": "Cada cor é uma configuração de corte: velocidade, potência, passagens, preenchimento ou corte.",
   "Bildgravur": "Gravação de imagens",
@@ -1459,5 +1459,8 @@ export default {
   "Ecken der Arbeitsfläche (ohne Linsenkorrektur)": "Cantos da área de trabalho (sem correção da lente)",
   "Kalibriert: {m}.": "Calibrada: {m}.",
   "Restfehler an den Kreuzen ca. {e} mm.": "Erro residual nas cruzes cerca de {e} mm.",
-  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Passos: cria as cruzes de calibração, grava-as com pouca potência numa tábua, deixa a tábua no lugar, depois «Calibrar…» e clica nas cruzes pela ordem."
+  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Passos: cria as cruzes de calibração, grava-as com pouca potência numa tábua, deixa a tábua no lugar, depois «Calibrar…» e clica nas cruzes pela ordem.",
+  "Diese Schrift enthält die Zeichen deines Textes nicht": "Esta fonte não contém os caracteres do teu texto",
+  "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} fontes contêm os caracteres do teu texto – aparecem no topo.",
+  "Arabisch": "Árabe"
 };

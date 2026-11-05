@@ -485,7 +485,7 @@ export default {
   "Viel Erfolg! Die Einrichtung findest du jederzeit unter Hilfe.": "Good luck! You can find the setup any time under Help.",
   "BeamSketch ist ein Laser-Editor, der komplett im Browser läuft. Du zeichnest oder importierst deine Vorlage, legst fest wie geschnitten oder graviert wird, und bekommst GCode für deinen GRBL-Laser – wahlweise als Datei oder direkt per USB.": "BeamSketch is a laser editor that runs entirely in the browser. You draw or import your design, decide how it is cut or engraved, and get GCode for your GRBL laser – either as a file or directly via USB.",
   "Zeichnen & Importieren": "Draw & import",
-  "Rechteck, Ellipse, Polygon, Bezier, Text mit 138 Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Rectangle, ellipse, polygon, Bezier, text with 138 fonts. Plus SVG, DXF, LightBurn projects and images.",
+  "Rechteck, Ellipse, Polygon, Bezier, Text mit {n} Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Rectangle, ellipse, polygon, Bezier, text with {n} fonts. Plus SVG, DXF, LightBurn projects and images.",
   "Ebenen statt Farben": "Layers instead of colors",
   "Jede Farbe ist ein Schnitt-Satz: Geschwindigkeit, Leistung, Durchgänge, Füllen oder Schneiden.": "Each color is a cut setting: speed, power, passes, fill or cut.",
   "Bildgravur": "Image engraving",
@@ -1459,5 +1459,8 @@ export default {
   "Ecken der Arbeitsfläche (ohne Linsenkorrektur)": "Corners of the work area (no lens correction)",
   "Kalibriert: {m}.": "Calibrated: {m}.",
   "Restfehler an den Kreuzen ca. {e} mm.": "Remaining error at the crosses about {e} mm.",
-  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Steps: create calibration crosses, engrave them at low power on a board, leave the board in place, then “Calibrate…” and click the crosses in order."
+  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Steps: create calibration crosses, engrave them at low power on a board, leave the board in place, then “Calibrate…” and click the crosses in order.",
+  "Diese Schrift enthält die Zeichen deines Textes nicht": "This font does not contain the characters of your text",
+  "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} fonts contain the characters of your text – they are listed first.",
+  "Arabisch": "Arabic"
 };

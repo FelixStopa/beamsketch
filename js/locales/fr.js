@@ -485,7 +485,7 @@ export default {
   "Viel Erfolg! Die Einrichtung findest du jederzeit unter Hilfe.": "Bonne réussite ! La configuration est toujours accessible dans Aide.",
   "BeamSketch ist ein Laser-Editor, der komplett im Browser läuft. Du zeichnest oder importierst deine Vorlage, legst fest wie geschnitten oder graviert wird, und bekommst GCode für deinen GRBL-Laser – wahlweise als Datei oder direkt per USB.": "BeamSketch est un éditeur laser qui fonctionne entièrement dans le navigateur. Vous dessinez ou importez votre modèle, définissez comment il est découpé ou gravé, et obtenez du GCode pour votre laser GRBL – en fichier ou directement par USB.",
   "Zeichnen & Importieren": "Dessiner & importer",
-  "Rechteck, Ellipse, Polygon, Bezier, Text mit 138 Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Rectangle, ellipse, polygone, Bézier, texte avec 138 polices. Plus SVG, DXF, projets LightBurn et images.",
+  "Rechteck, Ellipse, Polygon, Bezier, Text mit {n} Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Rectangle, ellipse, polygone, Bézier, texte avec {n} polices. Plus SVG, DXF, projets LightBurn et images.",
   "Ebenen statt Farben": "Des calques plutôt que des couleurs",
   "Jede Farbe ist ein Schnitt-Satz: Geschwindigkeit, Leistung, Durchgänge, Füllen oder Schneiden.": "Chaque couleur est un réglage de découpe : vitesse, puissance, passes, remplissage ou découpe.",
   "Bildgravur": "Gravure d'images",
@@ -1459,5 +1459,8 @@ export default {
   "Ecken der Arbeitsfläche (ohne Linsenkorrektur)": "Coins de la zone de travail (sans correction d’objectif)",
   "Kalibriert: {m}.": "Calibrée : {m}.",
   "Restfehler an den Kreuzen ca. {e} mm.": "Erreur résiduelle aux croix env. {e} mm.",
-  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Étapes : créer les croix de calibrage, les graver à faible puissance sur une planche, laisser la planche en place, puis « Calibrer… » et cliquer les croix dans l’ordre."
+  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Étapes : créer les croix de calibrage, les graver à faible puissance sur une planche, laisser la planche en place, puis « Calibrer… » et cliquer les croix dans l’ordre.",
+  "Diese Schrift enthält die Zeichen deines Textes nicht": "Cette police ne contient pas les caractères de ton texte",
+  "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} polices contiennent les caractères de ton texte – elles sont en haut.",
+  "Arabisch": "Arabe"
 };

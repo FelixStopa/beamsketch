@@ -80,7 +80,7 @@
       materials, with an exploded view and PNG export.
     </td>
     <td valign="top">
-      <h3>138 fonts & 97 symbols</h3>
+      <h3>162 fonts & 97 symbols</h3>
       Bundled fonts with real kerning – 92 of them connected script fonts – plus system fonts and your own
       <code>.ttf</code>/<code>.otf</code>. A symbol library with hearts, stars, animals, holidays and more.
     </td>
@@ -103,7 +103,7 @@
     <td><img src="docs/img/symbols.png" alt="Symbol library next to inserted symbols"></td>
   </tr>
   <tr>
-    <td align="center"><b>Font overview</b> – 138 fonts, click to apply</td>
+    <td align="center"><b>Font overview</b> – 162 fonts (24 of them Arabic), click to apply</td>
     <td align="center"><b>Symbol library</b> – 97 ready-to-cut shapes</td>
   </tr>
 </table>

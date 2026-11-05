@@ -485,7 +485,7 @@ export default {
   "Viel Erfolg! Die Einrichtung findest du jederzeit unter Hilfe.": "Bol şans! Kurulumu her zaman Yardım menüsünde bulabilirsiniz.",
   "BeamSketch ist ein Laser-Editor, der komplett im Browser läuft. Du zeichnest oder importierst deine Vorlage, legst fest wie geschnitten oder graviert wird, und bekommst GCode für deinen GRBL-Laser – wahlweise als Datei oder direkt per USB.": "BeamSketch tamamen tarayıcıda çalışan bir lazer editörüdür. Tasarımınızı çizer veya içe aktarır, nasıl kesileceğini ya da kazınacağını belirler ve GRBL lazeriniz için GCode alırsınız – dosya olarak ya da doğrudan USB ile.",
   "Zeichnen & Importieren": "Çiz ve içe aktar",
-  "Rechteck, Ellipse, Polygon, Bezier, Text mit 138 Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Dikdörtgen, elips, çokgen, Bezier, 138 yazı tipiyle metin. Ayrıca SVG, DXF, LightBurn projeleri ve görseller.",
+  "Rechteck, Ellipse, Polygon, Bezier, Text mit {n} Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Dikdörtgen, elips, çokgen, Bezier, {n} yazı tipiyle metin. Ayrıca SVG, DXF, LightBurn projeleri ve görseller.",
   "Ebenen statt Farben": "Renkler yerine katmanlar",
   "Jede Farbe ist ein Schnitt-Satz: Geschwindigkeit, Leistung, Durchgänge, Füllen oder Schneiden.": "Her renk bir kesim ayarıdır: hız, güç, geçiş sayısı, dolgu veya kesim.",
   "Bildgravur": "Görsel kazıma",
@@ -1459,5 +1459,8 @@ export default {
   "Ecken der Arbeitsfläche (ohne Linsenkorrektur)": "Çalışma alanının köşeleri (lens düzeltmesi yok)",
   "Kalibriert: {m}.": "Kalibre edildi: {m}.",
   "Restfehler an den Kreuzen ca. {e} mm.": "Artılardaki kalan hata yaklaşık {e} mm.",
-  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Adımlar: kalibrasyon artılarını oluştur, düşük güçle bir tahtaya kazı, tahtayı yerinde bırak, sonra “Kalibre et…” ve artılara sırayla tıkla."
+  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Adımlar: kalibrasyon artılarını oluştur, düşük güçle bir tahtaya kazı, tahtayı yerinde bırak, sonra “Kalibre et…” ve artılara sırayla tıkla.",
+  "Diese Schrift enthält die Zeichen deines Textes nicht": "Bu yazı tipi metnindeki karakterleri içermiyor",
+  "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} yazı tipi metnindeki karakterleri içeriyor – en üstteler.",
+  "Arabisch": "Arapça"
 };

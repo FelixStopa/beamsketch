@@ -3,6 +3,7 @@
 // echten Werte über USB direkt von der Steuerung auslesen.
 import { h, $, modal, toast, field, numInput, checkbox, selectInput, fmtNum, langSelect } from './ui.js';
 import { loc } from './i18n.js';
+import { FontStore } from './font.js';
 
 const KEY = 'laserstudio.onboarded';
 const VERSION = 1;
@@ -276,7 +277,7 @@ function stepWelcome() {
       h('span', {}, '🌐 ' + loc('Sprache')), h('div', { style: { width: '160px' } }, langSelect())),
     h('p', { class: 'lead' }, loc('BeamSketch ist ein Laser-Editor, der komplett im Browser läuft. Du zeichnest oder importierst deine Vorlage, legst fest wie geschnitten oder graviert wird, und bekommst GCode für deinen GRBL-Laser – wahlweise als Datei oder direkt per USB.')),
     h('div', { class: 'feats' },
-      f('✏️', loc('Zeichnen & Importieren'), loc('Rechteck, Ellipse, Polygon, Bezier, Text mit 138 Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.')),
+      f('✏️', loc('Zeichnen & Importieren'), loc('Rechteck, Ellipse, Polygon, Bezier, Text mit {n} Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.', { n: FontStore.library.length || 162 })),
       f('🎨', loc('Ebenen statt Farben'), loc('Jede Farbe ist ein Schnitt-Satz: Geschwindigkeit, Leistung, Durchgänge, Füllen oder Schneiden.')),
       f('🖼️', loc('Bildgravur'), loc('Graustufen, Schwellwert und Dithering – live auf der Zeichenfläche so dargestellt, wie es graviert wird.')),
       f('👁️', loc('Vorschau & Rahmen'), loc('Werkzeugwege mit Laufzeitschätzung ansehen und den Rahmen abfahren, bevor der Laser zündet.')),

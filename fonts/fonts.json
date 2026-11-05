@@ -7,836 +7,1500 @@
   "sans": "Sans-Serif",
   "display": "Display / Deko",
   "stencil": "Schablone",
-  "mono": "Monospace"
+  "mono": "Monospace",
+  "arabic": "Arabisch"
  },
  "fonts": [
   {
    "name": "Alex Brush",
    "file": "AlexBrush-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Allura",
    "file": "Allura-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Arizonia",
    "file": "Arizonia-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Babylonica",
    "file": "Babylonica-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Bad Script",
    "file": "BadScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Beau Rivage",
    "file": "BeauRivage-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Berkshire Swash",
    "file": "BerkshireSwash-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Bilbo",
    "file": "Bilbo-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Bilbo Swash Caps",
    "file": "BilboSwashCaps-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Birthstone",
    "file": "Birthstone-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Bonheur Royale",
    "file": "BonheurRoyale-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Carattere",
    "file": "Carattere-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Charmonman",
    "file": "Charmonman-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Cherish",
    "file": "Cherish-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Clicker Script",
    "file": "ClickerScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Comforter",
    "file": "Comforter-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Comforter Brush",
    "file": "ComforterBrush-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Cookie",
    "file": "Cookie-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Corinthia",
    "file": "Corinthia-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Courgette",
    "file": "Courgette-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Dancing Script",
    "file": "DancingScript-Variable.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Dr Sugiyama",
    "file": "DrSugiyama-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Engagement",
    "file": "Engagement-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Ephesis",
    "file": "Ephesis-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Estonia",
    "file": "Estonia-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Euphoria Script",
    "file": "EuphoriaScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Explora",
    "file": "Explora-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Felipa",
    "file": "Felipa-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Fleur De Leah",
    "file": "FleurDeLeah-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Grand Hotel",
    "file": "GrandHotel-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Great Vibes",
    "file": "GreatVibes-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Gwendolyn",
    "file": "Gwendolyn-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Herr Von Muellerhoff",
    "file": "HerrVonMuellerhoff-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Imperial Script",
    "file": "ImperialScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Island Moments",
    "file": "IslandMoments-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Italianno",
    "file": "Italianno-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Kaushan Script",
    "file": "KaushanScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Kolker Brush",
    "file": "KolkerBrush-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Kristi",
    "file": "Kristi-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Lavishly Yours",
    "file": "LavishlyYours-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "League Script",
    "file": "LeagueScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Long Cang",
    "file": "LongCang-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Lovers Quarrel",
    "file": "LoversQuarrel-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Luxurious Script",
    "file": "LuxuriousScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Marck Script",
    "file": "MarckScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "cyrillic"
+   ]
   },
   {
    "name": "Meie Script",
    "file": "MeieScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Meow Script",
    "file": "MeowScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Miss Fajardose",
    "file": "MissFajardose-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Monsieur La Doulaise",
    "file": "MonsieurLaDoulaise-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "MonteCarlo",
    "file": "MonteCarlo-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Mooli",
    "file": "Mooli-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Mr Bedfort",
    "file": "MrBedfort-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Mr De Haviland",
    "file": "MrDeHaviland-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Mrs Saint Delafield",
    "file": "MrsSaintDelafield-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Mrs Sheppards",
    "file": "MrsSheppards-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Ms Madi",
    "file": "MsMadi-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Mynerve",
    "file": "Mynerve-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Niconne",
    "file": "Niconne-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Norican",
    "file": "Norican-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Pacifico",
    "file": "Pacifico-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Parisienne",
    "file": "Parisienne-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Passions Conflict",
    "file": "PassionsConflict-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Petemoss",
    "file": "Petemoss-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Petit Formal Script",
    "file": "PetitFormalScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Pinyon Script",
    "file": "PinyonScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Playball",
    "file": "Playball-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Princess Sofia",
    "file": "PrincessSofia-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Puppies Play",
    "file": "PuppiesPlay-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Quintessential",
    "file": "Quintessential-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Qwigley",
    "file": "Qwigley-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Redressed",
    "file": "Redressed-Regular.ttf",
    "cat": "script",
-   "lic": "Apache-2.0"
+   "lic": "Apache-2.0",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Romanesco",
    "file": "Romanesco-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Rouge Script",
    "file": "RougeScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Ruthie",
    "file": "Ruthie-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Sacramento",
    "file": "Sacramento-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Satisfy",
    "file": "Satisfy-Regular.ttf",
    "cat": "script",
-   "lic": "Apache-2.0"
+   "lic": "Apache-2.0",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Seaweed Script",
    "file": "SeaweedScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Send Flowers",
    "file": "SendFlowers-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Sofia",
    "file": "Sofia-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Square Peg",
    "file": "SquarePeg-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Sriracha",
    "file": "Sriracha-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Style Script",
    "file": "StyleScript-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Tangerine",
    "file": "Tangerine-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Tillana",
    "file": "Tillana-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Updock",
    "file": "Updock-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Vibur",
    "file": "Vibur-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Water Brush",
    "file": "WaterBrush-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Whisper",
    "file": "Whisper-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "WindSong",
    "file": "WindSong-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Yellowtail",
    "file": "Yellowtail-Regular.ttf",
    "cat": "script",
-   "lic": "Apache-2.0"
+   "lic": "Apache-2.0",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Yesteryear",
    "file": "Yesteryear-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Zeyada",
    "file": "Zeyada-Regular.ttf",
    "cat": "script",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Amatic SC",
    "file": "AmaticSC-Regular.ttf",
    "cat": "hand",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Architects Daughter",
    "file": "ArchitectsDaughter-Regular.ttf",
    "cat": "hand",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Caveat",
    "file": "Caveat-Regular.ttf",
    "cat": "hand",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Dawning of a New Day",
    "file": "DawningofaNewDay-Regular.ttf",
    "cat": "hand",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Homemade Apple",
    "file": "HomemadeApple-Regular.ttf",
    "cat": "hand",
-   "lic": "Apache-2.0"
+   "lic": "Apache-2.0",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Indie Flower",
    "file": "IndieFlower-Regular.ttf",
    "cat": "hand",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "La Belle Aurore",
    "file": "LaBelleAurore-Regular.ttf",
    "cat": "hand",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Meddon",
    "file": "Meddon-Regular.ttf",
    "cat": "hand",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Nothing You Could Do",
    "file": "NothingYouCouldDo-Regular.ttf",
    "cat": "hand",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Over the Rainbow",
    "file": "OvertheRainbow-Regular.ttf",
    "cat": "hand",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Patrick Hand",
    "file": "PatrickHand-Regular.ttf",
    "cat": "hand",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Permanent Marker",
    "file": "PermanentMarker-Regular.ttf",
    "cat": "hand",
-   "lic": "Apache-2.0"
+   "lic": "Apache-2.0",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Reenie Beanie",
    "file": "ReenieBeanie-Regular.ttf",
    "cat": "hand",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Shadows Into Light",
    "file": "ShadowsIntoLight-Regular.ttf",
    "cat": "hand",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Cinzel",
    "file": "Cinzel-Regular.ttf",
    "cat": "serif",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Cormorant Garamond",
    "file": "CormorantGaramond-Regular.ttf",
    "cat": "serif",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "EB Garamond",
    "file": "EBGaramond-Regular.ttf",
    "cat": "serif",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Italiana",
    "file": "Italiana-Regular.ttf",
    "cat": "serif",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Libre Baskerville",
    "file": "LibreBaskerville-Variable.ttf",
    "cat": "serif",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Lora",
    "file": "Lora-Variable.ttf",
    "cat": "serif",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "cyrillic"
+   ]
   },
   {
    "name": "Merriweather",
    "file": "Merriweather-Regular.ttf",
    "cat": "serif",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "cyrillic"
+   ]
   },
   {
    "name": "Playfair Display",
    "file": "PlayfairDisplay-Variable.ttf",
    "cat": "serif",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "cyrillic"
+   ]
   },
   {
    "name": "Bebas Neue",
    "file": "BebasNeue-Regular.ttf",
    "cat": "sans",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Josefin Sans",
    "file": "JosefinSans-Regular.ttf",
    "cat": "sans",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Montserrat",
    "file": "Montserrat-Regular.ttf",
    "cat": "sans",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Nunito",
    "file": "Nunito-Regular.ttf",
    "cat": "sans",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Oswald",
    "file": "Oswald-Regular.ttf",
    "cat": "sans",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Poppins",
    "file": "Poppins-Regular.ttf",
    "cat": "sans",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Raleway",
    "file": "Raleway-Regular.ttf",
    "cat": "sans",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "cyrillic"
+   ]
   },
   {
    "name": "Abril Fatface",
    "file": "AbrilFatface-Regular.ttf",
    "cat": "display",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Alfa Slab One",
    "file": "AlfaSlabOne-Regular.ttf",
    "cat": "display",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Anton",
    "file": "Anton-Regular.ttf",
    "cat": "display",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Bungee",
    "file": "Bungee-Regular.ttf",
    "cat": "display",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Creepster",
    "file": "Creepster-Regular.ttf",
    "cat": "display",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Lobster",
    "file": "Lobster-Regular.ttf",
    "cat": "display",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "cyrillic"
+   ]
   },
   {
    "name": "Lobster Two",
    "file": "LobsterTwo-Regular.ttf",
    "cat": "display",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Orbitron",
    "file": "Orbitron-Variable.ttf",
    "cat": "display",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Righteous",
    "file": "Righteous-Regular.ttf",
    "cat": "display",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Rye",
    "file": "Rye-Regular.ttf",
    "cat": "display",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Special Elite",
    "file": "SpecialElite-Regular.ttf",
    "cat": "display",
-   "lic": "Apache-2.0"
+   "lic": "Apache-2.0",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Wallpoet",
    "file": "Wallpoet-Regular.ttf",
    "cat": "display",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Saira Stencil One",
    "file": "SairaStencilOne-Regular.ttf",
    "cat": "stencil",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Stardos Stencil",
    "file": "StardosStencil-Regular.ttf",
    "cat": "stencil",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Inconsolata",
    "file": "Inconsolata-Regular.ttf",
    "cat": "mono",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
   },
   {
    "name": "Press Start 2P",
    "file": "PressStart2P-Regular.ttf",
    "cat": "mono",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "cyrillic",
+    "greek"
+   ]
   },
   {
    "name": "Share Tech Mono",
    "file": "ShareTechMono-Regular.ttf",
    "cat": "mono",
-   "lic": "OFL-1.1"
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin"
+   ]
+  },
+  {
+   "name": "Amiri",
+   "file": "Amiri-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Noto Naskh Arabic",
+   "file": "NotoNaskhArabic-Variable.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Scheherazade New",
+   "file": "ScheherazadeNew-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Lateef",
+   "file": "Lateef-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Aref Ruqaa",
+   "file": "ArefRuqaa-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Alkalami",
+   "file": "Alkalami-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Ruwudu",
+   "file": "Ruwudu-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Mirza",
+   "file": "Mirza-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Tajawal",
+   "file": "Tajawal-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Cairo",
+   "file": "Cairo-Variable.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Noto Kufi Arabic",
+   "file": "NotoKufiArabic-Variable.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Mada",
+   "file": "Mada-Variable.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Changa",
+   "file": "Changa-Variable.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "El Messiri",
+   "file": "ElMessiri-Variable.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "cyrillic",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Reem Kufi",
+   "file": "ReemKufi-Variable.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Qahiri",
+   "file": "Qahiri-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Lalezar",
+   "file": "Lalezar-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Rakkas",
+   "file": "Rakkas-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Jomhuria",
+   "file": "Jomhuria-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Katibeh",
+   "file": "Katibeh-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Marhey",
+   "file": "Marhey-Variable.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Vibes",
+   "file": "Vibes-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Blaka",
+   "file": "Blaka-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
+  },
+  {
+   "name": "Blaka Hollow",
+   "file": "BlakaHollow-Regular.ttf",
+   "cat": "arabic",
+   "lic": "OFL-1.1",
+   "scripts": [
+    "latin",
+    "arabic"
+   ]
   }
  ]
 }

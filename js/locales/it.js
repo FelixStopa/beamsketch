@@ -485,7 +485,7 @@ export default {
   "Viel Erfolg! Die Einrichtung findest du jederzeit unter Hilfe.": "Buon lavoro! Trovi la configurazione in qualsiasi momento in Aiuto.",
   "BeamSketch ist ein Laser-Editor, der komplett im Browser läuft. Du zeichnest oder importierst deine Vorlage, legst fest wie geschnitten oder graviert wird, und bekommst GCode für deinen GRBL-Laser – wahlweise als Datei oder direkt per USB.": "BeamSketch è un editor laser che funziona interamente nel browser. Disegni o importi il tuo progetto, stabilisci come tagliarlo o inciderlo e ottieni il GCode per il tuo laser GRBL – come file o direttamente via USB.",
   "Zeichnen & Importieren": "Disegna & importa",
-  "Rechteck, Ellipse, Polygon, Bezier, Text mit 138 Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Rettangolo, ellisse, poligono, Bézier, testo con 138 font. Inoltre SVG, DXF, progetti LightBurn e immagini.",
+  "Rechteck, Ellipse, Polygon, Bezier, Text mit {n} Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Rettangolo, ellisse, poligono, Bézier, testo con {n} font. Inoltre SVG, DXF, progetti LightBurn e immagini.",
   "Ebenen statt Farben": "Livelli invece di colori",
   "Jede Farbe ist ein Schnitt-Satz: Geschwindigkeit, Leistung, Durchgänge, Füllen oder Schneiden.": "Ogni colore è un'impostazione di taglio: velocità, potenza, passate, riempimento o taglio.",
   "Bildgravur": "Incisione di immagini",
@@ -1459,5 +1459,8 @@ export default {
   "Ecken der Arbeitsfläche (ohne Linsenkorrektur)": "Angoli dell’area di lavoro (senza correzione dell’obiettivo)",
   "Kalibriert: {m}.": "Calibrata: {m}.",
   "Restfehler an den Kreuzen ca. {e} mm.": "Errore residuo sulle croci circa {e} mm.",
-  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Passi: crea le croci di calibrazione, incidile a bassa potenza su una tavola, lascia la tavola al suo posto, poi «Calibra…» e clicca le croci in ordine."
+  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Passi: crea le croci di calibrazione, incidile a bassa potenza su una tavola, lascia la tavola al suo posto, poi «Calibra…» e clicca le croci in ordine.",
+  "Diese Schrift enthält die Zeichen deines Textes nicht": "Questo font non contiene i caratteri del tuo testo",
+  "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} font contengono i caratteri del tuo testo – sono in alto.",
+  "Arabisch": "Arabo"
 };

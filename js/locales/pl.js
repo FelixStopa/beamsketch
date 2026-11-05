@@ -485,7 +485,7 @@ export default {
   "Viel Erfolg! Die Einrichtung findest du jederzeit unter Hilfe.": "Powodzenia! Konfigurację znajdziesz zawsze w menu Pomoc.",
   "BeamSketch ist ein Laser-Editor, der komplett im Browser läuft. Du zeichnest oder importierst deine Vorlage, legst fest wie geschnitten oder graviert wird, und bekommst GCode für deinen GRBL-Laser – wahlweise als Datei oder direkt per USB.": "BeamSketch to edytor laserowy działający w całości w przeglądarce. Rysujesz lub importujesz projekt, określasz sposób cięcia lub grawerowania i otrzymujesz GCode dla lasera GRBL – jako plik lub bezpośrednio przez USB.",
   "Zeichnen & Importieren": "Rysowanie i import",
-  "Rechteck, Ellipse, Polygon, Bezier, Text mit 138 Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Prostokąt, elipsa, wielokąt, Bézier, tekst ze 138 czcionkami. Do tego SVG, DXF, projekty LightBurn i obrazy.",
+  "Rechteck, Ellipse, Polygon, Bezier, Text mit {n} Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "Prostokąt, elipsa, wielokąt, Bézier, tekst ze {n} czcionkami. Do tego SVG, DXF, projekty LightBurn i obrazy.",
   "Ebenen statt Farben": "Warstwy zamiast kolorów",
   "Jede Farbe ist ein Schnitt-Satz: Geschwindigkeit, Leistung, Durchgänge, Füllen oder Schneiden.": "Każdy kolor to zestaw ustawień cięcia: prędkość, moc, przejścia, wypełnienie lub cięcie.",
   "Bildgravur": "Grawerowanie obrazów",
@@ -1459,5 +1459,8 @@ export default {
   "Ecken der Arbeitsfläche (ohne Linsenkorrektur)": "Narożniki obszaru roboczego (bez korekcji obiektywu)",
   "Kalibriert: {m}.": "Skalibrowano: {m}.",
   "Restfehler an den Kreuzen ca. {e} mm.": "Błąd resztkowy na krzyżach ok. {e} mm.",
-  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Kroki: utwórz krzyże kalibracyjne, wygraweruj je małą mocą na desce, zostaw deskę na miejscu, potem „Kalibruj…” i klikaj krzyże po kolei."
+  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Kroki: utwórz krzyże kalibracyjne, wygraweruj je małą mocą na desce, zostaw deskę na miejscu, potem „Kalibruj…” i klikaj krzyże po kolei.",
+  "Diese Schrift enthält die Zeichen deines Textes nicht": "Ta czcionka nie zawiera znaków twojego tekstu",
+  "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} czcionek zawiera znaki twojego tekstu – są na górze.",
+  "Arabisch": "Arabski"
 };

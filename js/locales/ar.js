@@ -485,7 +485,7 @@ export default {
   "Viel Erfolg! Die Einrichtung findest du jederzeit unter Hilfe.": "بالتوفيق! تجد الإعداد في أي وقت تحت «مساعدة».",
   "BeamSketch ist ein Laser-Editor, der komplett im Browser läuft. Du zeichnest oder importierst deine Vorlage, legst fest wie geschnitten oder graviert wird, und bekommst GCode für deinen GRBL-Laser – wahlweise als Datei oder direkt per USB.": "BeamSketch محرر ليزر يعمل بالكامل في المتصفح. ترسم تصميمك أو تستورده، وتحدد كيف يُقطع أو يُنقش، وتحصل على GCode لليزر GRBL الخاص بك – إما كملف أو مباشرة عبر USB.",
   "Zeichnen & Importieren": "الرسم والاستيراد",
-  "Rechteck, Ellipse, Polygon, Bezier, Text mit 138 Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "مستطيل، قطع ناقص، مضلع، بيزييه، نص بـ 138 خطًا. بالإضافة إلى SVG وDXF ومشاريع LightBurn والصور.",
+  "Rechteck, Ellipse, Polygon, Bezier, Text mit {n} Schriften. Dazu SVG, DXF, LightBurn-Projekte und Bilder.": "مستطيل، قطع ناقص، مضلع، بيزييه، نص بـ {n} خطًا. بالإضافة إلى SVG وDXF ومشاريع LightBurn والصور.",
   "Ebenen statt Farben": "طبقات بدلًا من الألوان",
   "Jede Farbe ist ein Schnitt-Satz: Geschwindigkeit, Leistung, Durchgänge, Füllen oder Schneiden.": "كل لون هو إعداد قطع: السرعة، القدرة، التمريرات، تعبئة أو قطع.",
   "Bildgravur": "نقش الصور",
@@ -1459,5 +1459,8 @@ export default {
   "Ecken der Arbeitsfläche (ohne Linsenkorrektur)": "زوايا منطقة العمل (بدون تصحيح العدسة)",
   "Kalibriert: {m}.": "تمت المعايرة: {m}.",
   "Restfehler an den Kreuzen ca. {e} mm.": "الخطأ المتبقي عند العلامات حوالي {e} مم.",
-  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "الخطوات: أنشئ علامات المعايرة، وانقشها بقدرة منخفضة على لوح، واترك اللوح مكانه، ثم «معايرة…» وانقر العلامات بالترتيب."
+  "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "الخطوات: أنشئ علامات المعايرة، وانقشها بقدرة منخفضة على لوح، واترك اللوح مكانه، ثم «معايرة…» وانقر العلامات بالترتيب.",
+  "Diese Schrift enthält die Zeichen deines Textes nicht": "هذا الخط لا يحتوي على أحرف نصك",
+  "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} خطوط تحتوي على أحرف نصك – تظهر في الأعلى.",
+  "Arabisch": "عربي"
 };

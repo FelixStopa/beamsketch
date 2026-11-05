@@ -11,6 +11,9 @@ veränderte Fassungen den reservierten Namen nicht tragen; deshalb werden diese 
 Fünf davon sind variable Schriften (`*-Variable.ttf`, nur der Dateiname ist geändert); benutzt wird
 ihre Standard-Instanz (Regular).
 
+Die 24 arabischen Schriften (Kategorie „Arabisch“) liegen unverändert bei, variable Schriften als
+`*-Variable.ttf`.
+
 Die vollständigen Lizenztexte liegen in `OFL.txt` (SIL Open Font License 1.1) und
 `LICENSE-APACHE-2.0.txt` (Apache License 2.0).
 
@@ -156,3 +159,27 @@ Die vollständigen Lizenztexte liegen in `OFL.txt` (SIL Open Font License 1.1) u
 | Zeyada | Schreibschrift (verbunden) | OFL 1.1 | Copyright (c) 2010, Kimberly Geswein (kimberlygeswein.com) |
 
 `opentype.min.js` im Ordner `vendor/` stammt aus dem Projekt [opentype.js](https://github.com/opentypejs/opentype.js) (MIT-Lizenz).
+| Amiri | Arabisch | OFL 1.1 | Copyright 2010-2022 The Amiri Project Authors (https://github.com/aliftype/amiri). |
+| Noto Naskh Arabic | Arabisch | OFL 1.1 | Copyright 2022 The Noto Project Authors (https://github.com/notofonts/arabic) |
+| Scheherazade New | Arabisch | OFL 1.1 | Copyright (c) 1994-2026, SIL Global (https://www.sil.org/), with Reserved Font Names "Scheherazade" and "SIL". This Font Software is licensed under the SIL Open Font License, Version 1.1. |
+| Lateef | Arabisch | OFL 1.1 | Copyright (c) 1994-2025 SIL Global. |
+| Aref Ruqaa | Arabisch | OFL 1.1 | Copyright 2015-2021 The Aref Ruqaa Project Authors (https://github.com/alif-type/aref-ruqaa), with Reserved Font Name EURM10. |
+| Alkalami | Arabisch | OFL 1.1 | Copyright (c) SIL International, 2015-2023 |
+| Ruwudu | Arabisch | OFL 1.1 | Copyright (c) SIL International, 2015-2023 |
+| Mirza | Arabisch | OFL 1.1 | Copyright 2015, 2016 KB-Studio (www.k-b-studio.com/tarobish@gmail.com). Copyright 2015, 2016 Lasse Fister (lasse@graphicore.de). Copyright 2015, 2016 Eduardo Tunni(edu@tipo.net.ar). |
+| Tajawal | Arabisch | OFL 1.1 | (c) 2017 by Boutros International. All rights reserved. |
+| Cairo | Arabisch | OFL 1.1 | Copyright 2009 The Cairo Project Authors (https://github.com/Gue3bara/Cairo) |
+| Noto Kufi Arabic | Arabisch | OFL 1.1 | Copyright 2019-2022 Google LLC. All Rights Reserved. |
+| Mada | Arabisch | OFL 1.1 | Copyright 2015-2022 The Mada Project Authors (https://github.com/aliftype/mada), with Reserved Font Name "Source". |
+| Changa | Arabisch | OFL 1.1 | Copyright 2018 The Changa Project Authors (https://github.com/eliheuer/changa-vf) |
+| El Messiri | Arabisch | OFL 1.1 | Copyright 2015 The El Messiri Project Authors (https://github.com/Gue3bara/El-Messiri) |
+| Reem Kufi | Arabisch | OFL 1.1 | Copyright 2015-2022 The Reem Kufi Project Authors (https://github.com/aliftype/reem-kufi). |
+| Qahiri | Arabisch | OFL 1.1 | Copyright 2021 The Qahiri Project Authors (github.com/aliftype/qahiri). |
+| Lalezar | Arabisch | OFL 1.1 | Copyright 2015 The Lalezar Project Authors (https://github.com/BornaIz/Lalezar) |
+| Rakkas | Arabisch | OFL 1.1 | Copyright 2017 The Rakkas Project Authors (https://github.com/zeynepakay/Rakkas) |
+| Jomhuria | Arabisch | OFL 1.1 | Copyright 2015 KB-Studio (www.k-b-studio.com/tarobish@gmail.com). Copyright 2015 Lasse Fister (lasse@graphicore.de). Copyright 2015 Sorkin Type Co (www.sorkintype.com). Copyright 2010-2015 Khaled Hosny (khaledhosny@eglug.org). |
+| Katibeh | Arabisch | OFL 1.1 | Copyright 2015, 2016 KB-Studio (www.k-b-studio.com/tarobish@gmail.com). Copyright 2015, 2016 Lasse Fister (lasse@graphicore.de). Copyright 2015, 2016 Eduardo Tunni(edu@tipo.net.ar). |
+| Marhey | Arabisch | OFL 1.1 | Copyright 2022 The Marhey Project Authors (https://github.com/namelatype/Marhey) |
+| Vibes | Arabisch | OFL 1.1 | Copyright 2019 The Vibes Project Authors (https://github.com/bluemix/vibes-typeface) |
+| Blaka | Arabisch | OFL 1.1 | Copyright 2019 The Blaka Project Authors (https://github.com/Gue3bara/Blaka) |
+| Blaka Hollow | Arabisch | OFL 1.1 | Copyright 2019 The Blaka Project Authors (https://github.com/Gue3bara/Blaka) |
