@@ -1466,5 +1466,6 @@ export default {
   "Als STL herunterladen": "下载为 STL",
   "STL gespeichert: {n} Dreiecke": "已保存 STL：{n} 个三角形",
   "Höhe je Ebene mm": "每个图层的高度 mm",
-  "STL exportieren (3D)…": "导出 STL（3D）…"
+  "STL exportieren (3D)…": "导出 STL（3D）…",
+  "wird nicht gelasert": "不会被加工"
 };

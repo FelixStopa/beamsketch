@@ -1466,5 +1466,6 @@ export default {
   "Als STL herunterladen": "STL olarak indir",
   "STL gespeichert: {n} Dreiecke": "STL kaydedildi: {n} üçgen",
   "Höhe je Ebene mm": "Katman başına yükseklik mm",
-  "STL exportieren (3D)…": "STL dışa aktar (3D)…"
+  "STL exportieren (3D)…": "STL dışa aktar (3D)…",
+  "wird nicht gelasert": "lazerlenmez"
 };

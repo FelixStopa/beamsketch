@@ -1466,5 +1466,6 @@ export default {
   "Als STL herunterladen": "Télécharger en STL",
   "STL gespeichert: {n} Dreiecke": "STL enregistré : {n} triangles",
   "Höhe je Ebene mm": "Hauteur par calque mm",
-  "STL exportieren (3D)…": "Exporter en STL (3D)…"
+  "STL exportieren (3D)…": "Exporter en STL (3D)…",
+  "wird nicht gelasert": "n’est pas gravé"
 };

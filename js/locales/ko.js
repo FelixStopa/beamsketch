@@ -1466,5 +1466,6 @@ export default {
   "Als STL herunterladen": "STL로 다운로드",
   "STL gespeichert: {n} Dreiecke": "STL 저장됨: 삼각형 {n}개",
   "Höhe je Ebene mm": "레이어별 높이 mm",
-  "STL exportieren (3D)…": "STL 내보내기(3D)…"
+  "STL exportieren (3D)…": "STL 내보내기(3D)…",
+  "wird nicht gelasert": "가공되지 않음"
 };

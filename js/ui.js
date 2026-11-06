@@ -1,5 +1,5 @@
 // ui.js — Panels, Menüs, Dialoge
-import { LAYER_COLORS, CUT_MODES, layerNo } from './doc.js';
+import { LAYER_COLORS, TOOL_COLORS, CUT_MODES, layerNo } from './doc.js';
 import { fmtTime } from './gcode.js';
 import { loc, lang, LANGS, setLang } from './i18n.js';
 import { speedUnit, toDisp, fromDisp, speedStep } from './units.js';
@@ -305,6 +305,18 @@ export function buildPalette(App) {
   LAYER_COLORS.forEach((c, i) => {
     p.appendChild(h('div', {
       class: 'sw', style: { background: c }, title: loc('Ebene') + ' ' + layerNo(i),
+      onclick: () => {
+        if (App.state.selection.length) { App.setLayer(i); }
+        else { App.state.activeLayer = i; App.refresh(); }
+      }
+    }));
+  });
+  // Hilfsebenen (werden nie gelasert): gestreift, mit Abstand zu den Laser-Ebenen
+  TOOL_COLORS.forEach((c, k) => {
+    const i = 30 + k;
+    p.appendChild(h('div', {
+      class: 'sw tool', style: { background: `repeating-linear-gradient(135deg, ${c} 0 4px, #fff8 4px 6px)`, marginLeft: k ? '' : '8px' },
+      title: loc('Hilfsebene {n}', { n: k + 1 }) + ' – ' + loc('wird nicht gelasert'),
       onclick: () => {
         if (App.state.selection.length) { App.setLayer(i); }
         else { App.state.activeLayer = i; App.refresh(); }

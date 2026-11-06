@@ -1466,5 +1466,6 @@ export default {
   "Als STL herunterladen": "STL としてダウンロード",
   "STL gespeichert: {n} Dreiecke": "STL を保存しました: 三角形 {n} 個",
   "Höhe je Ebene mm": "レイヤーごとの高さ mm",
-  "STL exportieren (3D)…": "STL を書き出し (3D)…"
+  "STL exportieren (3D)…": "STL を書き出し (3D)…",
+  "wird nicht gelasert": "レーザー加工されません"
 };

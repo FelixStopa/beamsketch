@@ -1466,5 +1466,6 @@ export default {
   "Als STL herunterladen": "Скачать как STL",
   "STL gespeichert: {n} Dreiecke": "STL сохранён: {n} треугольников",
   "Höhe je Ebene mm": "Высота по слоям, мм",
-  "STL exportieren (3D)…": "Экспорт STL (3D)…"
+  "STL exportieren (3D)…": "Экспорт STL (3D)…",
+  "wird nicht gelasert": "не обрабатывается лазером"
 };

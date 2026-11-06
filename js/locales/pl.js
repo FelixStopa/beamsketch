@@ -1466,5 +1466,6 @@ export default {
   "Als STL herunterladen": "Pobierz jako STL",
   "STL gespeichert: {n} Dreiecke": "Zapisano STL: {n} trójkątów",
   "Höhe je Ebene mm": "Wysokość na warstwę mm",
-  "STL exportieren (3D)…": "Eksportuj STL (3D)…"
+  "STL exportieren (3D)…": "Eksportuj STL (3D)…",
+  "wird nicht gelasert": "nie jest wypalana"
 };

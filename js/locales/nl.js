@@ -1466,5 +1466,6 @@ export default {
   "Als STL herunterladen": "Downloaden als STL",
   "STL gespeichert: {n} Dreiecke": "STL opgeslagen: {n} driehoeken",
   "Höhe je Ebene mm": "Hoogte per laag mm",
-  "STL exportieren (3D)…": "STL exporteren (3D)…"
+  "STL exportieren (3D)…": "STL exporteren (3D)…",
+  "wird nicht gelasert": "wordt niet gelaserd"
 };

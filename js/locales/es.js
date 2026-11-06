@@ -1466,5 +1466,6 @@ export default {
   "Als STL herunterladen": "Descargar como STL",
   "STL gespeichert: {n} Dreiecke": "STL guardado: {n} triángulos",
   "Höhe je Ebene mm": "Altura por capa mm",
-  "STL exportieren (3D)…": "Exportar STL (3D)…"
+  "STL exportieren (3D)…": "Exportar STL (3D)…",
+  "wird nicht gelasert": "no se graba"
 };

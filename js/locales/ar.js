@@ -1466,5 +1466,6 @@ export default {
   "Als STL herunterladen": "تنزيل بصيغة STL",
   "STL gespeichert: {n} Dreiecke": "تم حفظ STL: {n} مثلثات",
   "Höhe je Ebene mm": "الارتفاع لكل طبقة مم",
-  "STL exportieren (3D)…": "تصدير STL (ثلاثي الأبعاد)…"
+  "STL exportieren (3D)…": "تصدير STL (ثلاثي الأبعاد)…",
+  "wird nicht gelasert": "لا تُحرق بالليزر"
 };
