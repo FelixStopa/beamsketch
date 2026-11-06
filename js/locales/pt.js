@@ -1243,7 +1243,6 @@ export default {
   "Nussbaum": "Nogueira",
   "Pappelsperrholz": "Contraplacado de choupo",
   "Schiefer": "Ardósia",
-  "Stärke flacher Teile mm": "Espessura das peças planas mm",
   "{a} Baugruppen, {f} flache Teile": "{a} conjuntos, {f} peças planas",
   "Achse der Rippen": "Eixo das costelas",
   "Das Rückgrat trifft das Modell nicht – Versatz ändern.": "A espinha não cruza o modelo – muda o desvio.",
@@ -1462,5 +1461,10 @@ export default {
   "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Passos: cria as cruzes de calibração, grava-as com pouca potência numa tábua, deixa a tábua no lugar, depois «Calibrar…» e clica nas cruzes pela ordem.",
   "Diese Schrift enthält die Zeichen deines Textes nicht": "Esta fonte não contém os caracteres do teu texto",
   "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} fontes contêm os caracteres do teu texto – aparecem no topo.",
-  "Arabisch": "Árabe"
+  "Arabisch": "Árabe",
+  "Höhe flacher Teile mm": "Altura das peças planas mm",
+  "Als STL herunterladen": "Transferir como STL",
+  "STL gespeichert: {n} Dreiecke": "STL guardado: {n} triângulos",
+  "Höhe je Ebene mm": "Altura por camada mm",
+  "STL exportieren (3D)…": "Exportar STL (3D)…"
 };

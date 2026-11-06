@@ -79,7 +79,8 @@ export function orientPolys(polys) {
 }
 
 /* Szene: generierte Sätze zusammengebaut nebeneinander, übrige Formen flach an ihrer Stelle.
-   sets: [{ kind, cfg }], flat: [[poly, …], …] (Umrisse je Form), t = Stärke flacher Platten */
+   sets: [{ kind, cfg }], flat: [[poly, …], …] oder [{ polys, t }] (Umrisse je Form, optional eigene Höhe),
+   t = Stärke flacher Platten */
 export function buildScene(sets, flat, t) {
   const scene = [];
   let x = 0;
@@ -95,11 +96,12 @@ export function buildScene(sets, flat, t) {
   }
   // flache Teile: Lage untereinander wie auf der Arbeitsfläche, als Gruppe rechts neben den Baugruppen
   let fx = Infinity, fy = Infinity;
-  for (const polys of flat) for (const p of polys) for (const q of p) { fx = Math.min(fx, q.x); fy = Math.min(fy, q.y); }
-  for (const polys of flat) {
-    if (!polys.length) continue;
-    const pp = orientPolys(polys);
-    scene.push({ name: '', polys: pp, z0: 0, z1: t, map: sets.length ? (u, v, w) => [u - fx + x, v - fy, w] : (u, v, w) => [u, v, w] });
+  const items = flat.map(f => Array.isArray(f) ? { polys: f, t } : { polys: f.polys, t: f.t ?? t });
+  for (const { polys } of items) for (const p of polys) for (const q of p) { fx = Math.min(fx, q.x); fy = Math.min(fy, q.y); }
+  for (const it of items) {
+    if (!it.polys.length) continue;
+    const pp = orientPolys(it.polys);
+    scene.push({ name: '', polys: pp, z0: 0, z1: it.t, map: sets.length ? (u, v, w) => [u - fx + x, v - fy, w] : (u, v, w) => [u, v, w] });
   }
   return scene;
 }

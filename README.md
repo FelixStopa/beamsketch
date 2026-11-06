@@ -77,7 +77,8 @@
       A <b>part generator</b> makes involute gears, gear pairs, racks, GT2/HTD pulleys, cams, box inserts,
       slot-together shelves and drawers – double-click a part to change its parameters later.
       The <b>3D view</b> shows boxes, drawers, shelves, inserts and gear pairs assembled, in different
-      materials, with an exploded view and PNG export.
+      materials, with an exploded view and PNG export. Any drawing can be downloaded as an <b>STL</b> for
+      3D printing, with a height per layer (e.g. a 3 mm plate with 5 mm raised lettering).
     </td>
     <td valign="top">
       <h3>162 fonts & 97 symbols</h3>
@@ -211,7 +212,7 @@ model and its work area is very welcome.
 | `js/serial.js` | Web Serial connection to GRBL |
 | `js/galvo.js` | Galvo lasers (EZCAD2 / BJJCZ) over WebUSB |
 | `js/mesh.js`, `js/model3d.js`, `js/ribs.js`, `js/view3d.js` | STL/OBJ import, layered and rib models, 3D preview (WebGL) |
-| `js/assembly.js`, `js/view3dui.js` | 3D view of assemblies |
+| `js/assembly.js`, `js/view3dui.js` | 3D view of assemblies, STL export |
 | `js/parts.js`, `js/partsui.js`, `js/joints.js`, `js/calibrate.js` | Part generator (gears, cams, shelves …), joint tool, fit calibration |
 | `js/nest.js`, `js/check.js` | True-shape nesting, design check |
 | `js/pathtools.js`, `js/pathtoolsui.js` | Warp, round/chamfer corners, close/join/reverse paths, start point, trim |

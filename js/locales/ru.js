@@ -1243,7 +1243,6 @@ export default {
   "Nussbaum": "Орех",
   "Pappelsperrholz": "Тополиная фанера",
   "Schiefer": "Сланец",
-  "Stärke flacher Teile mm": "Толщина плоских деталей, мм",
   "{a} Baugruppen, {f} flache Teile": "Сборок: {a}, плоских деталей: {f}",
   "Achse der Rippen": "Ось рёбер",
   "Das Rückgrat trifft das Modell nicht – Versatz ändern.": "Хребет не пересекает модель – измени смещение.",
@@ -1462,5 +1461,10 @@ export default {
   "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Порядок: создай калибровочные кресты, выгравируй их малой мощностью на доске, не сдвигай доску, затем «Калибровать…» и щёлкай кресты по порядку.",
   "Diese Schrift enthält die Zeichen deines Textes nicht": "В этом шрифте нет символов твоего текста",
   "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "Символы твоего текста есть в {n} шрифтах – они вверху списка.",
-  "Arabisch": "Арабский"
+  "Arabisch": "Арабский",
+  "Höhe flacher Teile mm": "Высота плоских деталей, мм",
+  "Als STL herunterladen": "Скачать как STL",
+  "STL gespeichert: {n} Dreiecke": "STL сохранён: {n} треугольников",
+  "Höhe je Ebene mm": "Высота по слоям, мм",
+  "STL exportieren (3D)…": "Экспорт STL (3D)…"
 };

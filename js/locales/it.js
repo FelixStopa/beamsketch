@@ -1243,7 +1243,6 @@ export default {
   "Nussbaum": "Noce",
   "Pappelsperrholz": "Compensato di pioppo",
   "Schiefer": "Ardesia",
-  "Stärke flacher Teile mm": "Spessore dei pezzi piani mm",
   "{a} Baugruppen, {f} flache Teile": "{a} assiemi, {f} pezzi piani",
   "Achse der Rippen": "Asse delle costole",
   "Das Rückgrat trifft das Modell nicht – Versatz ändern.": "La spina non incrocia il modello – cambia lo spostamento.",
@@ -1462,5 +1461,10 @@ export default {
   "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Passi: crea le croci di calibrazione, incidile a bassa potenza su una tavola, lascia la tavola al suo posto, poi «Calibra…» e clicca le croci in ordine.",
   "Diese Schrift enthält die Zeichen deines Textes nicht": "Questo font non contiene i caratteri del tuo testo",
   "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} font contengono i caratteri del tuo testo – sono in alto.",
-  "Arabisch": "Arabo"
+  "Arabisch": "Arabo",
+  "Höhe flacher Teile mm": "Altezza dei pezzi piatti mm",
+  "Als STL herunterladen": "Scarica come STL",
+  "STL gespeichert: {n} Dreiecke": "STL salvato: {n} triangoli",
+  "Höhe je Ebene mm": "Altezza per livello mm",
+  "STL exportieren (3D)…": "Esporta STL (3D)…"
 };

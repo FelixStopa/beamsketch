@@ -1243,7 +1243,6 @@ export default {
   "Nussbaum": "호두나무",
   "Pappelsperrholz": "포플러 합판",
   "Schiefer": "슬레이트",
-  "Stärke flacher Teile mm": "평평한 부품 두께 mm",
   "{a} Baugruppen, {f} flache Teile": "조립품 {a}개, 평평한 부품 {f}개",
   "Achse der Rippen": "리브 축",
   "Das Rückgrat trifft das Modell nicht – Versatz ändern.": "척추판이 모델과 만나지 않습니다 – 오프셋을 바꾸세요.",
@@ -1462,5 +1461,10 @@ export default {
   "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "순서: 보정 십자를 만들고 낮은 출력으로 판에 각인한 뒤 판을 그대로 두고 “보정…”을 눌러 십자를 순서대로 클릭하세요.",
   "Diese Schrift enthält die Zeichen deines Textes nicht": "이 글꼴에는 텍스트의 문자가 없습니다",
   "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "텍스트의 문자를 포함한 글꼴 {n}개 – 위쪽에 표시됩니다.",
-  "Arabisch": "아랍어"
+  "Arabisch": "아랍어",
+  "Höhe flacher Teile mm": "평면 부품 높이 mm",
+  "Als STL herunterladen": "STL로 다운로드",
+  "STL gespeichert: {n} Dreiecke": "STL 저장됨: 삼각형 {n}개",
+  "Höhe je Ebene mm": "레이어별 높이 mm",
+  "STL exportieren (3D)…": "STL 내보내기(3D)…"
 };

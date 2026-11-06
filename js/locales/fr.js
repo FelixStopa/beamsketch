@@ -1243,7 +1243,6 @@ export default {
   "Nussbaum": "Noyer",
   "Pappelsperrholz": "Contreplaqué de peuplier",
   "Schiefer": "Ardoise",
-  "Stärke flacher Teile mm": "Épaisseur des pièces plates mm",
   "{a} Baugruppen, {f} flache Teile": "{a} assemblages, {f} pièces plates",
   "Achse der Rippen": "Axe des nervures",
   "Das Rückgrat trifft das Modell nicht – Versatz ändern.": "L’épine ne coupe pas le modèle – modifie le décalage.",
@@ -1462,5 +1461,10 @@ export default {
   "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Étapes : créer les croix de calibrage, les graver à faible puissance sur une planche, laisser la planche en place, puis « Calibrer… » et cliquer les croix dans l’ordre.",
   "Diese Schrift enthält die Zeichen deines Textes nicht": "Cette police ne contient pas les caractères de ton texte",
   "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} polices contiennent les caractères de ton texte – elles sont en haut.",
-  "Arabisch": "Arabe"
+  "Arabisch": "Arabe",
+  "Höhe flacher Teile mm": "Hauteur des pièces plates mm",
+  "Als STL herunterladen": "Télécharger en STL",
+  "STL gespeichert: {n} Dreiecke": "STL enregistré : {n} triangles",
+  "Höhe je Ebene mm": "Hauteur par calque mm",
+  "STL exportieren (3D)…": "Exporter en STL (3D)…"
 };

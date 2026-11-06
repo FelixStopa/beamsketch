@@ -1243,7 +1243,6 @@ export default {
   "Nussbaum": "جوز",
   "Pappelsperrholz": "خشب رقائقي من الحور",
   "Schiefer": "أردواز",
-  "Stärke flacher Teile mm": "سُمك الأجزاء المسطحة مم",
   "{a} Baugruppen, {f} flache Teile": "{a} مجموعات تجميع، {f} أجزاء مسطحة",
   "Achse der Rippen": "محور الأضلاع",
   "Das Rückgrat trifft das Modell nicht – Versatz ändern.": "العمود الفقري لا يلامس النموذج – غيّر الإزاحة.",
@@ -1462,5 +1461,10 @@ export default {
   "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "الخطوات: أنشئ علامات المعايرة، وانقشها بقدرة منخفضة على لوح، واترك اللوح مكانه، ثم «معايرة…» وانقر العلامات بالترتيب.",
   "Diese Schrift enthält die Zeichen deines Textes nicht": "هذا الخط لا يحتوي على أحرف نصك",
   "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} خطوط تحتوي على أحرف نصك – تظهر في الأعلى.",
-  "Arabisch": "عربي"
+  "Arabisch": "عربي",
+  "Höhe flacher Teile mm": "ارتفاع الأجزاء المسطحة مم",
+  "Als STL herunterladen": "تنزيل بصيغة STL",
+  "STL gespeichert: {n} Dreiecke": "تم حفظ STL: {n} مثلثات",
+  "Höhe je Ebene mm": "الارتفاع لكل طبقة مم",
+  "STL exportieren (3D)…": "تصدير STL (ثلاثي الأبعاد)…"
 };

@@ -1243,7 +1243,6 @@ export default {
   "Nussbaum": "Ceviz",
   "Pappelsperrholz": "Kavak kontrplak",
   "Schiefer": "Kayrak",
-  "Stärke flacher Teile mm": "Düz parçaların kalınlığı mm",
   "{a} Baugruppen, {f} flache Teile": "{a} montaj, {f} düz parça",
   "Achse der Rippen": "Kaburga ekseni",
   "Das Rückgrat trifft das Modell nicht – Versatz ändern.": "Omurga modele değmiyor – kaydırmayı değiştir.",
@@ -1462,5 +1461,10 @@ export default {
   "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Adımlar: kalibrasyon artılarını oluştur, düşük güçle bir tahtaya kazı, tahtayı yerinde bırak, sonra “Kalibre et…” ve artılara sırayla tıkla.",
   "Diese Schrift enthält die Zeichen deines Textes nicht": "Bu yazı tipi metnindeki karakterleri içermiyor",
   "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} yazı tipi metnindeki karakterleri içeriyor – en üstteler.",
-  "Arabisch": "Arapça"
+  "Arabisch": "Arapça",
+  "Höhe flacher Teile mm": "Düz parçaların yüksekliği mm",
+  "Als STL herunterladen": "STL olarak indir",
+  "STL gespeichert: {n} Dreiecke": "STL kaydedildi: {n} üçgen",
+  "Höhe je Ebene mm": "Katman başına yükseklik mm",
+  "STL exportieren (3D)…": "STL dışa aktar (3D)…"
 };

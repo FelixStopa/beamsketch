@@ -1243,7 +1243,6 @@ export default {
   "Nussbaum": "Notenhout",
   "Pappelsperrholz": "Populierentriplex",
   "Schiefer": "Leisteen",
-  "Stärke flacher Teile mm": "Dikte van platte delen mm",
   "{a} Baugruppen, {f} flache Teile": "{a} samenstellingen, {f} platte delen",
   "Achse der Rippen": "As van de ribben",
   "Das Rückgrat trifft das Modell nicht – Versatz ändern.": "De ruggengraat raakt het model niet – verschuiving aanpassen.",
@@ -1462,5 +1461,10 @@ export default {
   "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Werkwijze: kalibratiekruisen maken, met weinig vermogen op een plank graveren, plank laten liggen, dan ‘Kalibreren…’ en de kruisen op volgorde aanklikken.",
   "Diese Schrift enthält die Zeichen deines Textes nicht": "Dit lettertype bevat de tekens van je tekst niet",
   "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} lettertypen bevatten de tekens van je tekst – ze staan bovenaan.",
-  "Arabisch": "Arabisch"
+  "Arabisch": "Arabisch",
+  "Höhe flacher Teile mm": "Hoogte van platte delen mm",
+  "Als STL herunterladen": "Downloaden als STL",
+  "STL gespeichert: {n} Dreiecke": "STL opgeslagen: {n} driehoeken",
+  "Höhe je Ebene mm": "Hoogte per laag mm",
+  "STL exportieren (3D)…": "STL exporteren (3D)…"
 };

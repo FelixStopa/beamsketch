@@ -1243,7 +1243,6 @@ export default {
   "Nussbaum": "Orzech",
   "Pappelsperrholz": "Sklejka topolowa",
   "Schiefer": "Łupek",
-  "Stärke flacher Teile mm": "Grubość płaskich części mm",
   "{a} Baugruppen, {f} flache Teile": "Zespoły: {a}, płaskie części: {f}",
   "Achse der Rippen": "Oś żeber",
   "Das Rückgrat trifft das Modell nicht – Versatz ändern.": "Kręgosłup nie przecina modelu – zmień przesunięcie.",
@@ -1462,5 +1461,10 @@ export default {
   "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Kroki: utwórz krzyże kalibracyjne, wygraweruj je małą mocą na desce, zostaw deskę na miejscu, potem „Kalibruj…” i klikaj krzyże po kolei.",
   "Diese Schrift enthält die Zeichen deines Textes nicht": "Ta czcionka nie zawiera znaków twojego tekstu",
   "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} czcionek zawiera znaki twojego tekstu – są na górze.",
-  "Arabisch": "Arabski"
+  "Arabisch": "Arabski",
+  "Höhe flacher Teile mm": "Wysokość płaskich części mm",
+  "Als STL herunterladen": "Pobierz jako STL",
+  "STL gespeichert: {n} Dreiecke": "Zapisano STL: {n} trójkątów",
+  "Höhe je Ebene mm": "Wysokość na warstwę mm",
+  "STL exportieren (3D)…": "Eksportuj STL (3D)…"
 };

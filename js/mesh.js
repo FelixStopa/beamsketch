@@ -35,6 +35,24 @@ export function parseSTL(buf) {
   return new Float32Array(v.slice(0, v.length - (v.length % 9)));
 }
 
+/* Binäre STL aus Dreieckspositionen (je Dreieck 9 Zahlen, Umlauf gegen den Uhrzeigersinn von außen) */
+export function exportSTL(pos, title = 'BeamSketch') {
+  const n = Math.floor(pos.length / 9);
+  const buf = new ArrayBuffer(84 + n * 50), dv = new DataView(buf);
+  const head = new TextEncoder().encode(String(title).slice(0, 79));
+  new Uint8Array(buf, 0, 80).set(head);
+  dv.setUint32(80, n, true);
+  for (let i = 0; i < n; i++) {
+    const p = k => pos[i * 9 + k], o = 84 + i * 50;
+    const ux = p(3) - p(0), uy = p(4) - p(1), uz = p(5) - p(2), vx = p(6) - p(0), vy = p(7) - p(1), vz = p(8) - p(2);
+    let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+    const l = Math.hypot(nx, ny, nz) || 1;
+    [nx / l, ny / l, nz / l].forEach((v, k) => dv.setFloat32(o + k * 4, v, true));
+    for (let k = 0; k < 9; k++) dv.setFloat32(o + 12 + k * 4, p(k), true);
+  }
+  return buf;
+}
+
 export function parseOBJ(text) {
   const verts = [], out = [];
   for (const raw of text.split(/\r?\n/)) {

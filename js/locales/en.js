@@ -1243,7 +1243,6 @@ export default {
   "Nussbaum": "Walnut",
   "Pappelsperrholz": "Poplar plywood",
   "Schiefer": "Slate",
-  "Stärke flacher Teile mm": "Thickness of flat parts mm",
   "{a} Baugruppen, {f} flache Teile": "{a} assemblies, {f} flat parts",
   "Achse der Rippen": "Rib axis",
   "Das Rückgrat trifft das Modell nicht – Versatz ändern.": "The spine does not hit the model – change the offset.",
@@ -1462,5 +1461,10 @@ export default {
   "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "Steps: create calibration crosses, engrave them at low power on a board, leave the board in place, then “Calibrate…” and click the crosses in order.",
   "Diese Schrift enthält die Zeichen deines Textes nicht": "This font does not contain the characters of your text",
   "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} fonts contain the characters of your text – they are listed first.",
-  "Arabisch": "Arabic"
+  "Arabisch": "Arabic",
+  "Höhe flacher Teile mm": "Height of flat parts mm",
+  "Als STL herunterladen": "Download as STL",
+  "STL gespeichert: {n} Dreiecke": "STL saved: {n} triangles",
+  "Höhe je Ebene mm": "Height per layer mm",
+  "STL exportieren (3D)…": "Export STL (3D)…"
 };

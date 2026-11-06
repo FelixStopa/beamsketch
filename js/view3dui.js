@@ -1,9 +1,11 @@
 // view3dui.js — Fenster „3D-Ansicht": zeigt Baugruppen aus dem Teile-Generator zusammengebaut und alle
-// übrigen geschlossenen Formen als flache Platten, mit Materialoptik, Auseinanderziehen und PNG-Export.
+// übrigen geschlossenen Formen als Platten der gewählten Höhe, mit Materialoptik, Auseinanderziehen,
+// PNG-Export und STL-Export (z. B. für den 3D-Druck).
 import { h, modal, field, numInput, selectInput, slider, toast } from './ui.js';
 import { loc } from './i18n.js';
 import { shapePolys } from './doc.js';
-import { View3D } from './view3d.js';
+import { View3D, prismMesh } from './view3d.js';
+import { exportSTL } from './mesh.js';
 import { buildScene, assemblyPlates } from './assembly.js';
 
 const App = () => window.App;
@@ -23,7 +25,7 @@ const MATERIALS = () => ({
   slate: { t: loc('Schiefer'), top: [0.25, 0.27, 0.3], side: [0.35, 0.37, 0.4] }
 });
 
-export function view3dDialog() {
+export function view3dDialog(opts = {}) {
   const A = App();
   const usable = s => !s.hidden && !(A.doc.layers[s.layer] || {}).isTool;
   const list = (A.state.selection.length ? A.state.selection : A.doc.shapes).filter(usable);
@@ -32,10 +34,13 @@ export function view3dDialog() {
   for (const s of list) {
     if (s.gen && s.gen.set && assemblyPlates(s.gen.kind, s.gen.cfg)) { if (!sets.has(s.gen.set)) sets.set(s.gen.set, { kind: s.gen.kind, cfg: s.gen.cfg }); continue; }
     const polys = shapePolys(s, A.ctxGeo).filter(p => p.closed && p.pts.length >= 3).map(p => p.pts);
-    if (polys.length) flat.push(polys);
+    if (polys.length) flat.push({ polys, layer: s.layer });
   }
   if (!sets.size && !flat.length) return toast(loc('Keine geschlossenen Formen für die 3D-Ansicht'), 'err');
   const cfg = Object.assign({ material: 'poplar', t: 3, explode: 0 }, A.state.view3dCfg || {});
+  cfg.layerH = { ...(cfg.layerH || {}) };            // Höhe je Ebene (fehlt = cfg.t)
+  const layersUsed = [...new Set(flat.map(f => f.layer))].sort((a, b) => a - b);
+  const heightOf = L => cfg.layerH[L] ?? cfg.t;
   const canvas = h('canvas', { style: { width: '100%', height: '460px', borderRadius: '8px', border: '1px solid var(--line)', cursor: 'grab', touchAction: 'none' } });
   const info = h('div', { class: 'hint' });
   let view = null, scene = [];
@@ -43,7 +48,7 @@ export function view3dDialog() {
   const apply = () => {
     A.state.view3dCfg = { ...cfg };
     const mat = MATERIALS()[cfg.material] || MATERIALS().poplar;
-    scene = buildScene([...sets.values()], flat, cfg.t);
+    scene = buildScene([...sets.values()], flat.map(f => ({ polys: f.polys, t: heightOf(f.layer) })), cfg.t);
     // Auseinanderziehen: jede Platte vom Mittelpunkt ihrer Baugruppe weg
     let cx = 0, cy = 0, cz = 0, n = 0;
     const centers = scene.map(pl => {
@@ -66,15 +71,41 @@ export function view3dDialog() {
   const controls = h('div', { class: 'row', style: { gap: '8px', flexWrap: 'wrap', alignItems: 'end', marginTop: '6px' } },
     ...[['3d', '3D'], ['top', loc('Oben')], ['front', loc('Vorne')]].map(([v, t]) => h('button', { class: 'tbtn', onclick: () => view && view.setView(v) }, t)),
     h('div', { style: { minWidth: '160px' } }, field(loc('Material'), selectInput(cfg.material, matOpts, v => { cfg.material = v; apply(); }))),
-    h('div', { style: { width: '120px' } }, field(loc('Stärke flacher Teile mm'), numInput(cfg.t, 0.5, v => { cfg.t = Math.max(0.2, v); apply(); }))),
+    layersUsed.length === 1
+      ? h('div', { style: { width: '170px' } }, field(loc('Höhe flacher Teile mm'), numInput(heightOf(layersUsed[0]), 0.5, v => { cfg.t = Math.max(0.2, v); if (layersUsed.length) cfg.layerH[layersUsed[0]] = cfg.t; apply(); })))
+      : null,
     h('div', { style: { flex: 1, minWidth: '200px' } }, slider(loc('Auseinanderziehen'), cfg.explode, 0, 20, 0.5, v => { cfg.explode = v; apply(); })));
-  modal(loc('3D-Ansicht'), h('div', {}, canvas, controls, info), [
+  // mehrere Ebenen: eigene Höhe je Ebene (z. B. Platte 3 mm, Schrift 5 mm – die Schrift steht 2 mm hervor)
+  const perLayer = layersUsed.length > 1 ? h('div', { class: 'row', style: { gap: '10px', flexWrap: 'wrap', alignItems: 'end', marginTop: '6px' } },
+    h('span', { class: 'tag' }, loc('Höhe je Ebene mm')),
+    ...layersUsed.map(L => {
+      const lay = A.doc.layers[L] || {};
+      return h('div', { style: { display: 'flex', alignItems: 'center', gap: '5px' } },
+        h('span', { style: { width: '14px', height: '14px', borderRadius: '3px', background: lay.color || '#888', display: 'inline-block' } }),
+        h('small', {}, String(L + 1).padStart(2, '0') + (lay.name ? ' ' + lay.name : '')),
+        h('div', { style: { width: '80px' } }, numInput(heightOf(L), 0.5, v => { cfg.layerH[L] = Math.max(0.2, v); apply(); })));
+    })) : null;
+  modal(loc('3D-Ansicht'), h('div', {}, canvas, controls, perLayer, info), [
     {
       label: loc('Bild speichern …'), keep: true, click: () => {
         if (!view || !view.ok) return false;
         const a = document.createElement('a');
         a.href = view.snapshot(); a.download = 'beamsketch-3d.png';
         document.body.appendChild(a); a.click(); a.remove();
+        return false;
+      }
+    },
+    {
+      label: loc('Als STL herunterladen'), keep: true, click: () => {
+        // ohne Auseinanderziehen: die Teile liegen so, wie sie zusammengehören
+        const mesh = prismMesh(scene);
+        if (!mesh.pos.length) { toast(loc('Keine geschlossenen Formen für die 3D-Ansicht'), 'err'); return false; }
+        const blob = new Blob([exportSTL(mesh.pos, 'BeamSketch')], { type: 'model/stl' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob); a.download = (opts.name || 'beamsketch') + '.stl';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+        toast(loc('STL gespeichert: {n} Dreiecke', { n: mesh.pos.length / 9 }), 'ok');
         return false;
       }
     },

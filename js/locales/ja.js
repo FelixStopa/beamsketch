@@ -1243,7 +1243,6 @@ export default {
   "Nussbaum": "ウォールナット",
   "Pappelsperrholz": "ポプラ合板",
   "Schiefer": "スレート",
-  "Stärke flacher Teile mm": "平らなパーツの厚さ mm",
   "{a} Baugruppen, {f} flache Teile": "組立品 {a} 件、平らなパーツ {f} 件",
   "Achse der Rippen": "リブの軸",
   "Das Rückgrat trifft das Modell nicht – Versatz ändern.": "背骨がモデルと交わりません – オフセットを変更してください。",
@@ -1462,5 +1461,10 @@ export default {
   "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "手順: キャリブレーション十字を作成し、低出力で板に刻印して板を動かさずに置き、「キャリブレーション…」で十字を順番にクリックします。",
   "Diese Schrift enthält die Zeichen deines Textes nicht": "このフォントにはテキストの文字が含まれていません",
   "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "テキストの文字を含むフォントは {n} 個 – 上に表示されています。",
-  "Arabisch": "アラビア語"
+  "Arabisch": "アラビア語",
+  "Höhe flacher Teile mm": "平らなパーツの高さ mm",
+  "Als STL herunterladen": "STL としてダウンロード",
+  "STL gespeichert: {n} Dreiecke": "STL を保存しました: 三角形 {n} 個",
+  "Höhe je Ebene mm": "レイヤーごとの高さ mm",
+  "STL exportieren (3D)…": "STL を書き出し (3D)…"
 };

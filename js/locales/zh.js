@@ -1243,7 +1243,6 @@ export default {
   "Nussbaum": "胡桃木",
   "Pappelsperrholz": "杨木胶合板",
   "Schiefer": "板岩",
-  "Stärke flacher Teile mm": "平面零件厚度 mm",
   "{a} Baugruppen, {f} flache Teile": "{a} 个组件，{f} 个平面零件",
   "Achse der Rippen": "肋板轴向",
   "Das Rückgrat trifft das Modell nicht – Versatz ändern.": "脊板没有穿过模型——请修改偏移。",
@@ -1462,5 +1461,10 @@ export default {
   "Ablauf: Kalibrierkreuze anlegen, mit wenig Leistung auf ein Brett gravieren, Brett liegen lassen, dann „Kalibrieren…\" und die Kreuze der Reihe nach anklicken.": "步骤：创建校准十字，用低功率雕刻在木板上，木板保持不动，然后点“校准…”并按顺序点击十字。",
   "Diese Schrift enthält die Zeichen deines Textes nicht": "此字体不包含你文字中的字符",
   "{n} Schriften enthalten die Zeichen deines Textes – sie stehen oben.": "{n} 种字体包含你文字中的字符——排在最上面。",
-  "Arabisch": "阿拉伯文"
+  "Arabisch": "阿拉伯文",
+  "Höhe flacher Teile mm": "平面零件高度 mm",
+  "Als STL herunterladen": "下载为 STL",
+  "STL gespeichert: {n} Dreiecke": "已保存 STL：{n} 个三角形",
+  "Höhe je Ebene mm": "每个图层的高度 mm",
+  "STL exportieren (3D)…": "导出 STL（3D）…"
 };
