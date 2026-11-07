@@ -395,6 +395,12 @@ export function offsetPoly(poly, delta, join = 'round', arcTol = 0.05) {
       while (sweep > Math.PI) sweep -= 2 * Math.PI;
       while (sweep < -Math.PI) sweep += 2 * Math.PI;
       const r = Math.abs(d);
+      if (join === 'sharp') {
+        // spitze Ecke: Schnittpunkt der beiden versetzten Kanten (bei sehr spitzen Winkeln gekappt)
+        const k = 1 + n1.x * n2.x + n1.y * n2.y;
+        if (k > 0.12) raw.push({ x: b.x + (n1.x + n2.x) / k * d, y: b.y + (n1.y + n2.y) / k * d });
+        continue;
+      }
       const steps = join === 'miter' ? 1 : Math.max(1, Math.ceil(Math.abs(sweep) / Math.acos(Math.max(-1, 1 - arcTol / Math.max(r, .01)))));
       for (let s = 1; s < steps; s++) {
         const ang = a0 + sweep * (s / steps);

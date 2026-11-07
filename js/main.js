@@ -15,6 +15,7 @@ import { pickModelFile, layeredModelDialog } from './model3d.js';
 import { checkDesign, fixFinding } from './check.js';
 import { pickEdge, makeJoint, JOINT_DEFAULTS } from './joints.js';
 import { partsDialog, editPart } from './partsui.js';
+import { scadDialog, openScadFile } from './scadui.js';
 import { view3dDialog } from './view3dui.js';
 import { warpDialog, cornersDialog, closeDialog, joinSel, reverseSel, setStartFromNode, trimAt, applyTrim } from './pathtoolsui.js';
 import { exportDXF, exportPDF, readPDF, pdfShapes } from './formats.js';
@@ -481,6 +482,7 @@ tools.select = {
   dbl(w) {
     const hit = hitTest(w, 0, true);
     if (hit && hit.locked) unlockShape(hit);
+    else if (hit && hit.gen && hit.gen.kind === 'scad') scadDialog(hit);   // OpenSCAD-Code wieder öffnen
     else if (hit && hit.gen && editPart(hit)) { /* generiertes Teil: Generator wieder öffnen */ }
     else if (hit && hit.type === 'group') { ungroupOne(hit); App.commit('Gruppe betreten'); }
     else if (hit && hit.type === 'text') { setSel([hit]); buildProps(); const i = $('#txtInput'); if (i) { i.focus(); i.select(); } }
@@ -1680,6 +1682,8 @@ async function importFile(f) {
       if (r.skipped.text || r.skipped.images) msg += ' – ' + loc('Texte und Bilder wurden übersprungen (Texte vorher in Pfade umwandeln)');
       toast(msg, 'ok');
       fitAll();
+    } else if (ext === 'scad') {
+      await openScadFile(f);
     } else if (ext === 'stl' || ext === 'obj') {
       await layeredModelDialog(f);
     } else if (ext === 'lbdev') {
@@ -3158,6 +3162,7 @@ const MENUS = {
     { t: loc('Symbole…'), k: 'Strg+K', a: symbolPanel },
     { t: loc('Box-Generator…'), a: F.boxDialog },
     { t: loc('Teile-Generator (Zahnrad, Nocke, Regal …)…'), a: () => partsDialog() },
+    { t: loc('OpenSCAD-Code…'), a: () => scadDialog() },
     { t: loc('Schicht- oder Rippenmodell aus 3D-Datei (STL/OBJ)…'), a: pickModelFile },
     { t: loc('Flexscharnier…'), a: F.hingeDialog },
     { t: loc('QR-Code / Barcode…'), a: F.codeDialog },

@@ -124,6 +124,7 @@
 
 - **Setup assistant** with a searchable list of 62 laser models; reads `$130`, `$131`, `$30`, `$110` … directly from the controller
 - **Tabs** – several designs open at once, each with its own undo history
+- **OpenSCAD code** – write or open `.scad` files (Tools → OpenSCAD code…): BeamSketch's own interpreter runs the OpenSCAD language with 2D shapes, transformations, offset, hull and boolean operations, 3D solids as top view; live preview, Customizer-style parameter fields, and `color()` puts parts on their own layers (e.g. red = engraving)
 - **Camera overlay** – a webcam above the laser, calibrated with an engraved 3 × 3 or 5 × 5 grid of crosses (perspective and lens distortion corrected), shows the workpiece under your design (Laser → Camera…)
 - **Print & Cut** – print a design with two registration marks, jog the head to both marks, and the cut lines are rotated and shifted onto the print
 - **Jig for batches** – cut a board with pockets for your workpieces, then engrave the design into every pocket in one run
@@ -214,6 +215,7 @@ model and its work area is very welcome.
 | `js/mesh.js`, `js/model3d.js`, `js/ribs.js`, `js/view3d.js` | STL/OBJ import, layered and rib models, 3D preview (WebGL) |
 | `js/assembly.js`, `js/view3dui.js` | 3D view of assemblies, STL export |
 | `js/parts.js`, `js/partsui.js`, `js/joints.js`, `js/calibrate.js` | Part generator (gears, cams, shelves …), joint tool, fit calibration |
+| `js/scad.js`, `js/scadui.js` | OpenSCAD interpreter and editor |
 | `js/nest.js`, `js/check.js` | True-shape nesting, design check |
 | `js/pathtools.js`, `js/pathtoolsui.js` | Warp, round/chamfer corners, close/join/reverse paths, start point, trim |
 | `js/camera.js`, `js/printcut.js`, `js/jig.js` | Camera overlay, Print & Cut, jig for batches |
