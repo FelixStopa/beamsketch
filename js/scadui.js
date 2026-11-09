@@ -138,7 +138,7 @@ function layerForColor(color, active, used) {
   return best;
 }
 /* Ergebnis als Formen: eine je Farbe, alle mit derselben Verschiebung und demselben Satz */
-function partShapes(result, gen, transform, active, prev = new Map()) {
+export function partShapes(result, gen, transform, active, prev = new Map()) {
   const used = new Map([[active, null]]);
   for (const [c, L] of prev) used.set(L, c);
   return result.parts.map(part => {

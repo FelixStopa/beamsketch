@@ -216,6 +216,7 @@ model and its work area is very welcome.
 | `js/assembly.js`, `js/view3dui.js` | 3D view of assemblies, STL export |
 | `js/parts.js`, `js/partsui.js`, `js/joints.js`, `js/calibrate.js` | Part generator (gears, cams, shelves …), joint tool, fit calibration |
 | `js/scad.js`, `js/scadui.js` | OpenSCAD interpreter and editor |
+| `js/agenttools.js`, `js/agentapi.js` | Tools for AI agents (Model Context Protocol): definitions and execution in the editor – the bridge to an MCP server lives in the hosting layer |
 | `js/nest.js`, `js/check.js` | True-shape nesting, design check |
 | `js/pathtools.js`, `js/pathtoolsui.js` | Warp, round/chamfer corners, close/join/reverse paths, start point, trim |
 | `js/camera.js`, `js/printcut.js`, `js/jig.js` | Camera overlay, Print & Cut, jig for batches |
