@@ -1512,5 +1512,13 @@ export default {
   "OpenSCAD-Code": "Code OpenSCAD",
   "Der Code enthält einen Fehler": "Le code contient une erreur",
   "{n} Umrisse aus OpenSCAD eingefügt": "{n} contours insérés depuis OpenSCAD",
-  "{k} Farben auf {k} Ebenen": "{k} couleurs sur {k} calques"
+  "{k} Farben auf {k} Ebenen": "{k} couleurs sur {k} calques",
+  "Shift (Stift, Linienzug)": "Maj (plume, polyligne)",
+  "45°-Winkel": "Angles de 45°",
+  "Alt beim Ziehen (Stift)": "Alt en faisant glisser (plume)",
+  "Nur einen Anfasser ziehen (Ecke)": "Ne déplacer qu’une poignée (angle)",
+  "Klick auf letzten Punkt (Stift)": "Clic sur le dernier point (plume)",
+  "Anfasser entfernen, gerade weiter": "Supprimer la poignée, continuer droit",
+  "Rücktaste beim Zeichnen": "Retour arrière en dessinant",
+  "Letzten Punkt entfernen": "Supprimer le dernier point"
 };

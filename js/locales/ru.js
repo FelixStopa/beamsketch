@@ -1512,5 +1512,13 @@ export default {
   "OpenSCAD-Code": "Код OpenSCAD",
   "Der Code enthält einen Fehler": "Код содержит ошибку",
   "{n} Umrisse aus OpenSCAD eingefügt": "Вставлено контуров из OpenSCAD: {n}",
-  "{k} Farben auf {k} Ebenen": "{k} цветов на {k} слоях"
+  "{k} Farben auf {k} Ebenen": "{k} цветов на {k} слоях",
+  "Shift (Stift, Linienzug)": "Shift (перо, ломаная)",
+  "45°-Winkel": "Углы по 45°",
+  "Alt beim Ziehen (Stift)": "Alt при перетаскивании (перо)",
+  "Nur einen Anfasser ziehen (Ecke)": "Тянуть только один маркер (угол)",
+  "Klick auf letzten Punkt (Stift)": "Щелчок по последней точке (перо)",
+  "Anfasser entfernen, gerade weiter": "Убрать маркер, дальше прямо",
+  "Rücktaste beim Zeichnen": "Backspace при рисовании",
+  "Letzten Punkt entfernen": "Удалить последнюю точку"
 };

@@ -569,24 +569,49 @@ tools.polygon = drawTool((a, b) => {
   }
 });
 
-/* --- Linienzug / Bezier (Stift) --- */
+/* --- Linienzug / Bezier (Stift) ---
+   Wie in Illustrator: Shift = Winkel in 45°-Schritten (neuer Punkt und Anfasser), Alt beim Ziehen = nur der
+   ausgehende Anfasser (Ecke statt glatter Kurve), Klick auf den letzten Punkt = ausgehenden Anfasser entfernen,
+   Rücktaste = letzten Punkt entfernen. */
+// Punkt p so drehen, dass die Richtung von o aus ein Vielfaches von 45° ist (Abstand bleibt)
+function constrain45(o, p) {
+  const dx = p.x - o.x, dy = p.y - o.y, l = Math.hypot(dx, dy);
+  if (l < 1e-9) return p;
+  const a = Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) * (Math.PI / 4);
+  // auf die Richtung projizieren – fühlt sich beim Zeichnen natürlicher an als den Abstand zu halten
+  const k = dx * Math.cos(a) + dy * Math.sin(a);
+  return { x: o.x + Math.cos(a) * k, y: o.y + Math.sin(a) * k };
+}
+const penLast = () => pen && pen.nodes.length ? pen.nodes[pen.nodes.length - 1] : null;
 tools.pen = {
   down(w, e) {
-    const p = snap(w);
+    let p = snap(w);
     if (!pen) pen = { nodes: [], closed: false };
+    const last = penLast();
     if (pen.nodes.length > 2 && V.dist(p, pen.nodes[0]) < pxWorld(8)) { finishPen(true); return; }
+    // Klick auf den letzten Punkt: ausgehenden Anfasser entfernen, das nächste Stück beginnt gerade
+    if (last && V.dist(w, last) < pxWorld(6)) {
+      last.out = null;
+      App.state.drag = { mode: 'penHandle', idx: pen.nodes.length - 1, start: { x: last.x, y: last.y }, existing: true };
+      App.draw();
+      return;
+    }
+    if (e && e.shiftKey && last) p = constrain45(last, w);
     pen.nodes.push({ x: p.x, y: p.y, in: null, out: null });
     App.state.drag = { mode: 'penHandle', idx: pen.nodes.length - 1, start: p };
     setPenOverlay();
     App.draw();
   },
   move(w, e) {
+    App.state.penShift = !!(e && e.shiftKey);
     const d = App.state.drag;
     if (d && d.mode === 'penHandle') {
       const n = pen.nodes[d.idx];
       if (V.dist(w, d.start) > pxWorld(3)) {
-        n.out = { x: w.x, y: w.y };
-        n.in = { x: 2 * n.x - w.x, y: 2 * n.y - w.y };
+        const h = e && e.shiftKey ? constrain45(n, w) : { x: w.x, y: w.y };
+        n.out = h;
+        // Alt (oder Klick auf den letzten Punkt): nur der ausgehende Anfasser – der eingehende bleibt
+        if (!(e && e.altKey) && !d.existing) n.in = { x: 2 * n.x - h.x, y: 2 * n.y - h.y };
       }
     }
     App.draw();
@@ -607,9 +632,21 @@ function setPenOverlay() {
       if (a.out || b.in) g.bezierCurveTo((a.out || a).x, (a.out || a).y, (b.in || b).x, (b.in || b).y, b.x, b.y);
       else g.lineTo(b.x, b.y);
     }
-    const last = ns[ns.length - 1], m = App.state.mouse;
-    if (last.out) g.bezierCurveTo(last.out.x, last.out.y, m.x, m.y, m.x, m.y); else g.lineTo(m.x, m.y);
+    const last = ns[ns.length - 1];
+    const drag = App.state.drag && App.state.drag.mode === 'penHandle';
+    const m = !drag && App.state.penShift ? constrain45(last, App.state.mouse) : App.state.mouse;
+    if (!drag) { if (last.out) g.bezierCurveTo(last.out.x, last.out.y, m.x, m.y, m.x, m.y); else g.lineTo(m.x, m.y); }
     g.stroke();
+    // Anfasser des Punkts, der gerade gezogen wird
+    if (last.in || last.out) {
+      g.strokeStyle = '#12a594'; g.lineWidth = px;
+      g.beginPath();
+      if (last.in) { g.moveTo(last.in.x, last.in.y); g.lineTo(last.x, last.y); }
+      if (last.out) { g.moveTo(last.x, last.y); g.lineTo(last.out.x, last.out.y); }
+      g.stroke();
+      g.fillStyle = '#12a594';
+      for (const q of [last.in, last.out]) if (q) { g.beginPath(); g.arc(q.x, q.y, 2.5 * px, 0, 7); g.fill(); }
+    }
     g.fillStyle = '#12a594';
     for (const n of ns) g.fillRect(n.x - 3 * px, n.y - 3 * px, 6 * px, 6 * px);
   };
@@ -625,9 +662,10 @@ function finishPen(close) {
 }
 
 tools.line = {
-  down(w) {
-    const p = snap(w);
+  down(w, e) {
+    let p = snap(w);
     if (!polyDraw) polyDraw = { pts: [] };
+    if (e && e.shiftKey && polyDraw.pts.length) p = constrain45(polyDraw.pts[polyDraw.pts.length - 1], w);
     if (polyDraw.pts.length > 2 && V.dist(p, polyDraw.pts[0]) < pxWorld(8)) { finishPoly(true); return; }
     polyDraw.pts.push(p);
     App.state.overlay = (g, px) => {
@@ -635,11 +673,12 @@ tools.line = {
       g.strokeStyle = displayColor(L.color, App.state.dark); g.lineWidth = 1.3 * px;
       g.beginPath(); g.moveTo(polyDraw.pts[0].x, polyDraw.pts[0].y);
       for (const q of polyDraw.pts.slice(1)) g.lineTo(q.x, q.y);
-      g.lineTo(App.state.mouse.x, App.state.mouse.y); g.stroke();
+      const m = App.state.penShift ? constrain45(polyDraw.pts[polyDraw.pts.length - 1], App.state.mouse) : App.state.mouse;
+      g.lineTo(m.x, m.y); g.stroke();
     };
     App.draw();
   },
-  move() { App.draw(); },
+  move(w, e) { App.state.penShift = !!(e && e.shiftKey); App.draw(); },
   dbl() { finishPoly(false); }
 };
 function finishPoly(close) {
@@ -3430,7 +3469,9 @@ function shortcutsDialog() {
     ['Pfeiltasten', 'Verschieben (Shift = 10×)'], ['0 / 1', 'Alles / Arbeitsfläche einpassen'],
     ['Leertaste + Ziehen', 'Ansicht verschieben'], ['Mausrad', 'Zoom'],
     ['Shift beim Ziehen', 'Proportional / gerade'], ['Klick auf Auswahl', 'Dreh-Modus umschalten'],
-    ['Doppelklick (Pfad)', 'Knoten einfügen'], ['Alt+Klick (Knoten)', 'Ecke/Kurve umschalten']
+    ['Doppelklick (Pfad)', 'Knoten einfügen'], ['Alt+Klick (Knoten)', 'Ecke/Kurve umschalten'],
+    ['Shift (Stift, Linienzug)', '45°-Winkel'], ['Alt beim Ziehen (Stift)', 'Nur einen Anfasser ziehen (Ecke)'],
+    ['Klick auf letzten Punkt (Stift)', 'Anfasser entfernen, gerade weiter'], ['Rücktaste beim Zeichnen', 'Letzten Punkt entfernen']
   ];
   modal(loc('Tastenkürzel'), h('div', { class: 'kv' }, rows.flatMap(r => [h('kbd', { style: { color: 'var(--acc)' } }, keyName(loc(r[0]))), h('span', {}, loc(r[1]))])), [{ label: loc('OK'), primary: true }]);
 }
@@ -3649,8 +3690,15 @@ window.addEventListener('keydown', e => {
     if (map[K]) { e.preventDefault(); map[K](); }
     return;
   }
+  if (e.key === 'Shift' && (pen || polyDraw)) { App.state.penShift = true; App.draw(); }
+  if (e.key === 'Alt' && (pen || polyDraw)) e.preventDefault();
   switch (e.key) {
-    case 'Delete': case 'Backspace': e.preventDefault(); deleteSel(); break;
+    case 'Delete': case 'Backspace':
+      e.preventDefault();
+      // beim Zeichnen mit Stift oder Linienzug: nur den letzten Punkt entfernen
+      if (pen && pen.nodes.length) { pen.nodes.pop(); if (!pen.nodes.length) { pen = null; App.state.overlay = null; } App.draw(); break; }
+      if (polyDraw && polyDraw.pts.length) { polyDraw.pts.pop(); if (!polyDraw.pts.length) { polyDraw = null; App.state.overlay = null; } App.draw(); break; }
+      deleteSel(); break;
     case 'Escape':
       if (document.querySelector('.ctxmenu')) { closeMenus(); break; }
       if (hasDock()) { closeDock(); break; }
@@ -3682,6 +3730,9 @@ window.addEventListener('keydown', e => {
   }
 });
 window.addEventListener('keyup', e => {
+  if (e.key === 'Shift' && App.state.penShift) { App.state.penShift = false; App.draw(); }
+  // Alt beim Zeichnen: sonst springt der Fokus unter Windows in das Browsermenü
+  if (e.key === 'Alt' && (pen || polyDraw)) e.preventDefault();
   if (e.code === 'Space') { spaceDown = false; cv.style.cursor = App.state.tool === 'select' ? 'default' : 'crosshair'; }
 });
 

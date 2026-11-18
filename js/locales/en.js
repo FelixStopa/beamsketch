@@ -1512,5 +1512,13 @@ export default {
   "OpenSCAD-Code": "OpenSCAD code",
   "Der Code enthält einen Fehler": "The code contains an error",
   "{n} Umrisse aus OpenSCAD eingefügt": "{n} outlines inserted from OpenSCAD",
-  "{k} Farben auf {k} Ebenen": "{k} colors on {k} layers"
+  "{k} Farben auf {k} Ebenen": "{k} colors on {k} layers",
+  "Shift (Stift, Linienzug)": "Shift (pen, polyline)",
+  "45°-Winkel": "45° angles",
+  "Alt beim Ziehen (Stift)": "Alt while dragging (pen)",
+  "Nur einen Anfasser ziehen (Ecke)": "Drag one handle only (corner)",
+  "Klick auf letzten Punkt (Stift)": "Click on last point (pen)",
+  "Anfasser entfernen, gerade weiter": "Remove handle, continue straight",
+  "Rücktaste beim Zeichnen": "Backspace while drawing",
+  "Letzten Punkt entfernen": "Remove last point"
 };

@@ -1512,5 +1512,13 @@ export default {
   "OpenSCAD-Code": "شيفرة OpenSCAD",
   "Der Code enthält einen Fehler": "الشيفرة تحتوي على خطأ",
   "{n} Umrisse aus OpenSCAD eingefügt": "تم إدراج {n} محيطات من OpenSCAD",
-  "{k} Farben auf {k} Ebenen": "{k} ألوان على {k} طبقات"
+  "{k} Farben auf {k} Ebenen": "{k} ألوان على {k} طبقات",
+  "Shift (Stift, Linienzug)": "Shift (القلم، الخط المتعدد)",
+  "45°-Winkel": "زوايا 45°",
+  "Alt beim Ziehen (Stift)": "Alt أثناء السحب (القلم)",
+  "Nur einen Anfasser ziehen (Ecke)": "سحب مقبض واحد فقط (زاوية)",
+  "Klick auf letzten Punkt (Stift)": "النقر على آخر نقطة (القلم)",
+  "Anfasser entfernen, gerade weiter": "إزالة المقبض والمتابعة بخط مستقيم",
+  "Rücktaste beim Zeichnen": "Backspace أثناء الرسم",
+  "Letzten Punkt entfernen": "حذف آخر نقطة"
 };

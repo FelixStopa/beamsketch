@@ -193,6 +193,8 @@ model and its work area is very welcome.
 | `R` / `E` / `P` | Rectangle / ellipse / polygon | `Ctrl+G` / `U` | Group / ungroup |
 | `L` / `B` / `T` | Polyline / bezier / text | `Ctrl+K` | Symbol library |
 | `M` | Measure | `Ctrl+M` | Material library |
+| `Shift` (pen, polyline) | 45° angles | `Alt` + drag (pen) | Drag one handle only (corner) |
+| `Backspace` while drawing | Remove last point | Click last point (pen) | Remove handle, continue straight |
 | `0` / `1` | Fit all / fit work area | `Ctrl+E` | Save GCode |
 | `Space` + drag | Pan | `Ctrl+H` | History |
 | `PageUp` / `PageDown` | Previous / next page | | |

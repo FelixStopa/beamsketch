@@ -1512,5 +1512,13 @@ export default {
   "OpenSCAD-Code": "Kod OpenSCAD",
   "Der Code enthält einen Fehler": "Kod zawiera błąd",
   "{n} Umrisse aus OpenSCAD eingefügt": "Wstawiono {n} konturów z OpenSCAD",
-  "{k} Farben auf {k} Ebenen": "{k} kolorów na {k} warstwach"
+  "{k} Farben auf {k} Ebenen": "{k} kolorów na {k} warstwach",
+  "Shift (Stift, Linienzug)": "Shift (pióro, polilinia)",
+  "45°-Winkel": "Kąty co 45°",
+  "Alt beim Ziehen (Stift)": "Alt podczas przeciągania (pióro)",
+  "Nur einen Anfasser ziehen (Ecke)": "Przeciągnij tylko jeden uchwyt (narożnik)",
+  "Klick auf letzten Punkt (Stift)": "Klik na ostatni punkt (pióro)",
+  "Anfasser entfernen, gerade weiter": "Usuń uchwyt, dalej prosto",
+  "Rücktaste beim Zeichnen": "Backspace podczas rysowania",
+  "Letzten Punkt entfernen": "Usuń ostatni punkt"
 };

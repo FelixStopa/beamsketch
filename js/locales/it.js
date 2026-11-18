@@ -1512,5 +1512,13 @@ export default {
   "OpenSCAD-Code": "Codice OpenSCAD",
   "Der Code enthält einen Fehler": "Il codice contiene un errore",
   "{n} Umrisse aus OpenSCAD eingefügt": "{n} contorni inseriti da OpenSCAD",
-  "{k} Farben auf {k} Ebenen": "{k} colori su {k} livelli"
+  "{k} Farben auf {k} Ebenen": "{k} colori su {k} livelli",
+  "Shift (Stift, Linienzug)": "Maiusc (penna, polilinea)",
+  "45°-Winkel": "Angoli di 45°",
+  "Alt beim Ziehen (Stift)": "Alt trascinando (penna)",
+  "Nur einen Anfasser ziehen (Ecke)": "Trascina una sola maniglia (angolo)",
+  "Klick auf letzten Punkt (Stift)": "Clic sull’ultimo punto (penna)",
+  "Anfasser entfernen, gerade weiter": "Rimuovi maniglia, prosegui dritto",
+  "Rücktaste beim Zeichnen": "Backspace durante il disegno",
+  "Letzten Punkt entfernen": "Rimuovi l’ultimo punto"
 };

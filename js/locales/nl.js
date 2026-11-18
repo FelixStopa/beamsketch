@@ -1512,5 +1512,13 @@ export default {
   "OpenSCAD-Code": "OpenSCAD-code",
   "Der Code enthält einen Fehler": "De code bevat een fout",
   "{n} Umrisse aus OpenSCAD eingefügt": "{n} contouren uit OpenSCAD ingevoegd",
-  "{k} Farben auf {k} Ebenen": "{k} kleuren op {k} lagen"
+  "{k} Farben auf {k} Ebenen": "{k} kleuren op {k} lagen",
+  "Shift (Stift, Linienzug)": "Shift (pen, polylijn)",
+  "45°-Winkel": "Hoeken van 45°",
+  "Alt beim Ziehen (Stift)": "Alt tijdens slepen (pen)",
+  "Nur einen Anfasser ziehen (Ecke)": "Slechts één handvat slepen (hoek)",
+  "Klick auf letzten Punkt (Stift)": "Klik op laatste punt (pen)",
+  "Anfasser entfernen, gerade weiter": "Handvat verwijderen, recht verder",
+  "Rücktaste beim Zeichnen": "Backspace tijdens tekenen",
+  "Letzten Punkt entfernen": "Laatste punt verwijderen"
 };

@@ -1512,5 +1512,13 @@ export default {
   "OpenSCAD-Code": "OpenSCAD kodu",
   "Der Code enthält einen Fehler": "Kod bir hata içeriyor",
   "{n} Umrisse aus OpenSCAD eingefügt": "OpenSCAD’den {n} kontur eklendi",
-  "{k} Farben auf {k} Ebenen": "{k} renk {k} katmanda"
+  "{k} Farben auf {k} Ebenen": "{k} renk {k} katmanda",
+  "Shift (Stift, Linienzug)": "Shift (kalem, çoklu çizgi)",
+  "45°-Winkel": "45° açılar",
+  "Alt beim Ziehen (Stift)": "Sürüklerken Alt (kalem)",
+  "Nur einen Anfasser ziehen (Ecke)": "Yalnızca bir tutamacı sürükle (köşe)",
+  "Klick auf letzten Punkt (Stift)": "Son noktaya tıkla (kalem)",
+  "Anfasser entfernen, gerade weiter": "Tutamacı kaldır, düz devam et",
+  "Rücktaste beim Zeichnen": "Çizerken Geri tuşu",
+  "Letzten Punkt entfernen": "Son noktayı kaldır"
 };

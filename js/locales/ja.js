@@ -1512,5 +1512,13 @@ export default {
   "OpenSCAD-Code": "OpenSCAD コード",
   "Der Code enthält einen Fehler": "コードにエラーがあります",
   "{n} Umrisse aus OpenSCAD eingefügt": "OpenSCAD から輪郭を {n} 個挿入しました",
-  "{k} Farben auf {k} Ebenen": "{k} 色を {k} レイヤーに"
+  "{k} Farben auf {k} Ebenen": "{k} 色を {k} レイヤーに",
+  "Shift (Stift, Linienzug)": "Shift（ペン、ポリライン）",
+  "45°-Winkel": "45° 単位の角度",
+  "Alt beim Ziehen (Stift)": "ドラッグ中に Alt（ペン）",
+  "Nur einen Anfasser ziehen (Ecke)": "ハンドルを片方だけ動かす（角）",
+  "Klick auf letzten Punkt (Stift)": "最後の点をクリック（ペン）",
+  "Anfasser entfernen, gerade weiter": "ハンドルを消して直線で続ける",
+  "Rücktaste beim Zeichnen": "描画中に Backspace",
+  "Letzten Punkt entfernen": "最後の点を削除"
 };

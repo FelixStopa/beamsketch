@@ -1512,5 +1512,13 @@ export default {
   "OpenSCAD-Code": "Código OpenSCAD",
   "Der Code enthält einen Fehler": "O código contém um erro",
   "{n} Umrisse aus OpenSCAD eingefügt": "{n} contornos inseridos do OpenSCAD",
-  "{k} Farben auf {k} Ebenen": "{k} cores em {k} camadas"
+  "{k} Farben auf {k} Ebenen": "{k} cores em {k} camadas",
+  "Shift (Stift, Linienzug)": "Shift (caneta, polilinha)",
+  "45°-Winkel": "Ângulos de 45°",
+  "Alt beim Ziehen (Stift)": "Alt ao arrastar (caneta)",
+  "Nur einen Anfasser ziehen (Ecke)": "Arrastar só uma alça (canto)",
+  "Klick auf letzten Punkt (Stift)": "Clique no último ponto (caneta)",
+  "Anfasser entfernen, gerade weiter": "Remover alça, continuar a direito",
+  "Rücktaste beim Zeichnen": "Backspace ao desenhar",
+  "Letzten Punkt entfernen": "Remover o último ponto"
 };

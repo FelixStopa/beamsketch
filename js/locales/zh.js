@@ -1512,5 +1512,13 @@ export default {
   "OpenSCAD-Code": "OpenSCAD 代码",
   "Der Code enthält einen Fehler": "代码有错误",
   "{n} Umrisse aus OpenSCAD eingefügt": "已从 OpenSCAD 插入 {n} 个轮廓",
-  "{k} Farben auf {k} Ebenen": "{k} 种颜色在 {k} 个图层"
+  "{k} Farben auf {k} Ebenen": "{k} 种颜色在 {k} 个图层",
+  "Shift (Stift, Linienzug)": "Shift（钢笔、折线）",
+  "45°-Winkel": "45° 角",
+  "Alt beim Ziehen (Stift)": "拖动时按 Alt（钢笔）",
+  "Nur einen Anfasser ziehen (Ecke)": "只拖动一个控制柄（尖角）",
+  "Klick auf letzten Punkt (Stift)": "点击最后一个点（钢笔）",
+  "Anfasser entfernen, gerade weiter": "移除控制柄，直线继续",
+  "Rücktaste beim Zeichnen": "绘制时按退格键",
+  "Letzten Punkt entfernen": "删除最后一个点"
 };

@@ -1512,5 +1512,13 @@ export default {
   "OpenSCAD-Code": "OpenSCAD 코드",
   "Der Code enthält einen Fehler": "코드에 오류가 있습니다",
   "{n} Umrisse aus OpenSCAD eingefügt": "OpenSCAD에서 윤곽 {n}개를 삽입했습니다",
-  "{k} Farben auf {k} Ebenen": "{k}가지 색을 {k}개 레이어에"
+  "{k} Farben auf {k} Ebenen": "{k}가지 색을 {k}개 레이어에",
+  "Shift (Stift, Linienzug)": "Shift (펜, 폴리라인)",
+  "45°-Winkel": "45° 각도",
+  "Alt beim Ziehen (Stift)": "드래그 중 Alt (펜)",
+  "Nur einen Anfasser ziehen (Ecke)": "핸들 하나만 끌기 (모서리)",
+  "Klick auf letzten Punkt (Stift)": "마지막 점 클릭 (펜)",
+  "Anfasser entfernen, gerade weiter": "핸들 제거, 직선으로 계속",
+  "Rücktaste beim Zeichnen": "그리는 중 Backspace",
+  "Letzten Punkt entfernen": "마지막 점 삭제"
 };
